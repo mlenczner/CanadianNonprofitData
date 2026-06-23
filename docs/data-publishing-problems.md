@@ -32,7 +32,22 @@ The problems documented here fall into three categories: **missing mandatory dat
 
 **Example:** A record showing $500,000 to a recipient with no description field populated tells the public nothing about the purpose of the award.
 
-**Concerned departments:** Unknown without deeper per-department breakdown — this is a priority analysis task.
+**Worst offenders by department** (see [dept-compliance-report.md](dept-compliance-report.md)):
+
+| Department | Records | Missing desc_en | % Missing |
+|---|---|---|---|
+| Canadian Heritage (pch) | 134,212 | 45,309 | 33.8% |
+| Environment and Climate Change Canada (ec) | 8,582 | 2,577 | 30.0% |
+| Status of Women Canada (swc-cfc) | 143 | 44 | 30.8% |
+| Western Economic Diversification Canada (wd-deo) | 14,556 | 4,240 | 29.1% |
+| Global Affairs Canada (dfatd-maecd) | 16,001 | 4,589 | 28.7% |
+| Fisheries and Oceans Canada (dfo-mpo) | 18,504 | 4,871 | 26.3% |
+| National Research Council Canada (nrc-cnrc) | 77,946 | 20,440 | 26.2% |
+| Immigration, Refugees and Citizenship Canada (cic) | 18,393 | 3,153 | 17.1% |
+| Natural Resources Canada (nrcan-rncan) | 11,629 | 1,754 | 15.1% |
+| Impact Assessment Agency of Canada (iaac-aeic) | 4,319 | 599 | 13.9% |
+
+**Exemplary departments** (50+ records, zero missing descriptions): Parks Canada, Women and Gender Equality Canada, Canadian Space Agency, Canada Energy Regulator, Polar Knowledge Canada, Library and Archives Canada, Privy Council Office, Accessibility Standards Canada, and Canadian Food Inspection Agency.
 
 ---
 
@@ -56,7 +71,15 @@ The problems documented here fall into three categories: **missing mandatory dat
 
 **When it started:** Likely reflects older records submitted before the controlled vocabulary was enforced, or departments bypassing the standard template.
 
-**Concerned departments:** Unknown without per-department breakdown — analysis task needed.
+**Concerned departments** — only three departments account for virtually all non-standard values:
+
+| Department | Records | Dirty type count | % of dept records |
+|---|---|---|---|
+| Employment and Social Development Canada (esdc-edsc) | 352,726 | 17,922 | 5.1% |
+| Transport Canada (tc) | 46,598 | 777 | 1.7% |
+| Social Sciences and Humanities Research Council of Canada (sshrc-crsh) | 65,839 | 499 | 0.8% |
+
+All other departments use only the standard codes (`C`, `G`, `O`).
 
 ---
 
@@ -78,7 +101,39 @@ All other new mandatory fields are at 99.8–100%.
 
 **When it started:** The policy took effect December 1, 2025 — this non-compliance is less than 7 months old and already significant.
 
-**Concerned departments:** Unknown without per-department breakdown — high priority analysis task given the recency of the policy change.
+**Worst offenders — missing `federal_riding_number`** (post-Dec 2025 records only):
+
+| Department | Post-Dec Records | Missing riding | % Missing |
+|---|---|---|---|
+| Canadian Heritage (pch) | 3,040 | 3,040 | 100.0% |
+| SSHRC (sshrc-crsh) | 1,149 | 1,149 | 100.0% |
+| NSERC (nserc-crsng) | 672 | 672 | 100.0% |
+| Natural Resources Canada (nrcan-rncan) | 542 | 542 | 100.0% |
+| Agriculture and Agri-Food Canada (aafc-aac) | 468 | 468 | 100.0% |
+| Canada Economic Development for Quebec Regions (ced-dec) | 397 | 397 | 100.0% |
+| Atlantic Canada Opportunities Agency (acoa-apeca) | 346 | 346 | 100.0% |
+| CIHR (cihr-irsc) | 283 | 283 | 100.0% |
+| Global Affairs Canada (dfatd-maecd) | 280 | 280 | 100.0% |
+| Fisheries and Oceans Canada (dfo-mpo) | 255 | 255 | 100.0% |
+
+20 departments have 100% missing riding numbers on their post-Dec 2025 records. Only Employment and Social Development Canada (esdc-edsc, 2,955 post-Dec records) achieves 100% compliance on this field.
+
+**Worst offenders — missing `recipient_business_number`** (post-Dec 2025 records only):
+
+| Department | Post-Dec Records | Missing biz# | % Missing |
+|---|---|---|---|
+| Canadian Heritage (pch) | 3,040 | 3,040 | 100.0% |
+| Global Affairs Canada (dfatd-maecd) | 280 | 280 | 100.0% |
+| Fisheries and Oceans Canada (dfo-mpo) | 255 | 255 | 100.0% |
+| Impact Assessment Agency of Canada (iaac-aeic) | 237 | 237 | 100.0% |
+| Environment and Climate Change Canada (ec) | 199 | 199 | 100.0% |
+| Housing, Infrastructure and Communities (infc) | 97 | 97 | 100.0% |
+| Canadian Space Agency (csa-asc) | 74 | 74 | 100.0% |
+| Canada Water Agency (cwa-aec) | 69 | 69 | 100.0% |
+| Indigenous Services Canada (isc-sac) | 64 | 64 | 100.0% |
+| NSERC (nserc-crsng) | 672 | 612 | 91.1% |
+
+**Notable compliance:** ESDC (esdc-edsc) achieves 100% on all post-Dec 2025 mandatory fields across 2,955 records. Prairies Economic Development Canada and Pacific Economic Development Canada also show full compliance.
 
 ---
 
@@ -94,7 +149,22 @@ All other new mandatory fields are at 99.8–100%.
 
 **When it started:** Appears across multiple years — predates the amendment tracking fields added to the current schema.
 
-**Concerned departments:** Unknown without per-department breakdown.
+**Worst offenders by department:**
+
+| Department | Records | Zero/Neg value count | % of dept records |
+|---|---|---|---|
+| Employment and Social Development Canada (esdc-edsc) | 352,726 | 10,161 | 2.9% |
+| Indigenous Services Canada (isc-sac) | 156,896 | 3,885 | 2.5% |
+| Crown-Indigenous Relations and Northern Affairs Canada (aandc-aadnc) | 21,444 | 1,129 | 5.3% |
+| National Research Council Canada (nrc-cnrc) | 77,946 | 184 | 0.2% |
+| Natural Resources Canada (nrcan-rncan) | 11,629 | 108 | 0.9% |
+| Fisheries and Oceans Canada (dfo-mpo) | 18,504 | 97 | 0.5% |
+| Public Health Agency of Canada (phac-aspc) | 5,288 | 77 | 1.5% |
+| Canadian Northern Economic Development Agency (cannor) | 2,018 | 79 | 3.9% |
+| Public Safety Canada (ps-sp) | 3,476 | 57 | 1.6% |
+| CIHR (cihr-irsc) | 44,051 | 46 | 0.1% |
+
+ESDC alone accounts for 61% of all zero/negative value records in the dataset.
 
 ---
 
@@ -144,7 +214,22 @@ All other new mandatory fields are at 99.8–100%.
 
 **When it started:** Likely a persistent pattern across all years — this is a cultural/compliance problem as much as a technical one.
 
-**Concerned departments:** Unknown without per-department breakdown.
+**Worst offenders by department** (descriptions under 50 characters):
+
+| Department | Records | Short desc | % Short |
+|---|---|---|---|
+| Crown-Indigenous Relations and Northern Affairs Canada (aandc-aadnc) | 21,444 | 21,319 | 99.4% |
+| Indigenous Services Canada (isc-sac) | 156,896 | 155,837 | 99.3% |
+| Public Health Agency of Canada (phac-aspc) | 5,288 | 4,738 | 89.6% |
+| Innovation, Science and Economic Development Canada (ic) | 41,673 | 34,093 | 81.8% |
+| Veterans Affairs Canada (vac-acc) | 2,163 | 1,334 | 61.7% |
+| Canadian Heritage (pch) | 134,212 | 59,362 | 44.2% |
+| Health Canada (hc-sc) | 2,252 | 978 | 43.4% |
+| Atlantic Canada Opportunities Agency (acoa-apeca) | 30,350 | 12,733 | 42.0% |
+| Employment and Social Development Canada (esdc-edsc) | 352,726 | 40,928 | 11.6% |
+| Immigration, Refugees and Citizenship Canada (cic) | 18,393 | 4,547 | 24.7% |
+
+Indigenous Services Canada and Crown-Indigenous Relations and Northern Affairs Canada together account for 177,156 short-description records — over half of all short descriptions in the dataset.
 
 ---
 
@@ -160,6 +245,21 @@ All other new mandatory fields are at 99.8–100%.
 
 **When it started:** The field has been optional for most of the dataset's history. The Dec 2025 mandate was meant to fix this going forward, but early compliance is poor.
 
+**Worst offenders — post-Dec 2025 records** (where business number is now mandatory):
+
+| Department | Post-Dec Records | Missing biz# | % Missing |
+|---|---|---|---|
+| Canadian Heritage (pch) | 3,040 | 3,040 | 100.0% |
+| Global Affairs Canada (dfatd-maecd) | 280 | 280 | 100.0% |
+| Fisheries and Oceans Canada (dfo-mpo) | 255 | 255 | 100.0% |
+| Impact Assessment Agency of Canada (iaac-aeic) | 237 | 237 | 100.0% |
+| Environment and Climate Change Canada (ec) | 199 | 199 | 100.0% |
+| Public Safety Canada (ps-sp) | 193 | 180 | 93.3% |
+| NSERC (nserc-crsng) | 672 | 612 | 91.1% |
+| CIHR (cihr-irsc) | 283 | 278 | 98.2% |
+| SSHRC (sshrc-crsh) | 1,149 | 914 | 79.5% |
+| Parks Canada (pc) | 218 | 150 | 68.8% |
+
 ---
 
 ## Problem 9: Federal Riding Number Sparseness
@@ -170,29 +270,53 @@ All other new mandatory fields are at 99.8–100%.
 
 **Why it matters:** The federal riding number is what enables constituency-level accountability analysis — understanding which ridings are receiving how much federal funding. With 80% of records missing this field, that analysis is impossible for the bulk of the dataset. Even for the new mandatory cohort, 60% of records are missing it.
 
+**Worst offenders — post-Dec 2025 records** (where riding number is now mandatory):
+
+| Department | Post-Dec Records | Missing riding | % Missing |
+|---|---|---|---|
+| Canadian Heritage (pch) | 3,040 | 3,040 | 100.0% |
+| SSHRC (sshrc-crsh) | 1,149 | 1,149 | 100.0% |
+| NSERC (nserc-crsng) | 672 | 672 | 100.0% |
+| Natural Resources Canada (nrcan-rncan) | 542 | 542 | 100.0% |
+| Agriculture and Agri-Food Canada (aafc-aac) | 468 | 468 | 100.0% |
+| Canada Economic Development for Quebec Regions (ced-dec) | 397 | 397 | 100.0% |
+| Atlantic Canada Opportunities Agency (acoa-apeca) | 346 | 346 | 100.0% |
+| CIHR (cihr-irsc) | 283 | 283 | 100.0% |
+| Global Affairs Canada (dfatd-maecd) | 280 | 280 | 100.0% |
+| Fisheries and Oceans Canada (dfo-mpo) | 255 | 255 | 100.0% |
+
+20 of 43 departments with post-Dec 2025 records have 100% missing riding numbers. ESDC (esdc-edsc) is the only large department with full compliance (2,955 records, 100% complete).
+
 ---
 
 ## Summary Table
 
-| Problem | Records Affected | Severity |
-|---|---|---|
-| Missing descriptions (mandatory) | 109,383 | High |
-| Agreement type non-standard values | 19,248 | Medium |
-| Post-Dec 2025 riding number missing | 8,630 of 14,448 | High |
-| Post-Dec 2025 business number missing | 7,137 of 14,448 | High |
-| Zero or negative values | 16,675 | Medium |
-| Garbage dates (1899, future) | Unknown count | Medium |
-| Province/country field contamination | ~1,200+ | Low-Medium |
-| Short/boilerplate descriptions | 343,693 | High |
-| Business number missing (overall) | 721,577 | High |
-| Riding number missing (overall) | 1,047,369 | High |
+| Problem | Records Affected | Worst Offender(s) | Severity |
+|---|---|---|---|
+| Missing descriptions (mandatory) | 109,383 | Canadian Heritage (33.8%) | High |
+| Agreement type non-standard values | 19,248 | ESDC (17,922 records) | Medium |
+| Post-Dec 2025 riding number missing | 8,630 of 14,448 | 20 depts at 100% missing | High |
+| Post-Dec 2025 business number missing | 7,137 of 14,448 | Canadian Heritage (100%) | High |
+| Zero or negative values | 16,675 | ESDC (10,161 records) | Medium |
+| Garbage dates (1899, future) | Unknown count | — | Medium |
+| Province/country field contamination | ~1,200+ | — | Low-Medium |
+| Short/boilerplate descriptions | 343,693 | ISC (99.3%), CIRNAC (99.4%) | High |
+| Business number missing (overall) | 721,577 | Canadian Heritage (100% post-Dec) | High |
+| Riding number missing (overall) | 1,047,369 | 20 depts at 100% post-Dec | High |
+
+Full per-department breakdown: [dept-compliance-report.md](dept-compliance-report.md)
 
 ---
 
 ## What We Don't Know Yet
 
-The analysis above is based on the full dataset profile. We have not yet broken down most of these problems by department — which departments are the worst offenders, which are exemplary, and whether problems are improving or worsening over time. That analysis is the next priority.
+Per-department breakdowns are now available for Problems 1–4, 7–9 (see [dept-compliance-report.md](dept-compliance-report.md)). Remaining gaps:
+
+- **Temporal trends** — are problems improving or worsening over time?
+- **Garbage dates** — which departments are submitting Excel artifacts (1899-12-30) and future-dated records?
+- **Province/country contamination** — per-department breakdown not yet run
+- **Amendment tracking** — are negative values properly linked to amendment chains?
 
 ---
 
-*Document prepared by the Canadian Nonprofit Data project. Data profiled June 23, 2026.*
+*Document prepared by the Canadian Nonprofit Data project. Data profiled June 23, 2026. Department breakdown added from compliance report generated same date.*
