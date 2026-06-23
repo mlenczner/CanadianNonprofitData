@@ -361,4 +361,87 @@ Per-department breakdowns are now available for all nine problems (see [dept-com
 
 ---
 
-*Document prepared by the Canadian Nonprofit Data project. Data profiled June 23, 2026. Department breakdowns added from compliance and geo/date anomaly reports generated same date.*
+## Notable Records
+
+Individual records that illustrate systemic data quality problems documented above. Full details in [weird-grants.md](weird-grants.md).
+
+### Kee Tas Kee Now Tribal Council — extreme amendment volume
+
+| Ref | Department | Value | Amendments |
+|---|---|---|---|
+| `1910-2025-2026-Qrt1-0008764` | Indigenous Services Canada | $4,788,877 | 557 |
+| `1910-2025-2026-Qrt1-0008756` | Indigenous Services Canada | $13,473,814 | 554 |
+| `1910-2025-2026-Qrt4-0018093` | Indigenous Services Canada | $468,353,646 | 0 (original) |
+
+**Why it's notable:** Kee Tas Kee Now Tribal Council appears repeatedly among the most-amended agreements in the dataset, with individual records carrying 528–557 amendments — far more than any other recipient. Indigenous Services Canada appears to publish every budget adjustment as a separate amendment row rather than updating the original record in place. This inflates record counts, makes it impossible to calculate net funding from a single ref number, and is the clearest example of amendment-field misuse described in Problem 4.
+
+### Veterans Affairs Canada — batch reporting
+
+| Ref | Department | Value | Description |
+|---|---|---|---|
+| `021-2025-2026-Q4-0129` | Veterans Affairs Canada | $2,543,478,321 | Pain and Suffering Compensation |
+| `021-2022-2023-Q4-0112` | Veterans Affairs Canada | $1,550,234,952 | Disability Pensions |
+| `189-2018-2019-Q4-00082` | Veterans Affairs Canada | $1,323,653,614 | Disability Awards |
+| `021-2025-2026-Q4-0112` | Veterans Affairs Canada | $1,053,733,398 | Disability Pensions |
+
+**Why it's notable:** These records use the recipient name **"batch report│rapport en lots"** and aggregate billions of dollars in individual veteran benefit payments into single line items. This is a structural publishing choice — not an error per se — but it makes the dataset unusable for recipient-level analysis of veterans' spending. It also explains why Veterans Affairs dominates the high-value, short-description category: descriptions like "Disability Pensions" technically satisfy the mandatory field while describing thousands of separate payments.
+
+### Impact Assessment Agency — placeholder end dates (9999-12-31)
+
+| Ref | Department | Value | Dates |
+|---|---|---|---|
+| `GC-2020-Q1-00073` | Impact Assessment Agency of Canada | $8,096 | 2019-06-10 → 9999-12-31 |
+| `GC-2020-Q1-00080` | Impact Assessment Agency of Canada | $11,644 | 2019-06-12 → 9999-12-31 |
+| `071-2024-2025-Q2-00001` | Impact Assessment Agency of Canada | $7,897 | 2024-07-08 → 9999-12-31 |
+
+**Why it's notable:** The Impact Assessment Agency uses **9999-12-31** as an agreement end date across dozens of Policy Dialogue Program contributions. This is a common database placeholder meaning "no fixed end date," but it produces agreement durations of nearly 8,000 years in the published data and makes temporal analysis meaningless. It is distinct from the Excel null-date problem (Problem 5) — this is an intentional sentinel value that was never cleaned before publication.
+
+### ESDC same-day batch dumps
+
+| Department | Date | Records published |
+|---|---|---|
+| Employment and Social Development Canada | 2021-04-26 | 40,373 |
+| Employment and Social Development Canada | 2022-04-25 | 34,713 |
+| Employment and Social Development Canada | 2024-04-22 | 26,356 |
+| Employment and Social Development Canada | 2025-04-21 | 25,512 |
+
+**Why it's notable:** ESDC publishes tens of thousands of grant records on a single date each fiscal year — 40,373 records on April 26, 2021 alone, more than any other department-date combination in the dataset. This pattern suggests bulk import from an internal system rather than quarterly proactive disclosure as the policy requires. It also correlates with ESDC's high count of non-standard agreement type values (17,922 records using full words like "Contribution" instead of `C`).
+
+### NextStar Energy — largest single award
+
+| Ref | Department | Value |
+|---|---|---|
+| `033-2023-2024-Q2-515482` | Innovation, Science and Economic Development Canada | **$14,556,000,000** |
+
+**Why it's notable:** This is the largest single original award in the entire dataset — a contribution to NextStar Energy Inc. under the Electric Vehicle Battery Manufacturers program (2024-01-01 to 2032-12-31). It alone accounts for 1.5% of the ~$972 billion total disclosed value across 1.3 million records.
+
+### Global Affairs — negative $74M WHO record
+
+| Ref | Department | Value | Recipient |
+|---|---|---|---|
+| `GC-2018-Q2-00088` | Global Affairs Canada | **-$74,000,000** | WHO — World Health Organization |
+
+**Why it's notable:** A negative $74 million grant to the World Health Organization, recorded as amendment 0 (an original award, not an amendment). Negative values on original records violate the schema requirement that `agreement_value` be greater than zero (Problem 4). Without a linked prior award at the same ref number, this record is impossible to interpret — it may represent a clawback, a data correction, or a misclassified amendment, but the published data provides no way to tell.
+
+### ESDC $1 awards to United Way and Red Cross
+
+| Ref | Department | Value | Recipient |
+|---|---|---|---|
+| `141-2020-2021-Q1-00195` | Employment and Social Development Canada | **$1** | United Way of Canada — Centraide Canada |
+| `141-2020-2021-Q1-00196` | Employment and Social Development Canada | **$1** | Canadian Red Cross Society |
+
+**Why it's notable:** Two consecutive $1 contributions to major national charities under the SDPP-Children and Families program, published one day apart (October 14 and 15, 2020). Both carry full program descriptions but a nominal value of $1. These are almost certainly placeholder or administrative setup records — possibly used to establish a funding relationship before actual awards were issued — but they appear in the public dataset as real contributions, contributing to the 16,675 zero/near-zero value records in Problem 4.
+
+### Canada Economic Development for Quebec Regions — semicolon descriptions
+
+| Ref | Department | Value | Recipient |
+|---|---|---|---|
+| `093-2006-2007-Q4-00258` | Canada Economic Development for Quebec Regions | **$2,400,000** | Administration portuaire de Sept-Îles |
+| `093-2012-2013-Q3-00088` | Canada Economic Development for Quebec Regions | $50,000 | Institut canadien de recherche en politiques et administration publique |
+| `093-2010-2011-Q2-00035` | Canada Economic Development for Quebec Regions | $15,000 | FaunENord |
+
+**Why it's notable:** At least **27 records** from Canada Economic Development for Quebec Regions have a description consisting of a single semicolon (`;`). These span 2006–2012 and include awards up to $2.4 million. The semicolon appears to be a legacy placeholder from an older publishing system — it technically satisfies the non-empty description requirement (Problem 7) while providing zero accountability value. This pattern is unique to CED among all 51 departments in the dataset.
+
+---
+
+*Document prepared by the Canadian Nonprofit Data project. Data profiled June 23, 2026. Department breakdowns added from compliance and geo/date anomaly reports generated same date. Notable records drawn from [weird-grants.md](weird-grants.md).*
