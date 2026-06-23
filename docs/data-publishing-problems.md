@@ -173,10 +173,22 @@ ESDC alone accounts for 61% of all zero/negative value records in the dataset.
 **What the data shows:**
 - Earliest agreement start date in the dataset: **1899-12-30**
 - Latest agreement start date: **2027-01-01**
+- **22 records total** with anomalous dates across three categories (see [geo-date-anomaly-report.md](geo-date-anomaly-report.md))
 
 **Why it matters:** 1899-12-30 is a well-known artifact of Microsoft Excel's date handling — it's what Excel produces when a date cell is empty or contains a zero. Its presence indicates some departments are submitting data via spreadsheet without proper validation, and those records are making it into the published dataset uncleaned. Future-dated records (2027) may be legitimate multi-year agreement projections, but without context they're indistinguishable from errors.
 
 **When it started:** Likely reflects data from earlier years when spreadsheet submission was more common.
+
+**Concerned departments:**
+
+| Category | Department | Count | Example dates |
+|---|---|---|---|
+| Excel null date (1899-12-30) | Innovation, Science and Economic Development Canada (ic) | 1 | 1899-12-30 |
+| Pre-1990 dates (excl. Excel null) | Innovation, Science and Economic Development Canada (ic) | 19 | 1899-12-31, 1900-01-01 |
+| Pre-1990 dates (excl. Excel null) | Global Affairs Canada (dfatd-maecd) | 1 | 1989-02-21 |
+| Future dates (after 2026) | National Research Council Canada (nrc-cnrc) | 1 | 2027-01-01 |
+
+Innovation, Science and Economic Development Canada (ic) accounts for **20 of 22** anomalous date records — almost all are Excel-era artifacts (1899–1900). The single future-dated record belongs to NRC; the single pre-1990 non-Excel record belongs to Global Affairs.
 
 ---
 
@@ -186,10 +198,13 @@ ESDC alone accounts for 61% of all zero/negative value records in the dataset.
 
 **What the data shows:**
 
-*Country field:*
+*Country field — 242 records with invalid values:*
 - `ca` (lowercase): 156 records — should be `CA`
+- `Canada` (full name): 67 records
+- `None`: 10 records
+- Other free-text values: 9 records (e.g. "United States", "Toronto, Ontario")
 
-*Province field (non-Canadian values appearing):*
+*Province field — 1,979 records with non-Canadian values:*
 - `OC`: 412 records (not a valid Canadian province code)
 - `CA`: 239 records (country code in province field)
 - `NY`: 208 records (New York state)
@@ -200,6 +215,35 @@ ESDC alone accounts for 61% of all zero/negative value records in the dataset.
 **Why it matters:** Foreign addresses are being entered into Canada-only fields, indicating departments are not following the schema correctly for international recipients. This corrupts geographic analysis.
 
 **When it started:** Unknown — requires per-record date analysis.
+
+**Worst offenders — lowercase/invalid country codes:**
+
+| Department | Count | Notes |
+|---|---|---|
+| Veterans Affairs Canada (vac-acc) | 156 | All are lowercase `ca` |
+| SSHRC (sshrc-crsh) | 67 | Full word `Canada` instead of `CA` |
+| Impact Assessment Agency of Canada (iaac-aeic) | 10 | `None` values |
+| Correctional Service of Canada (csc-scc) | 4 | Free-text country names |
+| Immigration, Refugees and Citizenship Canada (cic) | 4 | Free-text country names |
+| Fisheries and Oceans Canada (dfo-mpo) | 1 | Free-text value |
+
+**Worst offenders — foreign/invalid codes in `recipient_province`:**
+
+| Department | Count | Top values seen |
+|---|---|---|
+| SSHRC (sshrc-crsh) | 888 | NY:179, CA:160, MA:88, IL:56, PA:48 |
+| Natural Resources Canada (nrcan-rncan) | 412 | OC:412 (all records) |
+| NSERC (nserc-crsng) | 316 | CA:74, MA:59, NA:50, MI:20, NY:18 |
+| Environment and Climate Change Canada (ec) | 85 | ZZ:32, NY:11, CO:8 |
+| Canadian Heritage (pch) | 68 | US:56, GB:7 |
+| Employment and Social Development Canada (esdc-edsc) | 63 | NA:47, MA:10, CH:5 |
+| Agriculture and Agri-Food Canada (aafc-aac) | 56 | IT:20, FR:9, CH:6, US:5, GB:5 |
+| Atlantic Canada Opportunities Agency (acoa-apeca) | 38 | DC:14, CO:7, CA:4 |
+| Public Health Agency of Canada (phac-aspc) | 34 | CH:18, FR:9, US:4 |
+
+SSHRC and NSERC together account for **1,204 of 1,979** (61%) contaminated province records — consistent with international research grant recipients being given US state codes instead of proper country/province handling. Natural Resources Canada's 412 `OC` values appear to be a systematic data entry error.
+
+Full breakdown: [geo-date-anomaly-report.md](geo-date-anomaly-report.md)
 
 ---
 
@@ -298,25 +342,23 @@ Indigenous Services Canada and Crown-Indigenous Relations and Northern Affairs C
 | Post-Dec 2025 riding number missing | 8,630 of 14,448 | 20 depts at 100% missing | High |
 | Post-Dec 2025 business number missing | 7,137 of 14,448 | Canadian Heritage (100%) | High |
 | Zero or negative values | 16,675 | ESDC (10,161 records) | Medium |
-| Garbage dates (1899, future) | Unknown count | — | Medium |
-| Province/country field contamination | ~1,200+ | — | Low-Medium |
+| Garbage dates (1899, future) | 22 | ISED (20 records) | Low |
+| Province/country field contamination | 2,221 | SSHRC (888 prov), NRCan (412 OC) | Low-Medium |
 | Short/boilerplate descriptions | 343,693 | ISC (99.3%), CIRNAC (99.4%) | High |
 | Business number missing (overall) | 721,577 | Canadian Heritage (100% post-Dec) | High |
 | Riding number missing (overall) | 1,047,369 | 20 depts at 100% post-Dec | High |
 
-Full per-department breakdown: [dept-compliance-report.md](dept-compliance-report.md)
+Full per-department breakdown: [dept-compliance-report.md](dept-compliance-report.md) · [geo-date-anomaly-report.md](geo-date-anomaly-report.md)
 
 ---
 
 ## What We Don't Know Yet
 
-Per-department breakdowns are now available for Problems 1–4, 7–9 (see [dept-compliance-report.md](dept-compliance-report.md)). Remaining gaps:
+Per-department breakdowns are now available for all nine problems (see [dept-compliance-report.md](dept-compliance-report.md) and [geo-date-anomaly-report.md](geo-date-anomaly-report.md)). Remaining gaps:
 
 - **Temporal trends** — are problems improving or worsening over time?
-- **Garbage dates** — which departments are submitting Excel artifacts (1899-12-30) and future-dated records?
-- **Province/country contamination** — per-department breakdown not yet run
 - **Amendment tracking** — are negative values properly linked to amendment chains?
 
 ---
 
-*Document prepared by the Canadian Nonprofit Data project. Data profiled June 23, 2026. Department breakdown added from compliance report generated same date.*
+*Document prepared by the Canadian Nonprofit Data project. Data profiled June 23, 2026. Department breakdowns added from compliance and geo/date anomaly reports generated same date.*
