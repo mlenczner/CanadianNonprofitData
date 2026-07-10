@@ -8,10 +8,11 @@ issue #2): "ALBERTA CIRCUIT 5A OF JEHOVAH'S WITNESSES" fuzzy-matched
 otherwise-identical long name. Resolver.resolve() now requires a candidate's
 digit-bearing tokens to match exactly before accepting a fuzzy match.
 
-This is a plain assert-script, not a pytest suite (no test framework is
-installed in this project's minimal venv) — run directly:
+This is a plain assert-script (no pytest fixtures needed), but it's also
+pytest-discoverable via requirements-dev.txt:
 
     .venv/bin/python tests/test_digit_token_gate.py
+    .venv/bin/python -m pytest tests/
 """
 
 import os
@@ -19,7 +20,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from analysis.build_entity_graph import Resolver, digit_tokens, normalize_name
+from analysis.build_entity_graph import (
+    Resolver, digit_tokens, digit_tokens_match, normalize_name,
+)
 
 
 def fuzzy_result(resolver, name, province):
@@ -75,6 +78,96 @@ def test_gate_reject_is_logged_for_qa():
     assert score >= 90
 
 
+# ── Pattern A: hyphen/space-split vs. fused digit-letter suffix ──────────────
+# Confirmed on real production data: a full pipeline run's QA sample showed
+# 8.6% of all digit-gate rejects (128 of 1,492) were the same branch/circuit
+# number written differently across sources ("1-B" vs "1B", "9 B" vs "9B").
+
+def test_hyphen_split_suffix_matches_fused():
+    r = Resolver()
+    r.add_charity("444444444", "Saskatchewan Circuit 1B of Jehovah's Witnesses", "Regina", "SK")
+    method = fuzzy_result(r, "Saskatchewan Circuit No 1-B of Jehovah's Witnesses", "SK")
+    assert method == "fuzzy_accept", f"hyphen-split 1-B wrongly split from fused 1B (method={method})"
+
+
+def test_space_split_suffix_matches_fused():
+    r = Resolver()
+    r.add_charity("555555555", "Ontario Circuit 9B of Jehovah's Witnesses", "Toronto", "ON")
+    method = fuzzy_result(r, "Ontario Circuit # 9 B of Jehovah's Witnesses", "ON")
+    assert method == "fuzzy_accept", f"space-split 9 B wrongly split from fused 9B (method={method})"
+
+
+def test_french_hyphen_suffix_matches_fused():
+    r = Resolver()
+    r.add_charity("666666666", "Circonscription des Témoins de Jéhovah du Québec 10A", "Montreal", "QC")
+    method = fuzzy_result(r, "Circonscription des Temoins de Jehovah Quebec 10-A", "QC")
+    assert method == "fuzzy_accept", f"French 10-A wrongly split from 10A (method={method})"
+
+
+def test_fuse_is_symmetric_at_token_level():
+    assert digit_tokens(normalize_name("Circuit 1-B")) == digit_tokens(normalize_name("Circuit 1B"))
+    assert digit_tokens(normalize_name("Circuit # 9 B")) == frozenset({"9B"})
+
+
+def test_fuse_leaves_possessive_s_alone():
+    # 'JEHOVAH'S' -> 'JEHOVAH S'; the lone 'S' must NOT fuse to a preceding number
+    assert digit_tokens(normalize_name("Circuit 7A of Jehovah's Witnesses")) == frozenset({"7A"})
+
+
+def test_fuse_does_not_merge_11B_and_1B():
+    assert digit_tokens(normalize_name("Circuit 11B")) != digit_tokens(normalize_name("Circuit 1B"))
+
+
+# ── Pattern B: incidental year embedded in a legal name ──────────────────────
+# Confirmed on real production data: 13.9% of all digit-gate rejects (207 of
+# 1,492) were an incorporation/founding year in one name ("Society (1992)")
+# with no branch-number counterpart on the other side.
+
+def test_bare_year_suffix_matches():
+    r = Resolver()
+    r.add_charity("777777777", "The Lethbridge Soup Kitchen Association", "Lethbridge", "AB")
+    method = fuzzy_result(r, "THE LETHBRIDGE SOUP KITCHEN ASSOCIATION 2013", "AB")
+    assert method == "fuzzy_accept", f"incidental bare year 2013 wrongly split (method={method})"
+
+
+def test_parenthetical_year_matches():
+    r = Resolver()
+    r.add_charity("888888888", "Medicine Hat and District Food Bank", "Medicine Hat", "AB")
+    method = fuzzy_result(r, "MEDICINE HAT AND DISTRICT FOOD BANK (1992) ASSOCIATION", "AB")
+    assert method == "fuzzy_accept", f"incidental (1992) wrongly split (method={method})"
+
+
+def test_same_year_on_both_sides_matches():
+    r = Resolver()
+    r.add_charity("101010101", "Strathcona Community Centre (1972)", "Edmonton", "AB")
+    method = fuzzy_result(r, "STRATHCONA COMMUNITY CENTRE SOCIETY (1972)", "AB")
+    assert method == "fuzzy_accept", f"matching year on both sides wrongly split (method={method})"
+
+
+def test_differing_year_on_both_sides_still_splits():
+    # Both names carry a year and they differ -> keep it as a differentiator,
+    # since this could be two genuinely distinct orgs with the same base name.
+    r = Resolver()
+    r.add_charity("999999999", "Strathcona Community Centre (1972)", "Edmonton", "AB")
+    method = fuzzy_result(r, "STRATHCONA COMMUNITY CENTRE (2010)", "AB")
+    assert method != "fuzzy_accept", f"orgs differing only by year must stay split (method={method})"
+
+
+def test_digit_tokens_match_ignores_asymmetric_year():
+    assert digit_tokens_match(frozenset(), frozenset({"2013"}))
+    assert digit_tokens_match(frozenset({"5A"}), frozenset({"5A", "1992"}))
+
+
+def test_digit_tokens_match_keeps_symmetric_differing_year():
+    assert not digit_tokens_match(frozenset({"1972"}), frozenset({"2010"}))
+
+
+def test_digit_tokens_match_still_splits_branch_numbers():
+    assert not digit_tokens_match(frozenset({"5A"}), frozenset({"7A"}))
+    assert not digit_tokens_match(frozenset({"11B"}), frozenset({"1B"}))
+    assert not digit_tokens_match(frozenset({"24"}), frozenset({"33"}))
+
+
 TESTS = [
     test_differing_branch_number_does_not_match,
     test_same_branch_number_minor_variant_still_matches,
@@ -82,6 +175,19 @@ TESTS = [
     test_apostrophe_variant_still_matches,
     test_lettered_branch_tokens_are_distinguished_not_collapsed,
     test_gate_reject_is_logged_for_qa,
+    test_hyphen_split_suffix_matches_fused,
+    test_space_split_suffix_matches_fused,
+    test_french_hyphen_suffix_matches_fused,
+    test_fuse_is_symmetric_at_token_level,
+    test_fuse_leaves_possessive_s_alone,
+    test_fuse_does_not_merge_11B_and_1B,
+    test_bare_year_suffix_matches,
+    test_parenthetical_year_matches,
+    test_same_year_on_both_sides_matches,
+    test_differing_year_on_both_sides_still_splits,
+    test_digit_tokens_match_ignores_asymmetric_year,
+    test_digit_tokens_match_keeps_symmetric_differing_year,
+    test_digit_tokens_match_still_splits_branch_numbers,
 ]
 
 

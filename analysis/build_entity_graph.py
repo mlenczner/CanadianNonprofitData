@@ -57,6 +57,7 @@ LEGAL_SUFFIXES = {
 
 BN9_RE = re.compile(r"^\d{9}$")
 BN15_RE = re.compile(r"^\d{9}[A-Z]{2}\d{4}$")
+YEAR_RE = re.compile(r"^(?:18|19|20)\d{2}$")  # plausible incorporation/founding year
 
 GRANTS_NFP_TYPES = {"N", "A", "S"}  # NFP/charity, Indigenous, academic
 
@@ -96,15 +97,52 @@ def block_key(province, norm_name):
     return f"{prov}|{prefix}"
 
 
+def _fuse_digit_letter_tokens(tokens):
+    """Join a standalone single-letter token onto an immediately-preceding
+    pure-digit token, so 'CIRCUIT 1 B' (produced from a raw '1-B' or '1 B'
+    once normalize_name turns the hyphen/extra space into a plain space)
+    collapses to the same 'CIRCUIT 1B' that a source writing '1B' fused
+    already yields. Leaves an unrelated standalone letter alone (e.g. the
+    possessive 'S' in 'JEHOVAH S') since the preceding token isn't pure-digit,
+    and never touches an already-fused multi-char token like '11B'."""
+    out = []
+    for tok in tokens:
+        if len(tok) == 1 and tok.isalpha() and out and out[-1].isdigit():
+            out[-1] = out[-1] + tok
+        else:
+            out.append(tok)
+    return out
+
+
 def digit_tokens(norm_name):
-    """Whitespace tokens containing a digit (e.g. '5A', '60') from an already
-    normalize_name()-processed string. Gates fuzzy matches: two org names
+    """Whitespace tokens containing a digit (e.g. '5A', '60', '1992') from an
+    already normalize_name()-processed string, after fusing split digit+
+    single-letter suffixes ('1 B' -> '1B'). Gates fuzzy matches: two org names
     differing only in a branch/circuit/chapter number (Alberta Circuit '5A'
     vs '7A' of Jehovah's Witnesses) must not fuzzy-match no matter how high
     token_sort_ratio scores the rest of the name. Deliberately splits on
     whitespace rather than a \\d+ regex, since a regex would collapse '5A' to
-    '5' and fail to distinguish it from '5B' or '7A'."""
-    return frozenset(t for t in norm_name.split() if any(ch.isdigit() for ch in t))
+    '5' and fail to distinguish it from '5B' or '7A'. Year-like tokens are
+    kept here and handled by digit_tokens_match() at comparison time."""
+    fused = _fuse_digit_letter_tokens(norm_name.split())
+    return frozenset(t for t in fused if any(ch.isdigit() for ch in t))
+
+
+def digit_tokens_match(a, b):
+    """Gate test for whether two digit-token sets represent the same branch/
+    circuit/chapter identity. Non-year tokens must match exactly. A year-like
+    token (1800-2099) is treated as an incidental incorporation/founding year
+    embedded in a legal name (e.g. 'Soup Kitchen Association 2013') and
+    ignored when only one side carries one; when BOTH sides carry a
+    (differing) year it's kept as a differentiator, so two same-named orgs
+    distinguished only by year aren't merged."""
+    a_years = frozenset(t for t in a if YEAR_RE.match(t))
+    b_years = frozenset(t for t in b if YEAR_RE.match(t))
+    if (a - a_years) != (b - b_years):
+        return False
+    if a_years and b_years:
+        return a_years == b_years
+    return True
 
 
 def fiscal_year_from_date(date_str, month_cutover=4):
@@ -204,14 +242,14 @@ class Resolver:
                 )
                 if pre_gate:
                     _, pre_score, pre_idx = pre_gate
-                    if candidates[pre_idx][1] != q_nums:
+                    if not digit_tokens_match(candidates[pre_idx][1], q_nums):
                         rejected_eid = candidates[pre_idx][2]
                         self.stats["digit_gate_reject"] += 1
                         self.gate_rejects.append(
                             (name, self.entities[rejected_eid - 1][2], pre_score, source_dataset)
                         )
 
-                gated = [c for c in candidates if c[1] == q_nums]
+                gated = [c for c in candidates if digit_tokens_match(c[1], q_nums)]
                 if gated:
                     choices = [c[0] for c in gated]
                     match = process.extractOne(
