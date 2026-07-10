@@ -39,7 +39,7 @@ Set up a virtualenv and install dependencies (needed for the linking pipeline; t
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install duckdb rapidfuzz unidecode
+.venv/bin/pip install -r requirements.txt
 ```
 
 Profile `grants.csv` on its own:
