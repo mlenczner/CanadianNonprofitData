@@ -438,9 +438,21 @@ def build_role_summary(con):
 
 
 def build_entity_financials(con):
-    print("\nBuilding entity_financials (T3010 line codes 4700/4950/5100/5050/4540/4570) ...")
+    # raw_t3010_fin spans 2013-2024 (one row per BN per filing year). We keep
+    # only the latest source_year per bn_root before joining to entities, so
+    # entity_financials stays one row per entity instead of up to 12.
+    print("\nBuilding entity_financials (T3010 line codes 4700/4950/5100/5050/4540/4570, latest fiscal year per entity) ...")
     con.execute("""
         CREATE OR REPLACE TABLE entity_financials AS
+        WITH fin_with_root AS (
+            SELECT *, substr(regexp_replace(BN, '[^0-9A-Za-z]', ''), 1, 9) AS bn_root
+            FROM raw_t3010_fin
+        ),
+        latest_fin AS (
+            SELECT *
+            FROM fin_with_root
+            QUALIFY ROW_NUMBER() OVER (PARTITION BY bn_root ORDER BY source_year DESC) = 1
+        )
         SELECT
             e.entity_id,
             f.BN AS bn_full,
@@ -451,8 +463,8 @@ def build_entity_financials(con):
             TRY_CAST(f."5050" AS DOUBLE) AS total_gifts_to_qualified_donees,
             TRY_CAST(f."4540" AS DOUBLE) AS revenue_from_federal_gov,
             TRY_CAST(f."4570" AS DOUBLE) AS revenue_from_any_cdn_gov
-        FROM raw_t3010_fin f
-        JOIN entities e ON e.bn_root = substr(regexp_replace(f.BN, '[^0-9A-Za-z]', ''), 1, 9)
+        FROM latest_fin f
+        JOIN entities e ON e.bn_root = f.bn_root
     """)
     n = con.execute("SELECT COUNT(*) FROM entity_financials").fetchone()[0]
     print(f"  entity_financials: {n:,} rows")

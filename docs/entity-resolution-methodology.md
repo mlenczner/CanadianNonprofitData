@@ -49,7 +49,7 @@ Every resolution decision is recorded in `entity_links` (`entity_id`, `source_da
   - otherwise → `dual_role`
   
   The 90/10 split is what operationalizes "95% of the time an org is mainly one or the other" — it's a threshold, not a law, and can be tightened or loosened per analysis.
-- **`entity_financials`** — T3010 line-code data joined to `entities` by BN root: total revenue (line 4700), total expenditures (4950/5100), total gifts to qualified donees (5050), revenue from federal/any Canadian government (4540/4570) — sourced from CRA's official [T3010 Open Data Dictionary](https://www.canadiancharitylaw.ca/wp-content/uploads/2025/02/CRA-open-data-data-dictionary-for-T3010.pdf), not guessed from field names.
+- **`entity_financials`** — one row per entity: T3010 line-code data for its latest filed fiscal year, joined to `entities` by BN root: total revenue (line 4700), total expenditures (4950/5100), total gifts to qualified donees (5050), revenue from federal/any Canadian government (4540/4570) — sourced from CRA's official [T3010 Open Data Dictionary](https://www.canadiancharitylaw.ca/wp-content/uploads/2025/02/CRA-open-data-data-dictionary-for-T3010.pdf), not guessed from field names. `raw_t3010_fin` spans 2013-2024 (up to 12 filings per entity); only the latest `source_year` per `bn_root` is kept before joining.
 
 ## Results from the first run
 
