@@ -1,7 +1,7 @@
 """
 Regression test for the digit-token fuzzy-match gate in Resolver.resolve().
 
-Confirmed bug (see docs/entity-resolution-methodology.md, CLAUDE.md open
+Confirmed bug (see docs/entity-resolution-methodology.md, AGENTS.md open
 issue #2): "ALBERTA CIRCUIT 5A OF JEHOVAH'S WITNESSES" fuzzy-matched
 "Alberta Circuit 7A of Jehovah's Witnesses" at a 97.4 token_sort_ratio score
 — a differing branch/circuit number barely dents the score against an
