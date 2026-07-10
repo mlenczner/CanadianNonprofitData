@@ -1,1 +1,6 @@
 grants.csv
+data/
+*.duckdb
+*.duckdb.wal
+.venv/
+

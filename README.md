@@ -10,32 +10,57 @@ Analysis of the Government of Canada's **Proactive Disclosure — Grants and Con
 ## Repository structure
 
 ```
-docs/       Documentation — data problems and research questions
-analysis/   Scripts for profiling and analyzing the dataset
+docs/       Documentation — data problems, research questions, and methodology
+analysis/   Scripts for downloading, profiling, and linking the datasets
 ```
 
 | Path | Description |
 |------|-------------|
 | [`docs/data-publishing-problems.md`](docs/data-publishing-problems.md) | Documented issues with missing mandatory fields, inconsistent data, and structural publishing limitations |
 | [`docs/questions-and-insights.md`](docs/questions-and-insights.md) | Working list of research questions and possible insights |
-| [`analysis/profile_grants.py`](analysis/profile_grants.py) | Dataset profiler — completeness, field distributions, and quality metrics |
+| [`docs/entity-resolution-methodology.md`](docs/entity-resolution-methodology.md) | How funders/recipients are matched across sources, thresholds, and known limitations |
+| [`analysis/profile_grants.py`](analysis/profile_grants.py) | `grants.csv` profiler — completeness, field distributions, and quality metrics |
+| [`analysis/download_sources.py`](analysis/download_sources.py) | Downloads the T3010 charity registry and Canada Council grants data |
+| [`analysis/build_entity_graph.py`](analysis/build_entity_graph.py) | Links grants.csv + T3010 + Canada Council into one entity graph |
 
 ---
 
 ## Data
 
-Download the full CSV from [Open Canada](https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013) and place it at the repo root as `grants.csv`.
+Download the federal G&C CSV from [Open Canada](https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013) and place it at the repo root as `grants.csv`.
 
-The dataset is not tracked in this repository — at ~2 GB it exceeds GitHub's file size limits.
+Neither `grants.csv` (~2 GB) nor the files under `data/` (T3010, Canada Council) are tracked in this repository — they're either too large for GitHub or third-party downloads that shouldn't be vendored. Fetch them with `analysis/download_sources.py`.
 
 ---
 
 ## Usage
 
-Profile the dataset (requires Python 3):
+Set up a virtualenv and install dependencies (needed for the linking pipeline; the profiler alone only needs the standard library):
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install duckdb rapidfuzz unidecode
+```
+
+Profile `grants.csv` on its own:
 
 ```bash
 python analysis/profile_grants.py grants.csv
 ```
 
-The script outputs a compact JSON profile covering field completeness, top values, date ranges, and data quality metrics.
+Download the T3010 charity registry and Canada Council grants data, then build the linked entity graph:
+
+```bash
+.venv/bin/python analysis/download_sources.py
+.venv/bin/python analysis/build_entity_graph.py
+```
+
+This produces `nonprofit_network.duckdb` (gitignored) containing:
+
+- `entities` — every resolved organization (charities, federal departments, Canada Council, and unmatched orgs), one row each regardless of how many source datasets it appears in
+- `grants_unified` — every grant/gift from all three sources, with funder and recipient both pointing to `entities`
+- `entity_role_summary` — total given/received per entity and a `primarily_funder` / `primarily_recipient` / `dual_role` classification
+- `entity_links` — audit trail of how each record was matched (exact BN / fuzzy name / unmatched)
+- `entity_financials` — T3010-reported revenue/expenditures per entity
+
+See [`docs/entity-resolution-methodology.md`](docs/entity-resolution-methodology.md) for how the matching works and its limitations.
