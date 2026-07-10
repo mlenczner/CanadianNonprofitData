@@ -9,6 +9,7 @@ under. See docs/entity-resolution-methodology.md for the approach.
 Run with: python analysis/build_entity_graph.py
 """
 
+import glob
 import os
 import re
 from collections import defaultdict
@@ -203,37 +204,66 @@ class Resolver:
 
 # ── pipeline stages ──────────────────────────────────────────────────────────
 
+def _load_t3010_table(con, glob_pattern, table_name):
+    """Load a T3010 CSV glob into `table_name` (unioned by column name across
+    years, since form columns changed shape over time). Before that union
+    load — which uses ignore_errors=true and drops malformed rows silently —
+    scan each matching file on its own with store_rejects=true and print a
+    per-file count of rows dropped, since union_by_name is not supported
+    together with store_rejects in DuckDB."""
+    con.execute("DROP TABLE IF EXISTS _t3010_reject_errors")
+    con.execute("DROP TABLE IF EXISTS _t3010_reject_scans")
+    files = sorted(glob.glob(glob_pattern))
+    for f in files:
+        con.execute(
+            f"SELECT * FROM read_csv('{f}', all_varchar=true, ignore_errors=true, "
+            f"store_rejects=true, rejects_table='_t3010_reject_errors', rejects_scan='_t3010_reject_scans')"
+        ).fetchall()
+    rejects = con.execute(
+        "SELECT s.file_path, count(*) FROM _t3010_reject_errors e "
+        "JOIN _t3010_reject_scans s USING (scan_id) GROUP BY s.file_path ORDER BY s.file_path"
+    ).fetchall()
+    total = sum(n for _, n in rejects)
+    if total:
+        print(f"  {table_name}: {total:,} rows rejected by ignore_errors across {len(rejects)} file(s):")
+        for file_path, n in rejects:
+            print(f"    {os.path.basename(file_path)}: {n:,} rejected")
+    else:
+        print(f"  {table_name}: 0 rows rejected across {len(files)} file(s)")
+
+    con.execute(
+        f"CREATE OR REPLACE TABLE {table_name} AS "
+        f"SELECT *, CAST(regexp_extract(filename, '(\\d{{4}})\\.csv$', 1) AS INTEGER) AS source_year "
+        f"FROM read_csv('{glob_pattern}', all_varchar=true, union_by_name=true, filename=true, ignore_errors=true)"
+    )
+
+
 def load_raw(con):
     print("Loading raw sources into DuckDB ...")
     con.execute(f"CREATE OR REPLACE TABLE raw_grants AS SELECT * FROM read_csv('{GRANTS_CSV}', all_varchar=true)")
     n = con.execute("SELECT COUNT(*) FROM raw_grants").fetchone()[0]
     print(f"  raw_grants: {n:,} rows")
 
-    con.execute(
-        f"CREATE OR REPLACE TABLE raw_t3010_ident AS "
-        f"SELECT * FROM read_csv('{DATA_DIR}/t3010_identification.csv', all_varchar=true)"
-    )
-    n = con.execute("SELECT COUNT(*) FROM raw_t3010_ident").fetchone()[0]
-    print(f"  raw_t3010_ident: {n:,} rows")
+    # T3010 (2013-2024): one file per kind per year, unioned by column name
+    # since a handful of columns were added/removed across form versions
+    # (e.g. 5045/5840-5843 only exist from 2023 onward). `source_year` is
+    # parsed from our own local filename, not from any in-file column.
+    t3010_dir = os.path.join(DATA_DIR, "t3010")
 
-    con.execute(
-        f"CREATE OR REPLACE TABLE raw_t3010_qd AS "
-        f"SELECT * FROM read_csv('{DATA_DIR}/t3010_qualified_donees.csv', all_varchar=true)"
-    )
+    _load_t3010_table(con, f"{t3010_dir}/identification_*.csv", "raw_t3010_ident")
+    n = con.execute("SELECT COUNT(*) FROM raw_t3010_ident").fetchone()[0]
+    years = con.execute("SELECT COUNT(DISTINCT source_year) FROM raw_t3010_ident").fetchone()[0]
+    print(f"  raw_t3010_ident: {n:,} rows across {years} years")
+
+    _load_t3010_table(con, f"{t3010_dir}/qualified_donees_*.csv", "raw_t3010_qd")
     n = con.execute("SELECT COUNT(*) FROM raw_t3010_qd").fetchone()[0]
     print(f"  raw_t3010_qd: {n:,} rows")
 
-    con.execute(
-        f"CREATE OR REPLACE TABLE raw_t3010_nqd AS "
-        f"SELECT * FROM read_csv('{DATA_DIR}/t3010_non_qualified_donees.csv', all_varchar=true)"
-    )
+    _load_t3010_table(con, f"{t3010_dir}/non_qualified_donees_*.csv", "raw_t3010_nqd")
     n = con.execute("SELECT COUNT(*) FROM raw_t3010_nqd").fetchone()[0]
-    print(f"  raw_t3010_nqd: {n:,} rows")
+    print(f"  raw_t3010_nqd: {n:,} rows (only populated from 2023 onward)")
 
-    con.execute(
-        f"CREATE OR REPLACE TABLE raw_t3010_fin AS "
-        f"SELECT * FROM read_csv('{DATA_DIR}/t3010_financials.csv', all_varchar=true)"
-    )
+    _load_t3010_table(con, f"{t3010_dir}/financials_*.csv", "raw_t3010_fin")
     n = con.execute("SELECT COUNT(*) FROM raw_t3010_fin").fetchone()[0]
     print(f"  raw_t3010_fin: {n:,} rows")
 
@@ -260,14 +290,21 @@ def load_raw(con):
 def build_entities_and_grants(con):
     r = Resolver()
 
-    print("\nSeeding entities from T3010 charity registry ...")
-    for bn, legal_name, city, province in con.execute(
-        'SELECT BN, "Legal Name", City, Province FROM raw_t3010_ident'
+    print("\nSeeding entities from T3010 charity registry (2013-2024, latest year per BN wins) ...")
+    latest_by_root = {}  # bn_root -> (source_year, legal_name, city, province)
+    for bn, legal_name, city, province, source_year in con.execute(
+        'SELECT BN, "Legal Name", City, Province, source_year FROM raw_t3010_ident'
     ).fetchall():
         root = normalize_bn(bn)
-        if root:
-            r.add_charity(root, legal_name, city, province)
-    print(f"  {len(r.bn_to_entity):,} charity entities seeded")
+        if not root:
+            continue
+        prev = latest_by_root.get(root)
+        if prev is None or source_year > prev[0]:
+            latest_by_root[root] = (source_year, legal_name, city, province)
+    for root, (source_year, legal_name, city, province) in latest_by_root.items():
+        r.add_charity(root, legal_name, city, province)
+    print(f"  {len(r.bn_to_entity):,} charity entities seeded (including charities deregistered "
+          f"before 2024 that only appear in earlier years)")
 
     print("Seeding federal department entities from grants.csv ref_number prefixes ...")
     for (code,) in con.execute(
