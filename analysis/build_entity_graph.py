@@ -96,6 +96,17 @@ def block_key(province, norm_name):
     return f"{prov}|{prefix}"
 
 
+def digit_tokens(norm_name):
+    """Whitespace tokens containing a digit (e.g. '5A', '60') from an already
+    normalize_name()-processed string. Gates fuzzy matches: two org names
+    differing only in a branch/circuit/chapter number (Alberta Circuit '5A'
+    vs '7A' of Jehovah's Witnesses) must not fuzzy-match no matter how high
+    token_sort_ratio scores the rest of the name. Deliberately splits on
+    whitespace rather than a \\d+ regex, since a regex would collapse '5A' to
+    '5' and fail to distinguish it from '5B' or '7A'."""
+    return frozenset(t for t in norm_name.split() if any(ch.isdigit() for ch in t))
+
+
 def fiscal_year_from_date(date_str, month_cutover=4):
     if not date_str:
         return None
@@ -130,8 +141,11 @@ class Resolver:
         self.bn_to_entity = {}
         self.dept_to_entity = {}
         self.residual_to_entity = {}
-        self.fuzzy_index = defaultdict(list)  # block_key -> [(norm_name, entity_id)]
+        self.fuzzy_index = defaultdict(list)  # block_key -> [(norm_name, digit_tokens, entity_id)]
         self.links = []  # (entity_id, source_dataset, raw_name, raw_bn, match_method, match_score)
+        self.gate_rejects = []  # (raw_name, rejected_canonical_name, score, source_dataset) —
+                                 # candidates that scored >= FUZZY_ACCEPT but were split apart
+                                 # by the digit-token gate; sampled for QA in print_report
         self.stats = defaultdict(int)
 
     def new_id(self):
@@ -146,7 +160,7 @@ class Resolver:
         self.bn_to_entity[bn_root] = eid
         self.entities.append((eid, bn_root, legal_name, city, province, "charity"))
         norm = normalize_name(legal_name)
-        self.fuzzy_index[block_key(province, norm)].append((norm, eid))
+        self.fuzzy_index[block_key(province, norm)].append((norm, digit_tokens(norm), eid))
         return eid
 
     def add_dept(self, code):
@@ -177,17 +191,39 @@ class Resolver:
             key = block_key(province, norm)
             candidates = self.fuzzy_index.get(key, [])
             if candidates:
-                choices = [c[0] for c in candidates]
-                match = process.extractOne(
-                    norm, choices, scorer=fuzz.token_sort_ratio, score_cutoff=FUZZY_REVIEW
+                q_nums = digit_tokens(norm)
+                all_choices = [c[0] for c in candidates]
+
+                # Would this record have fuzzy-matched before the digit-token
+                # gate? Log it for QA sampling in print_report — a high
+                # pre-gate score split apart by a differing branch/circuit/
+                # chapter number is the gate doing its job; splitting a
+                # genuine near-duplicate instead is the failure mode to watch for.
+                pre_gate = process.extractOne(
+                    norm, all_choices, scorer=fuzz.token_sort_ratio, score_cutoff=FUZZY_ACCEPT
                 )
-                if match:
-                    _, score, idx = match
-                    if score >= FUZZY_ACCEPT:
-                        eid = candidates[idx][1]
-                        self.stats["fuzzy_accept"] += 1
-                        self.links.append((eid, source_dataset, name, bn_raw, "fuzzy_accept", score))
-                        return eid
+                if pre_gate:
+                    _, pre_score, pre_idx = pre_gate
+                    if candidates[pre_idx][1] != q_nums:
+                        rejected_eid = candidates[pre_idx][2]
+                        self.stats["digit_gate_reject"] += 1
+                        self.gate_rejects.append(
+                            (name, self.entities[rejected_eid - 1][2], pre_score, source_dataset)
+                        )
+
+                gated = [c for c in candidates if c[1] == q_nums]
+                if gated:
+                    choices = [c[0] for c in gated]
+                    match = process.extractOne(
+                        norm, choices, scorer=fuzz.token_sort_ratio, score_cutoff=FUZZY_REVIEW
+                    )
+                    if match:
+                        _, score, idx = match
+                        if score >= FUZZY_ACCEPT:
+                            eid = gated[idx][2]
+                            self.stats["fuzzy_accept"] += 1
+                            self.links.append((eid, source_dataset, name, bn_raw, "fuzzy_accept", score))
+                            return eid
 
         # residual: dedupe unmatched records by normalized name + province
         rkey = (norm, (province or "").strip().upper()[:2])
@@ -425,6 +461,21 @@ def build_entities_and_grants(con):
     """)
     con.executemany("INSERT INTO entity_links VALUES (?,?,?,?,?,?)", r.links)
 
+    # QA-only: candidates the digit-token gate split apart despite scoring
+    # >= FUZZY_ACCEPT pre-gate. Not part of the documented schema (underscore
+    # prefix, like _t3010_reject_errors) — sampled in print_report to check
+    # whether the gate is only catching true branch-number splits or also
+    # separating genuine same-org near-misses.
+    con.execute("DROP TABLE IF EXISTS _fuzzy_gate_rejects")
+    con.execute("""
+        CREATE TABLE _fuzzy_gate_rejects (
+            raw_name VARCHAR, rejected_canonical_name VARCHAR,
+            score DOUBLE, source_dataset VARCHAR
+        )
+    """)
+    con.executemany("INSERT INTO _fuzzy_gate_rejects VALUES (?,?,?,?)", r.gate_rejects)
+    print(f"_fuzzy_gate_rejects: {len(r.gate_rejects):,} rows")
+
     con.execute("DROP TABLE IF EXISTS grants_unified")
     con.execute("""
         CREATE TABLE grants_unified (
@@ -541,6 +592,14 @@ def print_report(con):
         FROM entity_links l JOIN entities e ON e.entity_id = l.entity_id
         WHERE l.match_method = 'fuzzy_accept' AND l.match_score < 99
         ORDER BY random() LIMIT 20
+    """).fetchall():
+        print(f"  [{score:>5.1f}] {raw_name[:38]:<38} -> {canon[:38]:<38} ({src})")
+
+    print("\n── 20 random digit-token-gate rejects, score >= 90 pre-gate (for manual QA — "
+          "true branch/circuit splits vs. wrongly split near-duplicates) ────")
+    for raw_name, canon, score, src in con.execute("""
+        SELECT raw_name, rejected_canonical_name, score, source_dataset
+        FROM _fuzzy_gate_rejects ORDER BY random() LIMIT 20
     """).fetchall():
         print(f"  [{score:>5.1f}] {raw_name[:38]:<38} -> {canon[:38]:<38} ({src})")
 
