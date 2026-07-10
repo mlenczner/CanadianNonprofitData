@@ -486,14 +486,14 @@ def print_report(con):
     """).fetchall():
         print(f"  {name[:45]:<45} given=${given:,.0f}  received=${received:,.0f}  share={share:.2f}")
 
-    print("\n── 20 random fuzzy_accept matches (for manual QA) ────────")
-    for eid, src, raw_name, score in con.execute("""
-        SELECT l.entity_id, l.source_dataset, l.raw_name, l.match_score
-        FROM entity_links l WHERE l.match_method = 'fuzzy_accept'
-        USING SAMPLE 20
+    print("\n── 20 random fuzzy_accept matches, score < 99 (for manual QA) ────")
+    for raw_name, score, canon, src in con.execute("""
+        SELECT l.raw_name, l.match_score, e.canonical_name, l.source_dataset
+        FROM entity_links l JOIN entities e ON e.entity_id = l.entity_id
+        WHERE l.match_method = 'fuzzy_accept' AND l.match_score < 99
+        ORDER BY random() LIMIT 20
     """).fetchall():
-        canon = con.execute("SELECT canonical_name FROM entities WHERE entity_id = ?", [eid]).fetchone()[0]
-        print(f"  [{score:>5.1f}] {raw_name[:35]:<35} -> {canon[:35]:<35} ({src})")
+        print(f"  [{score:>5.1f}] {raw_name[:38]:<38} -> {canon[:38]:<38} ({src})")
 
     print(f"\n{'='*60}\nDONE — database at {DB_PATH}\n{'='*60}")
 
