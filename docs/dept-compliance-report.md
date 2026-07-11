@@ -1,5 +1,5 @@
 # GC Grants — Per-Department Compliance Report
-Generated: 2026-06-23 14:49  |  Total records: 1,303,898  |  Departments: 51
+Generated: 2026-07-11 03:25  |  Total records: 1,303,939  |  Departments: 51
 
 ## 1. Overall Compliance Summary (all departments)
 
@@ -22,7 +22,7 @@ Generated: 2026-06-23 14:49  |  Total records: 1,303,898  |  Departments: 51
 | ced-dec | Canada Economic Development for Quebec Regions | Développeme | 16,461 | $9,443,816,568 | ✓ | ✓ | ✓ | 2,435 (15%) | ✓ |
 | dfatd-maecd | Global Affairs Canada | Affaires mondiales Canada | 16,001 | $63,532,998,893 | 4,589 (29%) | 4,590 (29%) | ✓ | 247 (2%) | 18 |
 | wd-deo | Western Economic Diversification Canada | Diversification de | 14,556 | $5,228,535,185 | 4,240 (29%) | 4,240 (29%) | ✓ | 105 (1%) | 11 |
-| nrcan-rncan | Natural Resources Canada | Ressources naturelles Canada | 11,629 | $24,572,253,396 | 1,754 (15%) | 1,754 (15%) | ✓ | 21 (0%) | 108 |
+| nrcan-rncan | Natural Resources Canada | Ressources naturelles Canada | 11,631 | $24,572,154,792 | 1,754 (15%) | 1,754 (15%) | ✓ | 21 (0%) | 108 |
 | ec | Environment and Climate Change Canada | Environnement et Cha | 8,582 | $7,059,987,727 | 2,577 (30%) | 2,577 (30%) | ✓ | 1,120 (13%) | ✓ |
 | cra-arc | Canada Revenue Agency | Agence du revenu du Canada | 7,188 | $33,874,983 | 34 (0%) | 34 (0%) | ✓ | ✓ | ✓ |
 | phac-aspc | Public Health Agency of Canada | Agence de la santé publique | 5,288 | $3,898,171,435 | 125 (2%) | 125 (2%) | ✓ | 4,738 (90%) | 77 |
@@ -32,14 +32,14 @@ Generated: 2026-06-23 14:49  |  Total records: 1,303,898  |  Departments: 51
 | ps-sp | Public Safety Canada | Sécurité publique Canada | 3,476 | $13,351,817,185 | 307 (9%) | 307 (9%) | ✓ | 50 (1%) | 57 |
 | prairiescan | Prairies Economic Development Canada | Développement économi | 3,396 | $3,422,534,469 | ✓ | ✓ | ✓ | 75 (2%) | 13 |
 | pc | Parks Canada | Parcs Canada | 3,023 | $990,207,998 | ✓ | ✓ | ✓ | ✓ | 1 |
-| wage | Women and Gender Equality Canada | Femmes et Égalité des gen | 2,578 | $2,567,881,564 | ✓ | ✓ | ✓ | ✓ | ✓ |
+| wage | Women and Gender Equality Canada | Femmes et Égalité des gen | 2,578 | $2,569,313,663 | ✓ | ✓ | ✓ | ✓ | ✓ |
 | hc-sc | Health Canada | Santé Canada | 2,252 | $103,245,607,560 | 12 (1%) | 12 (1%) | ✓ | 978 (43%) | 5 |
 | infc | Department of Housing, Infrastructure and Communities | Mini | 2,211 | $72,388,179,561 | 112 (5%) | 112 (5%) | ✓ | 7 (0%) | ✓ |
 | vac-acc | Veterans Affairs Canada | Anciens Combattants Canada | 2,163 | $30,809,942,769 | 168 (8%) | 168 (8%) | ✓ | 1,334 (62%) | 2 |
 | cannor | Canadian Northern Economic Development Agency | Agence canad | 2,018 | $568,862,042 | ✓ | ✓ | ✓ | 149 (7%) | 79 |
-| csa-asc | Canadian Space Agency | Agence spatiale canadienne | 1,932 | $1,939,516,550 | ✓ | ✓ | ✓ | ✓ | 1 |
+| csa-asc | Canadian Space Agency | Agence spatiale canadienne | 1,933 | $1,940,486,458 | ✓ | ✓ | ✓ | ✓ | 1 |
 | pacifican | Pacific Economic Development Canada | Développement économiq | 1,482 | $1,165,516,342 | ✓ | ✓ | ✓ | 55 (4%) | 14 |
-| fednor | Federal Economic Development Agency for Northern Ontario | A | 1,443 | $730,481,690 | ✓ | ✓ | ✓ | 264 (18%) | ✓ |
+| fednor | Federal Economic Development Agency for Northern Ontario | A | 1,481 | $754,825,265 | ✓ | ✓ | ✓ | 264 (18%) | ✓ |
 | dnd-mdn | National Defence | Défense nationale | 1,140 | $2,656,989,951 | 5 (0%) | 5 (0%) | ✓ | 1 (0%) | ✓ |
 | cnsc-ccsn | Canadian Nuclear Safety Commission | Commission canadienne d | 1,090 | $47,593,322 | 127 (12%) | 127 (12%) | ✓ | 36 (3%) | 1 |
 | cer-rec | Canada Energy Regulator | La Régie de l’énergie du Canada | 746 | $34,205,689 | ✓ | ✓ | ✓ | ✓ | ✓ |
@@ -78,7 +78,7 @@ Only departments with at least 1 record with agreement_start_date >= 2025-12-01 
 | dfatd-maecd | Global Affairs Canada | Affaires mondiales Canada | 280 | ✓ | 0% | 0% | 0% | ✓ | ✓ | ✓ |
 | dfo-mpo | Fisheries and Oceans Canada | Pêches et Océans Can | 255 | ✓ | 0% | 97% | 0% | ✓ | ✓ | ✓ |
 | iaac-aeic | Impact Assessment Agency of Canada | Agence d'éval | 237 | ✓ | 0% | 0% | 0% | ✓ | ✓ | ✓ |
-| pc | Parks Canada | Parcs Canada | 218 | ✓ | 31% | 100% | 100% | ✓ | ✓ | ✓ |
+| pc | Parks Canada | Parcs Canada | 219 | ✓ | 31% | 100% | 100% | ✓ | ✓ | ✓ |
 | ec | Environment and Climate Change Canada | Environnem | 199 | ✓ | 0% | 0% | 0% | ✓ | ✓ | ✓ |
 | ps-sp | Public Safety Canada | Sécurité publique Canada | 193 | ✓ | 7% | 98% | 91% | ✓ | ✓ | ✓ |
 | prairiescan | Prairies Economic Development Canada | Développeme | 176 | ✓ | 99% | ✓ | ✓ | ✓ | ✓ | ✓ |
@@ -90,8 +90,8 @@ Only departments with at least 1 record with agreement_start_date >= 2025-12-01 
 | cwa-aec | Canada Water Agency | Agence de l’eau du Canada | 69 | ✓ | 0% | 0% | 0% | ✓ | ✓ | ✓ |
 | hc-sc | Health Canada | Santé Canada | 66 | ✓ | 91% | 98% | 0% | ✓ | ✓ | ✓ |
 | isc-sac | Indigenous Services Canada | Services aux Autochto | 64 | ✓ | 0% | ✓ | 0% | ✓ | ✓ | ✓ |
+| fednor | Federal Economic Development Agency for Northern O | 59 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 98% |
 | cnsc-ccsn | Canadian Nuclear Safety Commission | Commission ca | 57 | ✓ | 0% | 98% | 0% | ✓ | ✓ | ✓ |
-| fednor | Federal Economic Development Agency for Northern O | 39 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 97% |
 | vac-acc | Veterans Affairs Canada | Anciens Combattants Cana | 37 | ✓ | 32% | 43% | 43% | ✓ | ✓ | ✓ |
 | aandc-aadnc | Crown-Indigenous Relations and Northern Affairs Ca | 31 | ✓ | 0% | ✓ | 0% | ✓ | ✓ | ✓ |
 | cer-rec | Canada Energy Regulator | La Régie de l’énergie du | 29 | ✓ | 0% | 0% | 0% | ✓ | ✓ | ✓ |
@@ -123,7 +123,7 @@ Only departments with at least 1 record with agreement_start_date >= 2025-12-01 
 | cic | Immigration, Refugees and Citizenship Canada | Immigration,  | 18,393 | 3,153 | 17.1% |
 | esdc-edsc | Employment and Social Development Canada | Emploi et Dévelop | 352,726 | 2,599 | 0.7% |
 | ec | Environment and Climate Change Canada | Environnement et Cha | 8,582 | 2,577 | 30.0% |
-| nrcan-rncan | Natural Resources Canada | Ressources naturelles Canada | 11,629 | 1,754 | 15.1% |
+| nrcan-rncan | Natural Resources Canada | Ressources naturelles Canada | 11,631 | 1,754 | 15.1% |
 | tc | Transport Canada | Transports Canada | 46,598 | 1,736 | 3.7% |
 | iaac-aeic | Impact Assessment Agency of Canada | Agence d'évaluation d'i | 4,319 | 599 | 13.9% |
 | aafc-aac | Agriculture and Agri-Food Canada | Agriculture et Agroalimen | 17,993 | 568 | 3.2% |
@@ -152,7 +152,7 @@ Only departments with at least 1 record with agreement_start_date >= 2025-12-01 
 | ec | Environment and Climate Change Canada | Environnement et Cha | 8,582 | 1,120 | 13.1% |
 | hc-sc | Health Canada | Santé Canada | 2,252 | 978 | 43.4% |
 | nrc-cnrc | National Research Council Canada | Conseil national de reche | 77,946 | 947 | 1.2% |
-| fednor | Federal Economic Development Agency for Northern Ontario | A | 1,443 | 264 | 18.3% |
+| fednor | Federal Economic Development Agency for Northern Ontario | A | 1,481 | 264 | 17.8% |
 | dfatd-maecd | Global Affairs Canada | Affaires mondiales Canada | 16,001 | 247 | 1.5% |
 | tc | Transport Canada | Transports Canada | 46,598 | 162 | 0.3% |
 | cannor | Canadian Northern Economic Development Agency | Agence canad | 2,018 | 149 | 7.4% |
@@ -206,7 +206,7 @@ Only departments with at least 1 record with agreement_start_date >= 2025-12-01 
 | ec | Environment and Climate Change Canada | Environnement et Cha | 199 | 199 | 100.0% |
 | ps-sp | Public Safety Canada | Sécurité publique Canada | 193 | 180 | 93.3% |
 | nrcan-rncan | Natural Resources Canada | Ressources naturelles Canada | 542 | 157 | 29.0% |
-| pc | Parks Canada | Parcs Canada | 218 | 150 | 68.8% |
+| pc | Parks Canada | Parcs Canada | 219 | 151 | 68.9% |
 | tc | Transport Canada | Transports Canada | 410 | 117 | 28.5% |
 | infc | Department of Housing, Infrastructure and Communities | Mini | 97 | 97 | 100.0% |
 | jus | Department of Justice Canada | Ministère de la Justice Canad | 292 | 87 | 29.8% |
@@ -224,8 +224,8 @@ Departments with 50+ records, no missing descriptions, no dirty type values, no 
 | Dept | Department | Records | Total Value (CAD) |
 |---|---|---|---|
 | pc | Parks Canada | Parcs Canada | 3,023 | $990,207,998 |
-| wage | Women and Gender Equality Canada | Femmes et Égalité des gen | 2,578 | $2,567,881,564 |
-| csa-asc | Canadian Space Agency | Agence spatiale canadienne | 1,932 | $1,939,516,550 |
+| wage | Women and Gender Equality Canada | Femmes et Égalité des gen | 2,578 | $2,569,313,663 |
+| csa-asc | Canadian Space Agency | Agence spatiale canadienne | 1,933 | $1,940,486,458 |
 | cer-rec | Canada Energy Regulator | La Régie de l’énergie du Canada | 746 | $34,205,689 |
 | polar-polaire | Polar Knowledge Canada | Savoir polaire Canada | 436 | $63,713,770 |
 | lac-bac | Library and Archives Canada | Bibliothèque et Archives Canad | 405 | $16,616,261 |
