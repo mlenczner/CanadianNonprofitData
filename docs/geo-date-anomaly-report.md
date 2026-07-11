@@ -1,5 +1,5 @@
 # GC Grants — Date and Geography Anomaly Report
-Generated: 2026-06-23 14:55  |  Total records: 1,303,898
+Generated: 2026-07-11 10:55  |  Total records: 1,303,939
 
 ## 1. Garbage Dates
 
@@ -26,32 +26,32 @@ Generated: 2026-06-23 14:55  |  Total records: 1,303,898
 
 ### 2a. Lowercase country codes — 242 total records
 
-All bad country values seen: {'ca': 156, 'Canada': 67, 'None': 10, 'United States': 4, 'Toronto, Ontario': 1, 'London, Ontario': 1, 'Box 188, Maple Creek SK S0N 1N0': 1, 'Stonewall, Manitoba': 1, 'Madrid': 1}
+All bad country values seen: {'ca': 156, 'Canada': 67, 'None': 10, 'United States': 4, 'Box 188, Maple Creek SK S0N 1N0': 1, 'London, Ontario': 1, 'Stonewall, Manitoba': 1, 'Toronto, Ontario': 1, 'Madrid': 1}
 
 | Dept | Department | Count |
 |---|---|---|
 | vac-acc | Veterans Affairs Canada | Anciens Combattants Canada | 156 |
 | sshrc-crsh | Social Sciences and Humanities Research Council of Canada | Conseil de recherches en sciences humaines du Canada | 67 |
 | iaac-aeic | Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada | 10 |
-| csc-scc | Correctional Service of Canada | Service correctionnel du Canada | 4 |
 | cic | Immigration, Refugees and Citizenship Canada | Immigration, Réfugiés et Citoyenneté Canada | 4 |
+| csc-scc | Correctional Service of Canada | Service correctionnel du Canada | 4 |
 | dfo-mpo | Fisheries and Oceans Canada | Pêches et Océans Canada | 1 |
 
-### 2b. Foreign/invalid codes in recipient_province field — 1,979 total records
+### 2b. Foreign/invalid codes in recipient_province field — 1,980 total records
 
-All bad province values seen: {'OC': 412, 'CA': 239, 'NY': 208, 'MA': 164, 'NA': 97, 'US': 65, 'IL': 63, 'MI': 61, 'PA': 56, 'NJ': 55, 'N/A': 48, 'CT': 48, 'WI': 35, 'ZZ': 34, 'MD': 33, 'CH': 29, 'DC': 29, 'IT': 24, 'NC': 23, 'CO': 23, 'WA': 21, 'GA': 21, 'FR': 20, 'TX': 18, 'RI': 18, 'IN': 16, 'VA': 14, 'GB': 12, 'HI': 11, 'MO': 11}
+All bad province values seen: {'OC': 413, 'CA': 239, 'NY': 208, 'MA': 164, 'NA': 97, 'US': 65, 'IL': 63, 'MI': 61, 'PA': 56, 'NJ': 55, 'N/A': 48, 'CT': 48, 'WI': 35, 'ZZ': 34, 'MD': 33, 'CH': 29, 'DC': 29, 'IT': 24, 'CO': 23, 'NC': 23, 'WA': 21, 'GA': 21, 'FR': 20, 'TX': 18, 'RI': 18, 'IN': 16, 'VA': 14, 'GB': 12, 'HI': 11, 'MO': 11}
 
 | Dept | Department | Count | Values seen |
 |---|---|---|---|
-| sshrc-crsh | Social Sciences and Humanities Research Council of Canada | Conseil de recherches en sciences humaines du Canada | 888 | NY:179, CA:160, MA:88, IL:56, PA:48, MI:38, CT:38, NJ:38, WI:29, MD:24 |
-| nrcan-rncan | Natural Resources Canada | Ressources naturelles Canada | 412 | OC:412 |
-| nserc-crsng | Natural Sciences and Engineering Research Council of Canada | Conseil de recherches en sciences naturelles et en génie du Canada | 316 | CA:74, MA:59, NA:50, MI:20, NY:18, NJ:16, GA:12, MD:9, NC:8, TX:8 |
-| ec | Environment and Climate Change Canada | Environnement et Changement climatique Canada | 85 | ZZ:32, NY:11, CO:8, GE:6, VA:4, DC:4, MI:3, VT:3, MA:3, ME:3 |
-| pch | Canadian Heritage | Patrimoine canadien | 68 | US:56, GB:7, AU:2, FR:1, IT:1, BE:1 |
+| sshrc-crsh | Social Sciences and Humanities Research Council of Canada | Conseil de recherches en sciences humaines du Canada | 888 | NY:179, CA:160, MA:88, IL:56, PA:48, CT:38, MI:38, NJ:38, WI:29, MD:24 |
+| nrcan-rncan | Natural Resources Canada | Ressources naturelles Canada | 413 | OC:413 |
+| nserc-crsng | Natural Sciences and Engineering Research Council of Canada | Conseil de recherches en sciences naturelles et en génie du Canada | 316 | CA:74, MA:59, NA:50, MI:20, NY:18, NJ:16, GA:12, MD:9, NC:8, PA:8 |
+| ec | Environment and Climate Change Canada | Environnement et Changement climatique Canada | 85 | ZZ:32, NY:11, CO:8, GE:6, DC:4, VA:4, MA:3, ME:3, MI:3, VT:3 |
+| pch | Canadian Heritage | Patrimoine canadien | 68 | US:56, GB:7, AU:2, BE:1, FR:1, IT:1 |
 | esdc-edsc | Employment and Social Development Canada | Emploi et Développement social Canada | 63 | NA:47, MA:10, CH:5, QB:1 |
-| aafc-aac | Agriculture and Agri-Food Canada | Agriculture et Agroalimentaire Canada | 56 | IT:20, FR:9, CH:6, US:5, GB:5, DE:3, DK:2, EN:1, IE:1, MX:1 |
-| acoa-apeca | Atlantic Canada Opportunities Agency | Agence de promotion économique du Canada atlantique | 38 | DC:14, CO:7, CA:4, MA:3, CT:3, NC:2, NV:2, SC:1, ID:1, NJ:1 |
-| phac-aspc | Public Health Agency of Canada | Agence de la santé publique du Canada | 34 | CH:18, FR:9, US:4, IT:1, KE:1, DE:1 |
+| aafc-aac | Agriculture and Agri-Food Canada | Agriculture et Agroalimentaire Canada | 56 | IT:20, FR:9, CH:6, GB:5, US:5, DE:3, DK:2, EN:1, IE:1, IN:1 |
+| acoa-apeca | Atlantic Canada Opportunities Agency | Agence de promotion économique du Canada atlantique | 38 | DC:14, CO:7, CA:4, CT:3, MA:3, NC:2, NV:2, ID:1, NJ:1, SC:1 |
+| phac-aspc | Public Health Agency of Canada | Agence de la santé publique du Canada | 34 | CH:18, FR:9, US:4, DE:1, IT:1, KE:1 |
 | aandc-aadnc | Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada | 8 | IS:6, NO:2 |
 | jus | Department of Justice Canada | Ministère de la Justice Canada | 5 | IT:2, FR:1, Z7:1, Z9:1 |
 | ic | Innovation, Science and Economic Development Canada | Innovation, Sciences et Développement économique Canada | 4 | YK:4 |
