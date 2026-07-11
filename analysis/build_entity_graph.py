@@ -14,6 +14,7 @@ import os
 import re
 from collections import defaultdict
 from datetime import datetime
+from typing import NamedTuple, Optional
 
 import duckdb
 from rapidfuzz import fuzz, process
@@ -168,6 +169,37 @@ def to_float(raw):
 
 # ── entity resolution state ─────────────────────────────────────────────────
 
+class EntityRow(NamedTuple):
+    entity_id: int
+    bn_root: Optional[str]
+    canonical_name: str
+    city: Optional[str]
+    province: Optional[str]
+    entity_kind: str
+
+
+class FuzzyCandidate(NamedTuple):
+    norm_name: str
+    digit_tokens: frozenset
+    entity_id: int
+
+
+class EntityLink(NamedTuple):
+    entity_id: int
+    source_dataset: str
+    raw_name: str
+    raw_bn: Optional[str]
+    match_method: str
+    match_score: Optional[float]
+
+
+class GateReject(NamedTuple):
+    raw_name: str
+    rejected_canonical_name: str
+    score: float
+    source_dataset: str
+
+
 class Resolver:
     """Holds the growing entity table plus lookup indexes, and resolves a
     (name, bn, province) triple to an entity_id via exact BN match, fuzzy
@@ -175,15 +207,14 @@ class Resolver:
 
     def __init__(self):
         self.next_id = 1
-        self.entities = []  # (entity_id, bn_root, canonical_name, city, province, entity_kind)
+        self.entities = []  # [EntityRow, ...]
         self.bn_to_entity = {}
         self.dept_to_entity = {}
         self.residual_to_entity = {}
-        self.fuzzy_index = defaultdict(list)  # block_key -> [(norm_name, digit_tokens, entity_id)]
-        self.links = []  # (entity_id, source_dataset, raw_name, raw_bn, match_method, match_score)
-        self.gate_rejects = []  # (raw_name, rejected_canonical_name, score, source_dataset) —
-                                 # candidates that scored >= FUZZY_ACCEPT but were split apart
-                                 # by the digit-token gate; sampled for QA in print_report
+        self.fuzzy_index = defaultdict(list)  # block_key -> [FuzzyCandidate, ...]
+        self.links = []  # [EntityLink, ...]
+        self.gate_rejects = []  # [GateReject, ...] — candidates that scored >= FUZZY_ACCEPT but
+                                 # were split apart by the digit-token gate; sampled for QA in print_report
         self.stats = defaultdict(int)
 
     def new_id(self):
@@ -196,9 +227,9 @@ class Resolver:
             return self.bn_to_entity[bn_root]
         eid = self.new_id()
         self.bn_to_entity[bn_root] = eid
-        self.entities.append((eid, bn_root, legal_name, city, province, "charity"))
+        self.entities.append(EntityRow(eid, bn_root, legal_name, city, province, "charity"))
         norm = normalize_name(legal_name)
-        self.fuzzy_index[block_key(province, norm)].append((norm, digit_tokens(norm), eid))
+        self.fuzzy_index[block_key(province, norm)].append(FuzzyCandidate(norm, digit_tokens(norm), eid))
         return eid
 
     def add_dept(self, code):
@@ -208,12 +239,12 @@ class Resolver:
         eid = self.new_id()
         self.dept_to_entity[code] = eid
         name = DEPT_NAMES.get(code, code.upper())
-        self.entities.append((eid, None, name, None, None, "federal_dept"))
+        self.entities.append(EntityRow(eid, None, name, None, None, "federal_dept"))
         return eid
 
     def add_funder_org(self, name):
         eid = self.new_id()
-        self.entities.append((eid, None, name, None, None, "funder_org"))
+        self.entities.append(EntityRow(eid, None, name, None, None, "funder_org"))
         return eid
 
     def resolve(self, source_dataset, name, bn_raw, province, allow_fuzzy):
@@ -221,7 +252,7 @@ class Resolver:
         if root and root in self.bn_to_entity:
             eid = self.bn_to_entity[root]
             self.stats["exact_bn"] += 1
-            self.links.append((eid, source_dataset, name, bn_raw, "exact_bn", 100.0))
+            self.links.append(EntityLink(eid, source_dataset, name, bn_raw, "exact_bn", 100.0))
             return eid
 
         norm = normalize_name(name)
@@ -230,7 +261,7 @@ class Resolver:
             candidates = self.fuzzy_index.get(key, [])
             if candidates:
                 q_nums = digit_tokens(norm)
-                all_choices = [c[0] for c in candidates]
+                all_choices = [c.norm_name for c in candidates]
 
                 # Would this record have fuzzy-matched before the digit-token
                 # gate? Log it for QA sampling in print_report — a high
@@ -242,25 +273,25 @@ class Resolver:
                 )
                 if pre_gate:
                     _, pre_score, pre_idx = pre_gate
-                    if not digit_tokens_match(candidates[pre_idx][1], q_nums):
-                        rejected_eid = candidates[pre_idx][2]
+                    if not digit_tokens_match(candidates[pre_idx].digit_tokens, q_nums):
+                        rejected_eid = candidates[pre_idx].entity_id
                         self.stats["digit_gate_reject"] += 1
-                        self.gate_rejects.append(
-                            (name, self.entities[rejected_eid - 1][2], pre_score, source_dataset)
-                        )
+                        self.gate_rejects.append(GateReject(
+                            name, self.entities[rejected_eid - 1].canonical_name, pre_score, source_dataset
+                        ))
 
-                gated = [c for c in candidates if digit_tokens_match(c[1], q_nums)]
+                gated = [c for c in candidates if digit_tokens_match(c.digit_tokens, q_nums)]
                 if gated:
-                    choices = [c[0] for c in gated]
+                    choices = [c.norm_name for c in gated]
                     match = process.extractOne(
                         norm, choices, scorer=fuzz.token_sort_ratio, score_cutoff=FUZZY_REVIEW
                     )
                     if match:
                         _, score, idx = match
                         if score >= FUZZY_ACCEPT:
-                            eid = gated[idx][2]
+                            eid = gated[idx].entity_id
                             self.stats["fuzzy_accept"] += 1
-                            self.links.append((eid, source_dataset, name, bn_raw, "fuzzy_accept", score))
+                            self.links.append(EntityLink(eid, source_dataset, name, bn_raw, "fuzzy_accept", score))
                             return eid
 
         # residual: dedupe unmatched records by normalized name + province
@@ -270,9 +301,9 @@ class Resolver:
         else:
             eid = self.new_id()
             self.residual_to_entity[rkey] = eid
-            self.entities.append((eid, root, name, None, province, "other_org"))
+            self.entities.append(EntityRow(eid, root, name, None, province, "other_org"))
         self.stats["unmatched_new"] += 1
-        self.links.append((eid, source_dataset, name, bn_raw, "unmatched_new", None))
+        self.links.append(EntityLink(eid, source_dataset, name, bn_raw, "unmatched_new", None))
         return eid
 
 

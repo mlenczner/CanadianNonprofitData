@@ -27,7 +27,7 @@ from analysis.build_entity_graph import (
 
 def fuzzy_result(resolver, name, province):
     resolver.resolve("federal_gc", name, None, province, allow_fuzzy=True)
-    return resolver.links[-1][4]  # match_method
+    return resolver.links[-1].match_method
 
 
 def test_differing_branch_number_does_not_match():
