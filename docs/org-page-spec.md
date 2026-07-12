@@ -167,3 +167,21 @@ rather than asking:
   rather than clipped — an earlier draft used `overflow:hidden` on the table itself (for
   rounded corners) which silently clipped the rightmost column on narrow viewports found
   during the eyeball pass. The wrapper scrolls; nothing is hidden.
+- **Drawers relocate to open inline next to their claim, not at the bottom of the
+  document.** An earlier draft rendered every drawer inside a single
+  `<div style="display:none">` at the end of the page for later JS placement — but an
+  inline `display:none` on an ancestor overrides any descendant's own `display`, so
+  toggling `.open` on a drawer inside it was a permanent no-op (independent review
+  caught this; see `tests/test_org_page.py`'s `assert_drawers_are_reachable` /
+  `test_drawers_not_trapped_in_hidden_wrapper`). Fixed by having `toggleDrawer()` move
+  the drawer to right after the clicked claim on first open: after the claim's `<tr>`
+  as a new `<tr><td colspan></td></tr>` for grants-table rows (a table row can only
+  contain cells, so a bare sibling insert would get mangled into an anonymous cell), or
+  via `insertAdjacentElement('afterend', ...)` after the closest `div`/`h1` otherwise.
+  `.stats` switched from CSS grid to flex-wrap so an opened stat's drawer can force a
+  `flex-basis:100%` line break directly beneath the row of stat boxes.
+- **Sample-page filenames slug only the English half of `/`-separated bilingual names
+  too** (the display decision above is unchanged — this is filename-only). Taking only
+  the segment before the first `/` risks nothing for a filename the way it would for
+  display text, and avoids 100+ character slugs for organizations like The Salvation
+  Army's national entity.

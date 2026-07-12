@@ -174,6 +174,63 @@ def assert_parses_cleanly(page_html):
     assert "<html" in page_html and page_html.strip().startswith("<!DOCTYPE html>")
 
 
+class DrawerVisibilityChecker(html.parser.HTMLParser):
+    """A drawer nested inside an inline display:none ancestor can never be
+    shown, no matter what class JS later toggles onto it -- display:none on
+    an ancestor always wins. This walks the actual tag nesting (not just
+    substring-searching the HTML) to catch that, plus verifies every claim's
+    data-drawer id resolves to exactly one (non-hidden) drawer element."""
+    VOID_TAGS = {"meta", "link", "br", "img", "input", "hr"}
+
+    def __init__(self):
+        super().__init__()
+        self.hidden_stack = []  # bool per open tag: does *this* tag have inline display:none
+        self.hidden_depth = 0
+        self.drawer_ids_seen = []
+        self.hidden_drawer_ids = []
+        self.claim_drawer_refs = []
+
+    def handle_starttag(self, tag, attrs):
+        d = dict(attrs)
+        style = d.get("style", "") or ""
+        is_hidden = re.search(r"display\s*:\s*none", style) is not None
+        classes = (d.get("class") or "").split()
+        if "drawer" in classes:
+            self.drawer_ids_seen.append(d.get("id"))
+            if self.hidden_depth > 0:
+                self.hidden_drawer_ids.append(d.get("id"))
+        if "claim" in classes and d.get("data-drawer"):
+            self.claim_drawer_refs.append(d["data-drawer"])
+        if tag in self.VOID_TAGS:
+            return
+        if is_hidden:
+            self.hidden_depth += 1
+        self.hidden_stack.append(is_hidden)
+
+    def handle_endtag(self, tag):
+        if tag in self.VOID_TAGS or not self.hidden_stack:
+            return
+        if self.hidden_stack.pop():
+            self.hidden_depth -= 1
+
+
+def assert_drawers_are_reachable(page_html):
+    checker = DrawerVisibilityChecker()
+    checker.feed(page_html)
+    assert not checker.hidden_drawer_ids, (
+        f"drawer(s) nested inside an inline display:none ancestor -- can never "
+        f"open regardless of the 'open' class: {checker.hidden_drawer_ids}"
+    )
+    counts = {}
+    for did in checker.drawer_ids_seen:
+        counts[did] = counts.get(did, 0) + 1
+    for ref in checker.claim_drawer_refs:
+        assert counts.get(ref) == 1, (
+            f"claim references data-drawer={ref!r}, which resolves to "
+            f"{counts.get(ref, 0)} drawer element(s) instead of exactly 1"
+        )
+
+
 # ── name lookup ──────────────────────────────────────────────────────────────
 
 def test_exact_name_hit_builds(db_path, tmp_path, capsys):
@@ -210,6 +267,7 @@ def test_page_parses_and_has_canonical_name_and_totals(db_path):
     finally:
         con.close()
     assert_parses_cleanly(page)
+    assert_drawers_are_reachable(page)
     assert "Test Charity Inc" in page
     assert op.fmt_money(1200000.00) in page  # total received, formatted
 
@@ -267,6 +325,22 @@ def test_scale_cap_embeds_300_rows_and_rollup_note(db_path):
     assert page.count("<td class='num'>") == op.SCALE_CAP
     assert "300 largest of 305" in page
     assert "5 grants" in page or "remaining 5" in page
+    assert_drawers_are_reachable(page)
+
+
+def test_drawers_not_trapped_in_hidden_wrapper(db_path):
+    # Regression test: an earlier version wrapped every drawer in
+    # <div style="display:none">, which permanently hides all of them --
+    # toggling the .open class on a descendant can never override a
+    # display:none ancestor, so every claim click was a silent no-op. Cover
+    # every claim shape: identity (h1), stat (div), and grant-row (table).
+    con = duckdb.connect(db_path, read_only=True)
+    try:
+        page = op.render_page(con, 1)  # identity + stat + amendment-chain claims
+    finally:
+        con.close()
+    assert_drawers_are_reachable(page)
+    assert 'style="display:none"' not in page and "style='display:none'" not in page
 
 
 def test_zero_grants_given_section_omitted(db_path):

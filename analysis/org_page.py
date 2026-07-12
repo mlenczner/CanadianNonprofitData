@@ -375,8 +375,9 @@ h1{font-size:2.1rem;letter-spacing:-.02em}
 .badge{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:.78rem;color:var(--mut);margin-left:10px;vertical-align:middle}
 .meta-line{color:var(--mut);margin:8px 0 0;font-size:.92rem}
 h2{font-size:1.05rem;margin:40px 0 14px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);border-bottom:2px solid var(--red);display:inline-block;padding-bottom:4px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:20px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;flex:1 1 160px}
+.stats>.drawer.open{flex-basis:100%;width:100%}
 .stat b{display:block;font-size:1.5rem;letter-spacing:-.02em}
 .stat span{color:var(--mut);font-size:.8rem}
 .bars{display:flex;gap:5px;height:160px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 18px 30px;position:relative}
@@ -417,7 +418,30 @@ function toggleShowWork(){
 }
 function toggleDrawer(el){
   const d = document.getElementById(el.dataset.drawer);
-  if (d) d.classList.toggle('open');
+  if (!d) return;
+  if (d.classList.contains('open')) { d.classList.remove('open'); return; }
+  // Relocate the drawer next to the clicked claim so it opens inline, not at
+  // the bottom of the document. A table row can only contain <td>/<th>, so a
+  // claim inside one gets a sibling <tr><td colspan> row instead of a bare
+  // insertAdjacentElement (which a table would silently mangle into an
+  // anonymous cell).
+  const row = el.closest('tr');
+  if (row) {
+    let holder = row.nextElementSibling;
+    if (!holder || !holder.classList.contains('drawer-row')) {
+      holder = document.createElement('tr');
+      holder.className = 'drawer-row';
+      const td = document.createElement('td');
+      td.colSpan = row.children.length;
+      holder.appendChild(td);
+      row.insertAdjacentElement('afterend', holder);
+    }
+    holder.firstElementChild.appendChild(d);
+  } else {
+    const container = el.closest('div, h1');
+    if (container) container.insertAdjacentElement('afterend', d);
+  }
+  d.classList.add('open');
 }
 """
 
@@ -667,7 +691,7 @@ Show your work
 </div>
 </header>
 {"".join(sections)}
-<div style="display:none">{"".join(drawer_html)}</div>
+<div id="drawers">{"".join(drawer_html)}</div>
 <footer>Generated {esc(generated)} from the Canadian Nonprofit Data entity graph
 (federal Grants &amp; Contributions, CRA T3010, Canada Council for the Arts).
 Matching methodology &amp; limitations: see
@@ -689,7 +713,14 @@ def build_page(db_path, entity_id, out_path=None):
 
     if out_path is None:
         os.makedirs(ORGS_DIR, exist_ok=True)
-        out_path = os.path.join(ORGS_DIR, f"{slugify(english_name(entity['canonical_name']))}.html")
+        # Some T3010 canonical names use "/" (not "|") as the EN/FR separator,
+        # which english_name() doesn't split (that's a display decision -- see
+        # docs/org-page-spec.md -- since a blanket split risks corrupting
+        # legitimate single-language names containing a slash). For the
+        # *filename* specifically, a needlessly long bilingual slug is a pure
+        # cosmetic cost with no such risk, so trim it here only.
+        name_for_slug = english_name(entity["canonical_name"]).split("/", 1)[0].strip()
+        out_path = os.path.join(ORGS_DIR, f"{slugify(name_for_slug)}.html")
     else:
         os.makedirs(os.path.dirname(os.path.abspath(out_path)) or ".", exist_ok=True)
 
