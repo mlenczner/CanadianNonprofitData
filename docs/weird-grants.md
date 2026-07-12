@@ -1,5 +1,5 @@
 # GC Grants — Weird & Interesting Records
-Generated: 2026-06-23 15:01  |  Total records scanned: 1,303,898
+Generated: 2026-07-11 17:09  |  Total records scanned: 1,303,939
 
 ---
 
@@ -703,18 +703,6 @@ Working Together Priorities: expanding access to family health services; support
   Description: Contribution as part of the Participant Funding Program to WCS Wildlife Conservation Society Canada to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
 
 **7978.7 years** (2021-02-02 → 9999-12-31)
-  Ref: 071-2020-2021-Q4-00054
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) (op: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)))
-  Location: Nipissing, ON, CA
-  Value: $15,000 CAD
-  Type: C | Recipient type: N
-  Amendment: 1
-  Start: 2021-02-02 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Contribution as part of the Participant Funding Program to  Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment proc...
-
-**7978.7 years** (2021-02-02 → 9999-12-31)
   Ref: 071-2020-2021-Q4-00053
   Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
   Recipient: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) (op: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)))
@@ -725,6 +713,18 @@ Working Together Priorities: expanding access to family health services; support
   Start: 2021-02-02 → End: 9999-12-31
   Program: Participant Funding Program
   Description: Contribution as part of the Participant Funding Program to Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment proce...
+
+**7978.7 years** (2021-02-02 → 9999-12-31)
+  Ref: 071-2020-2021-Q4-00054
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) (op: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)))
+  Location: Nipissing, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: N
+  Amendment: 1
+  Start: 2021-02-02 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to  Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment proc...
 
 **7978.7 years** (2021-02-08 → 9999-12-31)
   Ref: 071-2020-2021-Q4-00052
@@ -739,18 +739,6 @@ Working Together Priorities: expanding access to family health services; support
   Description: Contribution as part of the Participant Funding Program to Kashechewan First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
 
 **7978.7 years** (2021-02-23 → 9999-12-31)
-  Ref: 071-2020-2021-Q4-00075
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Ginoogaming First Nation (op: Ginoogaming First Nation)
-  Location: Longlac, ON, CA
-  Value: $103,000 CAD
-  Type: C | Recipient type: A
-  Amendment: 1
-  Start: 2021-02-23 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Contribution as part of the Participant Funding Program to Ginoogaming First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road Project.
-
-**7978.7 years** (2021-02-23 → 9999-12-31)
   Ref: 071-2020-2021-Q4-00074
   Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
   Recipient: Ginoogaming First Nation (op: Ginoogaming First Nation)
@@ -761,6 +749,18 @@ Working Together Priorities: expanding access to family health services; support
   Start: 2021-02-23 → End: 9999-12-31
   Program: Participant Funding Program
   Description: Contribution as part of the Participant Funding Program to Ginoogaming First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
+
+**7978.7 years** (2021-02-23 → 9999-12-31)
+  Ref: 071-2020-2021-Q4-00075
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Ginoogaming First Nation (op: Ginoogaming First Nation)
+  Location: Longlac, ON, CA
+  Value: $103,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-02-23 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Ginoogaming First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road Project.
 
 **7978.5 years** (2021-05-14 → 9999-12-31)
   Ref: 071-2021-2022-Q1-00082
@@ -787,18 +787,6 @@ Working Together Priorities: expanding access to family health services; support
   Description: Contribution as part of the Participant Funding Program to Marten Falls First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
 
 **7977.3 years** (2022-07-29 → 9999-12-31)
-  Ref: 071-2022-2023-Q2-00035
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Attawapiskat First Nation (op: Attawapiskat First Nation)
-  Location: Attawapiskat, ON, CA
-  Value: $91,000 CAD
-  Type: C | Recipient type: A
-  Amendment: 1
-  Start: 2022-07-29 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Contribution as part of the Participant Funding Program to Attawapiskat First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road Project.
-
-**7977.3 years** (2022-07-29 → 9999-12-31)
   Ref: 071-2022-2023-Q2-00034
   Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
   Recipient: Attawapiskat First Nation (op: Attawapiskat First Nation)
@@ -809,6 +797,18 @@ Working Together Priorities: expanding access to family health services; support
   Start: 2022-07-29 → End: 9999-12-31
   Program: Participant Funding Program
   Description: Contribution as part of the Participant Funding Program to Attawapiskat First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
+
+**7977.3 years** (2022-07-29 → 9999-12-31)
+  Ref: 071-2022-2023-Q2-00035
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Attawapiskat First Nation (op: Attawapiskat First Nation)
+  Location: Attawapiskat, ON, CA
+  Value: $91,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2022-07-29 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Attawapiskat First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road Project.
 
 **7975.3 years** (2024-07-04 → 9999-12-31)
   Ref: 071-2024-2025-Q2-00008
@@ -923,18 +923,6 @@ Working Together Priorities: expanding access to family health services; support
   Description: Not a Project (Mandated or Core Funding)
 
 **$0.01**
-  Ref: 910A-2018-2019-Qrt4-0006075
-  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
-  Recipient: FIRST NATIONS FINANCIAL MANAGEMENT BOARD
-  Location: WEST VANCOUVER, BC, CA
-  Value: $0 CAD
-  Type: C | Recipient type: O
-  Amendment: 0
-  Start: 2012-04-01 → End: 2019-03-31
-  Program: CIRNAC - Governance and Institutions of Government
-  Description: Not a Project (Mandated or Core Funding)
-
-**$0.01**
   Ref: 1910-2022-2023-Qrt3-0001279
   Dept: Indigenous Services Canada | Services aux Autochtones Canada
   Recipient: SASKMETIS ECONOMIC DEVELOPMENT CORPORATION
@@ -1006,6 +994,18 @@ Working Together Priorities: expanding access to family health services; support
   Program: Economic Development
   Description: Not a Project (Mandated or Core Funding)
 
+**$0.01**
+  Ref: 910A-2018-2019-Qrt4-0006075
+  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
+  Recipient: FIRST NATIONS FINANCIAL MANAGEMENT BOARD
+  Location: WEST VANCOUVER, BC, CA
+  Value: $0 CAD
+  Type: C | Recipient type: O
+  Amendment: 0
+  Start: 2012-04-01 → End: 2019-03-31
+  Program: CIRNAC - Governance and Institutions of Government
+  Description: Not a Project (Mandated or Core Funding)
+
 **$0.02**
   Ref: 1910-2021-2022-Qrt2-0000263
   Dept: Indigenous Services Canada | Services aux Autochtones Canada
@@ -1055,16 +1055,16 @@ Working Together Priorities: expanding access to family health services; support
   Description: Not a Project (Mandated or Core Funding)
 
 **$1.00**
-  Ref: 1920-CN-000103
-  Dept: Canadian Northern Economic Development Agency | Agence canadienne de développement économique du Nord
-  Recipient: 9421 - BOREAL CULTIVATION INC. (op: 9421 - BOREAL CULTIVATION INC.)
-  Location: YELLOWKNIFE, NT, CA
+  Ref: 0420-2024-2025-Qrt1-0000096
+  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
+  Recipient: The Royal Institution for the Advancement of Learning / McGill University
+  Location: STE-ANNE DE BELLEVUE, QC, CA
   Value: $1 CAD
-  Type: C | Recipient type: F
+  Type: C | Recipient type: S
   Amendment: 0
-  Start: 2019-08-23 → End: 2021-03-31
-  Program: Inclusive Diversification and Economic Advancement in the North (IDEANorth)
-  Description: supports small and medium-sized territorial businesses operating in one or more of the territories, and which are currently, and expect to continue, operating at a loss as a direct result of economic disruptions associated with COVID-19.
+  Start: 2023-04-01 → End: 2026-03-31
+  Program: Northern Affairs
+  Description: Not a Project (Mandated or Core Funding)
 
 **$1.00**
   Ref: 0780-2024-2025-Qrt1-0000015
@@ -1077,30 +1077,6 @@ Working Together Priorities: expanding access to family health services; support
   Start: 2024-03-11 → End: 2025-03-31
   Program: IDEANorth
   Description: A design development project to plan the way forward for the future construction of a new convention centre
-
-**$1.00**
-  Ref: 1910-2018-2019-Qrt4-0007045
-  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
-  Recipient: DELINE GOT'INE GOVERNMENT
-  Location: DELINE, NT, CA
-  Value: $1 CAD
-  Type: C | Recipient type: O
-  Amendment: 0
-  Start: 2017-04-01 → End: 2020-03-31
-  Program: Treaties and Aboriginal Government
-  Description: Not a Project (Mandated or Core Funding)
-
-**$1.00**
-  Ref: 0420-2024-2025-Qrt1-0000096
-  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
-  Recipient: The Royal Institution for the Advancement of Learning / McGill University
-  Location: STE-ANNE DE BELLEVUE, QC, CA
-  Value: $1 CAD
-  Type: C | Recipient type: S
-  Amendment: 0
-  Start: 2023-04-01 → End: 2026-03-31
-  Program: Northern Affairs
-  Description: Not a Project (Mandated or Core Funding)
 
 **$1.00**
   Ref: 141-2020-2021-Q1-00195
@@ -1125,6 +1101,18 @@ Working Together Priorities: expanding access to family health services; support
   Start: 2020-10-15 → End: 2021-03-31
   Program: SDPP-Children and Families - Contributions
   Description: The objectives of the Program are to; support the development and utilization of effective approaches to address social issues and challenges;.develop, exchange and apply knowledge, tools and resources that address social needs of individuals, families and communities;  foster partnerships and netwo...
+
+**$1.00**
+  Ref: 1910-2018-2019-Qrt4-0007045
+  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
+  Recipient: DELINE GOT'INE GOVERNMENT
+  Location: DELINE, NT, CA
+  Value: $1 CAD
+  Type: C | Recipient type: O
+  Amendment: 0
+  Start: 2017-04-01 → End: 2020-03-31
+  Program: Treaties and Aboriginal Government
+  Description: Not a Project (Mandated or Core Funding)
 
 **$1.00**
   Ref: 1910-2019-2020-Qrt1-0002184
@@ -1198,32 +1186,44 @@ Working Together Priorities: expanding access to family health services; support
   Program: Health Promotion & Disease Prevention
   Description: Not a Project (Mandated or Core Funding)
 
-**$2.00**
-  Ref: 1910-2025-2026-Qrt4-0018834
-  Dept: Indigenous Services Canada | Services aux Autochtones Canada
-  Recipient: National Assembly of Remote Communities
-  Location: Thunder Bay, ON, CA
-  Value: $2 CAD
-  Type: C | Recipient type: O
+**$1.00**
+  Ref: 1920-CN-000103
+  Dept: Canadian Northern Economic Development Agency | Agence canadienne de développement économique du Nord
+  Recipient: 9421 - BOREAL CULTIVATION INC. (op: 9421 - BOREAL CULTIVATION INC.)
+  Location: YELLOWKNIFE, NT, CA
+  Value: $1 CAD
+  Type: C | Recipient type: F
   Amendment: 0
-  Start: 2024-05-01 → End: 2029-03-31
-  Program: Child and Family Services
-  Description: Not a Project (Mandated or Core Funding)
+  Start: 2019-08-23 → End: 2021-03-31
+  Program: Inclusive Diversification and Economic Advancement in the North (IDEANorth)
+  Description: supports small and medium-sized territorial businesses operating in one or more of the territories, and which are currently, and expect to continue, operating at a loss as a direct result of economic disruptions associated with COVID-19.
+
+**$2.00**
+  Ref: 172-2019-2020-Q1-925745
+  Dept: National Research Council Canada | Conseil national de recherches Canada
+  Recipient: Vastcon Inc.
+  Location: Wilcox|Wilcox, MB, CA
+  Value: $2 CAD
+  Type: C | Recipient type: F
+  Amendment: 0
+  Start: 2019-04-01 → End: 2019-10-01
+  Program: Industrial Research Assistance Program – Contributions to Firms
+  Description: VastCon has discovered unique molecular signatures in blood that could detect genetic hereditary colorectal cancers. This project is aimed at developing a screening test for genetic hereditary colorectal cancer.
 
 ---
 
 ## 5. Exactly $1 Awards (12 total, showing first 20)
 
-  Ref: 1920-CN-000103
-  Dept: Canadian Northern Economic Development Agency | Agence canadienne de développement économique du Nord
-  Recipient: 9421 - BOREAL CULTIVATION INC. (op: 9421 - BOREAL CULTIVATION INC.)
-  Location: YELLOWKNIFE, NT, CA
+  Ref: 0420-2024-2025-Qrt1-0000096
+  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
+  Recipient: The Royal Institution for the Advancement of Learning / McGill University
+  Location: STE-ANNE DE BELLEVUE, QC, CA
   Value: $1 CAD
-  Type: C | Recipient type: F
+  Type: C | Recipient type: S
   Amendment: 0
-  Start: 2019-08-23 → End: 2021-03-31
-  Program: Inclusive Diversification and Economic Advancement in the North (IDEANorth)
-  Description: supports small and medium-sized territorial businesses operating in one or more of the territories, and which are currently, and expect to continue, operating at a loss as a direct result of economic disruptions associated with COVID-19.
+  Start: 2023-04-01 → End: 2026-03-31
+  Program: Northern Affairs
+  Description: Not a Project (Mandated or Core Funding)
 
   Ref: 0780-2024-2025-Qrt1-0000015
   Dept: Canadian Northern Economic Development Agency | Agence canadienne de développement économique du Nord
@@ -1235,28 +1235,6 @@ Working Together Priorities: expanding access to family health services; support
   Start: 2024-03-11 → End: 2025-03-31
   Program: IDEANorth
   Description: A design development project to plan the way forward for the future construction of a new convention centre
-
-  Ref: 1910-2018-2019-Qrt4-0007045
-  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
-  Recipient: DELINE GOT'INE GOVERNMENT
-  Location: DELINE, NT, CA
-  Value: $1 CAD
-  Type: C | Recipient type: O
-  Amendment: 0
-  Start: 2017-04-01 → End: 2020-03-31
-  Program: Treaties and Aboriginal Government
-  Description: Not a Project (Mandated or Core Funding)
-
-  Ref: 0420-2024-2025-Qrt1-0000096
-  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
-  Recipient: The Royal Institution for the Advancement of Learning / McGill University
-  Location: STE-ANNE DE BELLEVUE, QC, CA
-  Value: $1 CAD
-  Type: C | Recipient type: S
-  Amendment: 0
-  Start: 2023-04-01 → End: 2026-03-31
-  Program: Northern Affairs
-  Description: Not a Project (Mandated or Core Funding)
 
   Ref: 141-2020-2021-Q1-00195
   Dept: Employment and Social Development Canada | Emploi et Développement social Canada
@@ -1279,6 +1257,17 @@ Working Together Priorities: expanding access to family health services; support
   Start: 2020-10-15 → End: 2021-03-31
   Program: SDPP-Children and Families - Contributions
   Description: The objectives of the Program are to; support the development and utilization of effective approaches to address social issues and challenges;.develop, exchange and apply knowledge, tools and resources that address social needs of individuals, families and communities;  foster partnerships and netwo...
+
+  Ref: 1910-2018-2019-Qrt4-0007045
+  Dept: Crown-Indigenous Relations and Northern Affairs Canada | Relations Couronne-Autochtones et Affaires du Nord Canada
+  Recipient: DELINE GOT'INE GOVERNMENT
+  Location: DELINE, NT, CA
+  Value: $1 CAD
+  Type: C | Recipient type: O
+  Amendment: 0
+  Start: 2017-04-01 → End: 2020-03-31
+  Program: Treaties and Aboriginal Government
+  Description: Not a Project (Mandated or Core Funding)
 
   Ref: 1910-2019-2020-Qrt1-0002184
   Dept: Indigenous Services Canada | Services aux Autochtones Canada
@@ -1345,6 +1334,17 @@ Working Together Priorities: expanding access to family health services; support
   Start: 2024-09-01 → End: 2028-03-31
   Program: Health Promotion & Disease Prevention
   Description: Not a Project (Mandated or Core Funding)
+
+  Ref: 1920-CN-000103
+  Dept: Canadian Northern Economic Development Agency | Agence canadienne de développement économique du Nord
+  Recipient: 9421 - BOREAL CULTIVATION INC. (op: 9421 - BOREAL CULTIVATION INC.)
+  Location: YELLOWKNIFE, NT, CA
+  Value: $1 CAD
+  Type: C | Recipient type: F
+  Amendment: 0
+  Start: 2019-08-23 → End: 2021-03-31
+  Program: Inclusive Diversification and Economic Advancement in the North (IDEANorth)
+  Description: supports small and medium-sized territorial businesses operating in one or more of the territories, and which are currently, and expect to continue, operating at a loss as a direct result of economic disruptions associated with COVID-19.
 
 ---
 
@@ -1665,18 +1665,6 @@ Working Together Priorities: expanding access to family health services; support
   Description: Canada Media Fund
 
 **134,146,077 CAD** (CAD value: $134,146,077)
-  Ref: GC-2017-Q1-01404
-  Dept: Canadian Heritage | Patrimoine canadien
-  Recipient: CANADA MEDIA FUND CORPORATION
-  Location: Toronto | Toronto, ON, CA
-  Value: $134,146,077 CAD (134,146,077 CAD)
-  Type: C | Recipient type: 
-  Amendment: 0
-  Start: 2017-04-01 → End: 2018-03-31
-  Program: Canada Media Fund
-  Description: Canada Media Fund
-
-**134,146,077 CAD** (CAD value: $134,146,077)
   Ref: 016-2018-2019-Q1-1318122
   Dept: Canadian Heritage | Patrimoine canadien
   Recipient: CANADA MEDIA FUND CORPORATION
@@ -1685,6 +1673,18 @@ Working Together Priorities: expanding access to family health services; support
   Type: C | Recipient type: 
   Amendment: 0
   Start: 2018-04-01 → End: 2019-03-31
+  Program: Canada Media Fund
+  Description: Canada Media Fund
+
+**134,146,077 CAD** (CAD value: $134,146,077)
+  Ref: GC-2017-Q1-01404
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: CANADA MEDIA FUND CORPORATION
+  Location: Toronto | Toronto, ON, CA
+  Value: $134,146,077 CAD (134,146,077 CAD)
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2017-04-01 → End: 2018-03-31
   Program: Canada Media Fund
   Description: Canada Media Fund
 
@@ -2143,363 +2143,517 @@ Working Together Priorities: expanding access to family health services; support
 
 ## 9. Suspiciously Short Descriptions (1-5 chars, 41113 total, showing first 30)
 
-**Description: 'Study'** | Value: $15,543
-  Ref: 276-2006-2007-Q4-00361
-  Dept: Atlantic Canada Opportunities Agency | Agence de promotion économique du Canada atlantique
-  Recipient: Lyceum Heritage Society|Lyceum Heritage Society
-  Location: Sydney|Sydney, NS, CA
-  Value: $15,543 CAD
+**Description: 'TV5'** | Value: $1,380,000
+  Ref: 016-2018-2019-Q3-1320471
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,380,000 CAD (1,380,000 CAD)
   Type: C | Recipient type: 
   Amendment: 0
-  Start: 2007-03-19 → End: 2007-03-31
-  Program: Business Development Program
+  Start: 2018-09-01 → End: 2019-08-31
+  Program: TV5
 
-**Description: ';'** | Value: $15,000
-  Ref: 093-2010-2011-Q2-00035
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: FaunENord
-  Location: Chapais, Jamésie, Nord-du-Québec, QC, CA
-  Value: $15,000 CAD
+**Description: 'TV 5'** | Value: $7,834,010
+  Ref: 016-2018-2019-Q4-1320740
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5MONDE (SOCIÉTÉ ANONYME)
+  Location: Paris cedex 17 France | Paris cedex 17 France, Hors du Canada, FR
+  Value: $7,834,010 CAD (7,834,010 CAD)
   Type: G | Recipient type: 
   Amendment: 0
-  Start: 2010-09-23
-  Program: Community diversification program (CED-Diversification)
+  Start: 2019-01-01 → End: 2019-12-31
+  Program: TV 5
 
-**Description: ';'** | Value: $20,000
-  Ref: 093-2010-2011-Q3-00082
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Association des professionnels en développement économique du Québec (APDEQ)
-  Location: Québec, No MRC, Québec, QC, CA
-  Value: $20,000 CAD
-  Type: G | Recipient type: 
+**Description: 'TV5'** | Value: $1,610,000
+  Ref: 016-2018-2019-Q4-1320771
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,610,000 CAD (1,610,000 CAD)
+  Type: C | Recipient type: 
   Amendment: 0
-  Start: 2010-10-08
-  Program: Community diversification program (CED-Diversification)
+  Start: 2019-01-01 → End: 2019-12-31
+  Program: TV5
 
-**Description: ';'** | Value: $15,000
-  Ref: 093-2009-2010-Q3-00044
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Association canadienne de l'énergie éolienne (CanWEA)
-  Location: Hors Québec / Outside Quebec, ,, QC, CA
-  Value: $15,000 CAD
-  Type: G | Recipient type: 
+**Description: 'TV5'** | Value: $11,041,232
+  Ref: 016-2019-2020-Q2-1325842
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $11,041,232 CAD (11,041,232 CAD)
+  Type: C | Recipient type: 
   Amendment: 0
-  Start: 2009-12-09
-  Program: Business and Regional Growth Program (CED-Business)
+  Start: 2019-09-01 → End: 2022-08-31
+  Program: TV5
 
-**Description: ';'** | Value: $50,000
-  Ref: 093-2012-2013-Q3-00088
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Institut canadien de recherche en politiques et administration publique
-  Location: Gatineau, No MRC, Outaouais, QC, CA
-  Value: $50,000 CAD
-  Type: G | Recipient type: 
+**Description: 'TV5'** | Value: $7,849,678
+  Ref: 016-2019-2020-Q4-1327300
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5MONDE (SOCIÉTÉ ANONYME)
+  Location: Paris cedex 17 France | Paris cedex 17 France, , FR
+  Value: $7,849,678 CAD (5,054,200 EUR)
+  Type: G | Recipient type: I
   Amendment: 0
-  Start: 2012-10-24
-  Program: Quebec Economic Development Program (QEDP)
+  Start: 2020-01-01 → End: 2020-12-31
+  Program: TV5
 
-**Description: ';'** | Value: $20,000
-  Ref: 093-2011-2012-Q4-00156
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Centre régional d'entrepreneuriat au féminin (CREF) / Femmessor - Estrie
-  Location: Sherbrooke, No MRC, Estrie, QC, CA
-  Value: $20,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2012-02-06
-  Program: Community diversification program (CED-Diversification)
-
-**Description: ';'** | Value: $15,000
-  Ref: 093-2006-2007-Q4-00219
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Fondation de la mode de Montréal
-  Location: Montréal, No MRC, Montréal, QC, CA
-  Value: $15,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2007-03-13
-  Program: Innovation Development Entrepreneurship and Access Program for SME (IDEA-SME)
-
-**Description: ';'** | Value: $15,000
-  Ref: 093-2006-2007-Q1-00097
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Fondation Armand-Frappier
-  Location: Laval, No MRC, Laval, QC, CA
-  Value: $15,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2006-06-12
-  Program: Innovation Development Entrepreneurship and Access Program for SME (IDEA-SME)
-
-**Description: ';'** | Value: $10,000
-  Ref: 093-2006-2007-Q2-00075
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Femmes autochtones du Québec inc.
-  Location: Kahnawake, No MRC, Montérégie, QC, CA
-  Value: $10,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2006-07-13
-  Program: Innovation Development Entrepreneurship and Access Program for SME (IDEA-SME)
-
-**Description: ';'** | Value: $20,000
-  Ref: 093-2006-2007-Q2-00082
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Inuit Circumpolar Conference (Canada) inc.
-  Location: Hors Québec / Outside Quebec, ,, QC, CA
-  Value: $20,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2006-07-27
-  Program: Innovation Development Entrepreneurship and Access Program for SME (IDEA-SME)
-
-**Description: ';'** | Value: $9,988
-  Ref: 093-2014-2015-Q3-00116
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Association Sportive de St-Eusèbe inc.
-  Location: Saint-Eusèbe, Témiscouata, Bas-Saint-Laurent, QC, CA
-  Value: $9,988 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-10-27
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $25,000
-  Ref: 093-2006-2007-Q4-00291
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Commission de développement économique des Premières Nations du Québec et du Labrador
-  Location: Wendake, No MRC, Québec, QC, CA
-  Value: $25,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2007-03-29
-  Program: Innovation Development Entrepreneurship and Access Program for SME (IDEA-SME)
-
-**Description: ';'** | Value: $15,000
-  Ref: 093-2007-2008-Q2-00114
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: LES ARTISANS D'ANTICOSTI
-  Location: L'Île-d'Anticosti, Minganie, Côte-Nord, QC, CA
-  Value: $15,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2007-08-13
-  Program: Community diversification program / Community Economic Diversification Initiative - Vitality  (CED-Diversification (CEDI-V))
-
-**Description: ';'** | Value: $2,400,000
-  Ref: 093-2006-2007-Q4-00258
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Administration portuaire de Sept-Iles
-  Location: Sept-Îles, Sept-Rivières, Côte-Nord, QC, CA
-  Value: $2,400,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2007-02-08
-  Program: Grant to the Sept-Îles Port Authority for the expansion of the 'quai 41' (39F GRANT - Sept-Iles Port Authorit)
-
-**Description: ';'** | Value: $7,200
-  Ref: 093-2009-2010-Q2-00127
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Université du Québec à Chicoutimi
-  Location: Saguenay, No MRC, Saguenay-Lac-Saint-Jean, QC, CA
-  Value: $7,200 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2009-08-26
-  Program: Community diversification program (CED-Diversification)
-
-**Description: ';'** | Value: $14,001
-  Ref: 093-2014-2015-Q3-00197
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: La Fabrique de la paroisse de Saint-Noël
-  Location: Saint-Noël, La Matapédia, Bas-Saint-Laurent, QC, CA
-  Value: $14,001 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-11-24
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $5,000
-  Ref: 093-2009-2010-Q4-00194
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Association touristique de Charlevoix inc.
-  Location: La Malbaie, Charlevoix-Est, Québec, QC, CA
-  Value: $5,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2010-03-01
-  Program: Community diversification program (CED-Diversification)
-
-**Description: ';'** | Value: $8,575
-  Ref: 093-2014-2015-Q2-00066
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Corporation du Parc de Gros-Cap
-  Location: Les Îles-de-la-Madeleine, No MRC, Gaspésie-Iles-de-la-Madeleine, QC, CA
-  Value: $8,575 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-09-29
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $12,341
-  Ref: 093-2014-2015-Q3-00151
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Club Anti-Âge de La Romaine
-  Location: Côte-Nord-du-Golfe-du-Saint-Laurent, Le Golfe-du-Saint-Laurent, Côte-Nord, QC, CA
-  Value: $12,341 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-10-02
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $3,000
-  Ref: 093-2014-2015-Q3-00074
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Corporation de développement communautaire Nicolet-Yamaska
-  Location: Nicolet, Nicolet-Yamaska, Centre-du-Québec, QC, CA
-  Value: $3,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-11-04
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $5,760
-  Ref: 093-2014-2015-Q2-00122
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Harrington Community Center
-  Location: L'Isle-aux-Allumettes, Pontiac, Outaouais, QC, CA
-  Value: $5,760 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-09-04
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $13,500
-  Ref: 093-2014-2015-Q2-00123
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Club Le Marquis de Black Lake inc.
-  Location: Thetford Mines, Les Appalaches, Chaudière-Appalaches, QC, CA
-  Value: $13,500 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-09-03
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $5,694
-  Ref: 093-2014-2015-Q2-00125
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Centre Communautaire Campbell
-  Location: Grenville-sur-la-Rouge, Argenteuil, Laurentides, QC, CA
-  Value: $5,694 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-09-04
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $1,416
-  Ref: 093-2014-2015-Q3-00104
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: L'oeuvre des terrains de jeux de St-Omer Limitée
-  Location: Carleton-sur-Mer, Avignon, Gaspésie-Iles-de-la-Madeleine, QC, CA
-  Value: $1,416 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-10-20
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $5,145
-  Ref: 093-2014-2015-Q3-00266
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Unité Domrémy Victoriaville inc.
-  Location: Victoriaville, Arthabaska, Centre-du-Québec, QC, CA
-  Value: $5,145 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-12-09
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $10,816
-  Ref: 093-2014-2015-Q2-00106
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Association sportive et récréative des employés du Canadien National de Senneterre inc.
-  Location: Senneterre, La Vallée-de-l'Or, Abitibi-Témiscamingue, QC, CA
-  Value: $10,816 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-09-18
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $12,500
-  Ref: 093-2014-2015-Q3-00177
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Comité des loisirs St-Daniel inc.
-  Location: Adstock, Les Appalaches, Chaudière-Appalaches, QC, CA
-  Value: $12,500 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-10-09
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: ';'** | Value: $9,418
-  Ref: 093-2014-2015-Q3-00017
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Kitigan Zibi Anishinabeg Band Council
-  Location: Maniwaki, La Vallée-de-la-Gatineau, Outaouais, QC, CA
-  Value: $9,418 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2014-11-03
-  Program: of the Local investment Initiative (PDEQ-LII)
-
-**Description: '-'** | Value: $200,000
-  Ref: 093-2018-2019-Q4-00018
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Storcan ltée|Storcan ltée
-  Location: Châteauguay, QC, CA
-  Value: $200,000 CAD
+**Description: 'TV5'** | Value: $1,380,000
+  Ref: 016-2019-2020-Q4-1327410
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,380,000 CAD
   Type: C | Recipient type: F
   Amendment: 0
-  Start: 2019-01-14 → End: 2020-10-31
-  Program: Regional Economic Growth through Innovation (REGI)
+  Start: 2019-09-01 → End: 2021-08-31
+  Program: TV5
 
-**Description: '-'** | Value: $100,000
-  Ref: 093-2022-2023-Q2-00007
-  Dept: Canada Economic Development for Quebec Regions | Développement économique Canada pour les régions du Québec
-  Recipient: Municipalité du Village de Laurier-Station|Municipalité du Village de Laurier-Station
-  Location: Laurier-Station, QC, CA
-  Value: $100,000 CAD
-  Type: C | Recipient type: G
+**Description: 'TV5'** | Value: $1,610,000
+  Ref: 016-2019-2020-Q4-1327459
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,610,000 CAD
+  Type: C | Recipient type: F
   Amendment: 0
-  Start: 2022-06-13 → End: 2023-03-31
-  Program: The Quebec Economic Development Program (QEDP)
+  Start: 2020-01-01 → End: 2020-12-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $345,000
+  Ref: 016-2020-2021-Q2-1327410
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $345,000 CAD
+  Type: C | Recipient type: N
+  Amendment: 0
+  Start: 2019-09-01 → End: 2021-08-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $1,380,000
+  Ref: 016-2020-2021-Q4-1336084
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal│Montréal, QC, CA
+  Value: $1,380,000 CAD
+  Type: C | Recipient type: F
+  Amendment: 0
+  Start: 2020-09-01 → End: 2021-08-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $7,974,011
+  Ref: 016-2020-2021-Q4-1336118
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5MONDE (SOCIÉTÉ ANONYME)
+  Location: Paris cedex 17 France│Paris cedex 17 France, , FR
+  Value: $7,974,011 CAD (5,054,200 EUR)
+  Type: G | Recipient type: F
+  Amendment: 0
+  Start: 2021-01-01 → End: 2021-12-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $1,610,000
+  Ref: 016-2020-2021-Q4-1336264
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal│Montréal, QC, CA
+  Value: $1,610,000 CAD
+  Type: C | Recipient type: F
+  Amendment: 0
+  Start: 2021-01-01 → End: 2021-12-31
+  Program: TV5
+
+**Description: 'TV 5'** | Value: $7,974,011
+  Ref: 016-2021-2022-Q4-1343170
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5MONDE
+  Location: Paris cedex 17 France | Paris cedex 17 France, , FR
+  Value: $7,974,011 CAD
+  Type: G | Recipient type: 
+  Amendment: 0
+  Start: 2022-01-01 → End: 2022-12-31
+  Program: TV 5
+
+**Description: 'TV5'** | Value: $1,610,000
+  Ref: 016-2021-2022-Q4-1343701
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,610,000 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2022-01-01 → End: 2022-12-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $1,380,000
+  Ref: 016-2021-2022-Q4-1343702
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,380,000 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2021-09-01 → End: 2022-08-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $2,958,768
+  Ref: 016-2022-2023-Q2-1349815
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $2,958,768 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2022-09-01 → End: 2024-08-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $7,974,011
+  Ref: 016-2022-2023-Q4-1354024
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5MONDE
+  Location: Paris cedex 17 France | Paris cedex 17 France, , FR
+  Value: $7,974,011 CAD (5,054,200 EUR)
+  Type: G | Recipient type: 
+  Amendment: 0
+  Start: 2023-01-01 → End: 2023-12-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $1,610,000
+  Ref: 016-2022-2023-Q4-1354224
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,610,000 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2023-01-01 → End: 2023-12-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $1,380,000
+  Ref: 016-2022-2023-Q4-1354584.1
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,380,000 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2022-09-01 → End: 2023-08-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $703,565
+  Ref: 016-2022-2023-Q4-1354584.2
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $703,565 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2022-09-01 → End: 2023-08-31
+  Program: TV5
+
+**Description: 'TV5 -'** | Value: $7,974,011
+  Ref: 016-2023-2024-Q4-1363485
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5MONDE
+  Location: Paris cedex 17 France | Paris cedex 17 France, , FR
+  Value: $7,974,011 CAD
+  Type: G | Recipient type: 
+  Amendment: 0
+  Start: 2024-01-01 → End: 2024-12-31
+  Program: TV5 -
+
+**Description: 'TV5 -'** | Value: $1,610,000
+  Ref: 016-2023-2024-Q4-1363486
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,610,000 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2024-01-01 → End: 2024-08-31
+  Program: TV5 -
+
+**Description: 'TV5 -'** | Value: $1,380,000
+  Ref: 016-2023-2024-Q4-1363487
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $1,380,000 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2023-09-01 → End: 2024-08-31
+  Program: TV5 -
+
+**Description: 'TV5 -'** | Value: $576,175
+  Ref: 016-2023-2024-Q4-1363487.1
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA
+  Location: Montréal | Montréal, QC, CA
+  Value: $576,175 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2023-09-01 → End: 2024-08-31
+  Program: TV5 -
+
+**Description: 'TV5 -'** | Value: $9,980,000
+  Ref: 016-2024-2025-Q3-1370493
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA (op: TV5 QUÉBEC CANADA)
+  Location: Montréal | Montréal, QC, CA
+  Value: $9,980,000 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2024-09-01 → End: 2026-08-31
+  Program: TV5 -
+
+**Description: 'TV5'** | Value: $159,167
+  Ref: 016-2024-2025-Q4-1370493
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5 QUÉBEC CANADA (op: TV5 QUÉBEC CANADA)
+  Location: Montréal | Montréal, QC, CA
+  Value: $159,167 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2024-09-01 → End: 2026-08-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $7,768,026
+  Ref: 016-2024-2025-Q4-1371542
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5MONDE (op: TV5MONDE)
+  Location: Paris | Paris, , FR
+  Value: $7,768,026 CAD (5,054,200 EUR)
+  Type: G | Recipient type: 
+  Amendment: 0
+  Start: 2025-01-01 → End: 2025-12-31
+  Program: TV5
+
+**Description: 'TV5'** | Value: $8,339,430
+  Ref: 016-2025-2026-Q4-1379132
+  Dept: Canadian Heritage | Patrimoine canadien
+  Recipient: TV5MONDE
+  Location: Paris cedex 17 France | Paris cedex 17 France, , FR
+  Value: $8,339,430 CAD
+  Type: G | Recipient type: O
+  Amendment: 0
+  Start: 2026-01-01 → End: 2026-12-31
+  Program: TV5
+
+**Description: 'TBC'** | Value: $4,842
+  Ref: 021-2019-2020-Q4-00043
+  Dept: Veterans Affairs Canada | Anciens Combattants Canada
+  Recipient: Joe Batt's Arm Recreation
+  Location: Joe Batt's Arm, NL, CA
+  Value: $4,842 CAD
+  Type: G | Recipient type: 
+  Amendment: 0
+  Start: 2019-10-06
+
+**Description: 'TBC'** | Value: $25,000
+  Ref: 021-2020-2021-Q1-0032
+  Dept: Veterans Affairs Canada | Anciens Combattants Canada
+  Recipient: Arrondissement du Verdun
+  Location: Verdun, QC, CA
+  Value: $25,000 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2019-11-01
+
+**Description: 'CISP'** | Value: $7,100
+  Ref: 033-2006-2007-Q1-498794
+  Dept: Innovation, Science and Economic Development Canada | Innovation, Sciences et Développement économique Canada
+  Recipient: Town Of Springdale (op: Town Of Springdale)
+  Location: Springdale, NL, CA
+  Value: $7,100 CAD
+  Type: C | Recipient type: F
+  Amendment: 1
+  Start: 2006-04-01 → End: 2007-03-08
+  Program: Community Investment Support Program (CISP)
 
 ---
 
 ## 10. Far Future End Dates (2040 or later)
 
 **End date: 9999-12-31**
-  Ref: GC-2020-Q1-00073
+  Ref: 071-2020-2021-Q4-00021
   Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Michel Bérubé (op: Michel Bérubé)
-  Location: St-Bruno De Montarville, QC, CA
-  Value: $8,096 CAD
-  Type: C | Recipient type: P
-  Amendment: 0
-  Start: 2019-06-10 → End: 9999-12-31
-  Program: Policy Dialogue Program
-  Description: Contribution as part of the Policy Dialogue Program to Michel Bérubé to assist in preparing for and engaging in participation activities associated with the ongoing Review of Legislative, Regulatory, and Policy Development Processes.
+  Recipient: Minodahmun Development LP (op: Minodahmun Development LP)
+  Location: Longlac, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-01-26 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Minodahmun Development LP to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road Project.
 
 **End date: 9999-12-31**
-  Ref: GC-2020-Q1-00080
+  Ref: 071-2020-2021-Q4-00024
   Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Mark Shrimpton (op: Mark Shrimpton)
-  Location: St. John's, NL, CA
-  Value: $11,644 CAD
-  Type: C | Recipient type: P
-  Amendment: 0
-  Start: 2019-06-12 → End: 9999-12-31
-  Program: Policy Dialogue Program
-  Description: Contribution as part of the Policy Dialogue Program to Mark Shrimpton to assist in preparing for and engaging in participation activities associated with the ongoing Review of Legislative, Regulatory, and Policy Development Processes.
+  Recipient: Minodahmun Development LP (op: Minodahmun Development LP)
+  Location: Longlac, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-01-26 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Minodahmun Development LP to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2020-2021-Q4-00028
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Constance Lake First Nation (op: Constance Lake First Nation)
+  Location: Constance Lake, ON, CA
+  Value: $45,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-01-27 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Constance Lake First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2020-2021-Q4-00029
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Constance Lake First Nation (op: Constance Lake First Nation)
+  Location: Constance Lake, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-01-27 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Constance Lake First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2020-2021-Q4-00030
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: WCS Wildlife Conservation Society Canada (op: WCS Wildlife Conservation Society Canada)
+  Location: Toronto, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: N
+  Amendment: 1
+  Start: 2021-01-27 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to WCS Wildlife Conservation Society Canada to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road P...
+
+**End date: 9999-12-31**
+  Ref: 071-2020-2021-Q4-00031
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: WCS Wildlife Conservation Society Canada (op: WCS Wildlife Conservation Society Canada)
+  Location: Toronto, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: N
+  Amendment: 1
+  Start: 2021-01-27 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to WCS Wildlife Conservation Society Canada to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2020-2021-Q4-00052
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Kashechewan First Nation (op: Kashechewan First Nation)
+  Location: Kashechewan, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-02-08 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Kashechewan First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2020-2021-Q4-00053
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) (op: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)))
+  Location: Nipissing, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: N
+  Amendment: 1
+  Start: 2021-02-02 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment proce...
+
+**End date: 9999-12-31**
+  Ref: 071-2020-2021-Q4-00054
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) (op: Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)))
+  Location: Nipissing, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: N
+  Amendment: 1
+  Start: 2021-02-02 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to  Friends of the Attawapiskat River (paid to Legal Advocates for Nature's Defence (LAND)) to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment proc...
+
+**End date: 9999-12-31**
+  Ref: 071-2020-2021-Q4-00074
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Ginoogaming First Nation (op: Ginoogaming First Nation)
+  Location: Longlac, ON, CA
+  Value: $15,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-02-23 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Ginoogaming First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2020-2021-Q4-00075
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Ginoogaming First Nation (op: Ginoogaming First Nation)
+  Location: Longlac, ON, CA
+  Value: $103,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-02-23 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Ginoogaming First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2021-2022-Q1-00082
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Marten Falls First Nation (op: Marten Falls First Nation)
+  Location: Ogoki, ON, CA
+  Value: $103,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-05-14 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Marten Falls First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2021-2022-Q1-00083
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Marten Falls First Nation (op: Marten Falls First Nation)
+  Location: Ogoki, ON, CA
+  Value: $103,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2021-05-14 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Marten Falls First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2022-2023-Q2-00034
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Attawapiskat First Nation (op: Attawapiskat First Nation)
+  Location: Attawapiskat, ON, CA
+  Value: $91,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2022-07-29 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Attawapiskat First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Webequie Supply Road Project.
+
+**End date: 9999-12-31**
+  Ref: 071-2022-2023-Q2-00035
+  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
+  Recipient: Attawapiskat First Nation (op: Attawapiskat First Nation)
+  Location: Attawapiskat, ON, CA
+  Value: $91,000 CAD
+  Type: C | Recipient type: A
+  Amendment: 1
+  Start: 2022-07-29 → End: 9999-12-31
+  Program: Participant Funding Program
+  Description: Contribution as part of the Participant Funding Program to Attawapiskat First Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Marten Falls Community Access Road Project.
 
 **End date: 9999-12-31**
   Ref: 071-2024-2025-Q2-00001
@@ -2560,162 +2714,6 @@ Working Together Priorities: expanding access to family health services; support
   Start: 2024-07-09 → End: 9999-12-31
   Program: Participant Funding Program
   Description: Grant as part of the Participant Funding Program to Conseil de la Nation Anishnabe du Lac Simon to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Novador Gold Mine Project.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00006
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Conseil de la Première Nation Abitibiwinni (op: Conseil de la Première Nation Abitibiwinni)
-  Location: Amos, QC, CA
-  Value: $25,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-09 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Grant as part of the Participant Funding Program to Conseil de la Première Nation Abitibiwinni to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Novador Gold Mine Project.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00007
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Saugeen Ojibway Nation (op: Saugeen Ojibway Nation)
-  Location: Southampton, ON, CA
-  Value: $10,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-09 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Grant as part of the Participant Funding Program to Saugeen Ojibway Nation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the RASA - Small Modular Reactor Project.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00008
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Greg McIvor, on behalf of Wabowden Registered Trapline #18 (op: Greg McIvor, on behalf of Wabowden Registered Trapline #18)
-  Location: Winnipeg, MB, CA
-  Value: $3,800 CAD
-  Type: C | Recipient type: 
-  Amendment: 1
-  Start: 2024-07-04 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Contribution as part of the Participant Funding Program to Greg McIvor, on behalf of Wabowden Registered Trapline #18 to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Lake Manitoba and ...
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00009
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Leq'a:mel First Nation (op: Leq'a:mel First Nation)
-  Location: Deroche, BC, CA
-  Value: $149,600 CAD
-  Type: C | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-12 → End: 9999-12-31
-  Program: Indigenous Capacity Support Program
-  Description: Contribution as part of the Indigenous Capacity Support Program to Leq'a:mel First Nation to assist in improving assessments, policy engagement, assessment monitoring and follow-up activities.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00010
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Société pour vaincre la pollution (op: Société pour vaincre la pollution)
-  Location: Montreal, QC, CA
-  Value: $5,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-15 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Grant as part of the Participant Funding Program to Société pour vaincre la pollution to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Novador Gold Mine Project.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00011
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: S'ólh Téméxw Stewardship Alliance (op: S'ólh Téméxw Stewardship Alliance)
-  Location: Chilliwack, BC, CA
-  Value: $5,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-15 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Grant as part of the Participant Funding Program to S'ólh Téméxw Stewardship Alliance to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Delta Grinding Facility Project.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00012
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Whitefish Lake First Nation #128 (op: Whitefish Lake First Nation #128)
-  Location: Goodfish, AB, CA
-  Value: $8,000 CAD
-  Type: C | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-16 → End: 9999-12-31
-  Program: Policy Dialogue Program
-  Description: Contribution as part of the Policy Dialogue Program to Whitefish Lake First Nation #128 to assist in preparing for and engaging in participation activities associated with the ongoing Review of Legislative, Regulatory, and Policy Development Processes.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00013
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Whitefish Lake First Nation #128 (op: Whitefish Lake First Nation #128)
-  Location: Goodfish, AB, CA
-  Value: $8,000 CAD
-  Type: C | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-16 → End: 9999-12-31
-  Program: Policy Dialogue Program
-  Description: Contribution as part of the Policy Dialogue Program to Whitefish Lake First Nation #128 to assist in preparing for and engaging in participation activities associated with the ongoing Review of Legislative, Regulatory, and Policy Development Processes.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00014
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Whitefish Lake First Nation #128 (op: Whitefish Lake First Nation #128)
-  Location: Goodfish, AB, CA
-  Value: $8,000 CAD
-  Type: C | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-16 → End: 9999-12-31
-  Program: Policy Dialogue Program
-  Description: Contribution as part of the Policy Dialogue Program to Whitefish Lake First Nation #128 to assist in preparing for and engaging in participation activities associated with the ongoing Review of Legislative, Regulatory, and Policy Development Processes.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00015
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Makivik Corporation (op: Makivik Corporation)
-  Location: Saint-Laurent, QC, CA
-  Value: $5,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-17 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Grant as part of the Participant Funding Program to Makivik Corporation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Strange Lake Rare Earth Mine Project.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00016
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Makivik Corporation (op: Makivik Corporation)
-  Location: Saint-Laurent, QC, CA
-  Value: $25,000 CAD
-  Type: G | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-17 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Grant as part of the Participant Funding Program to Makivik Corporation to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Strange Lake Rare Earth Mine Project.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00017
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: WCS Wildlife Conservation Society Canada (op: WCS Wildlife Conservation Society Canada)
-  Location: Toronto, ON, CA
-  Value: $14,930 CAD
-  Type: C | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-17 → End: 9999-12-31
-  Program: Participant Funding Program
-  Description: Contribution as part of the Participant Funding Program to WCS Wildlife Conservation Society Canada to assist in preparing for and engaging in Indigenous consultation activities and public participation opportunities associated with the assessment process for the Springpole Gold Project.
-
-**End date: 9999-12-31**
-  Ref: 071-2024-2025-Q2-00018
-  Dept: Impact Assessment Agency of Canada | Agence d'évaluation d'impact du Canada
-  Recipient: Canadian Environmental Network (op: Canadian Environmental Network)
-  Location: Ottawa, ON, CA
-  Value: $5,000 CAD
-  Type: C | Recipient type: 
-  Amendment: 0
-  Start: 2024-07-18 → End: 9999-12-31
-  Program: Policy Dialogue Program
-  Description: Contribution as part of the Policy Dialogue Program to Canadian Environmental Network to assist in preparing for and engaging in participation activities associated with the ongoing Review of Legislative, Regulatory, and Policy Development Processes.
 
 ---
 
@@ -3288,6 +3286,17 @@ The Global Fund to Fight AIDS, Tuberculosi...
   Amendment: 0
   Start: 2015-03-26
 
+**$500,000,000** | Country: US
+  Ref: 064-2024-2025-Q2-00736
+  Dept: Global Affairs Canada | Affaires mondiales Canada
+  Recipient: IDB - Inter-American Development Bank (op: IDB - Inter-American Development Bank)
+  Location: Washington | Washington, , US
+  Value: $500,000,000 CAD
+  Type: O | Recipient type: N
+  Amendment: 0
+  Start: 2024-03-08 → End: 2026-03-31
+  Description: This project aims to use private sector investments in climate change mitigation and adaptation across Latin America and the Caribbean while promoting gender-responsive, sustainable economic development. The project offers lower-cost and longer-term loans for innovative private-sector projects that ...
+
 **$500,000,000** | Country: CH
   Ref: GC-2016-Q2-0141
   Dept: Global Affairs Canada | Affaires mondiales Canada
@@ -3299,17 +3308,6 @@ The Global Fund to Fight AIDS, Tuberculosi...
   Start: 2015-09-17 → End: 2021-12-31
   Program: International Development Assistance Program
   Description: Canada’s support to Gavi, the Vaccine Alliance will assist in the realisation of Gavi’s Strategic Plan for 2016-2020, which aims to save 5-6 million children’s lives through equitable use of vaccines in lower income countries. Approximately 80% of these funds will be provided to procure and deliver ...
-
-**$500,000,000** | Country: US
-  Ref: 064-2024-2025-Q2-00736
-  Dept: Global Affairs Canada | Affaires mondiales Canada
-  Recipient: IDB - Inter-American Development Bank (op: IDB - Inter-American Development Bank)
-  Location: Washington | Washington, , US
-  Value: $500,000,000 CAD
-  Type: O | Recipient type: N
-  Amendment: 0
-  Start: 2024-03-08 → End: 2026-03-31
-  Description: This project aims to use private sector investments in climate change mitigation and adaptation across Latin America and the Caribbean while promoting gender-responsive, sustainable economic development. The project offers lower-cost and longer-term loans for innovative private-sector projects that ...
 
 **$410,000,000** | Country: US
   Ref: 064-2021-2022-Q1-00245
@@ -3415,16 +3413,6 @@ The Fund is ma...
   Amendment: 0
   Start: 2015-04-29
 
-**$200,000,000** | Country: PH
-  Ref: GC-2017-Q4-0017
-  Dept: Global Affairs Canada | Affaires mondiales Canada
-  Recipient: AsDB - Asian Development Bank
-  Location: Manila, Philippines, , PH
-  Value: $200,000,000 CAD
-  Type: C | Recipient type: 
-  Amendment: 0
-  Start: 2017-03-27
-
 **$200,000,000** | Country: US
   Ref: GC-2016-Q3-0331
   Dept: Global Affairs Canada | Affaires mondiales Canada
@@ -3434,6 +3422,16 @@ The Fund is ma...
   Type: G | Recipient type: 
   Amendment: 0
   Start: 2015-12-14
+
+**$200,000,000** | Country: PH
+  Ref: GC-2017-Q4-0017
+  Dept: Global Affairs Canada | Affaires mondiales Canada
+  Recipient: AsDB - Asian Development Bank
+  Location: Manila, Philippines, , PH
+  Value: $200,000,000 CAD
+  Type: C | Recipient type: 
+  Amendment: 0
+  Start: 2017-03-27
 
 **$190,000,000** | Country: IT
   Ref: 064-2020-2021-Q4-00435
