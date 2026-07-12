@@ -86,7 +86,14 @@ def normalize_bn(raw):
 def normalize_name(raw):
     if not raw:
         return ""
-    s = unidecode(str(raw)).upper()
+    s = str(raw)
+    if "|" in s:
+        # grants.csv recipient names are often bilingual, "English Name|Nom
+        # français" -- match on the English half only so both language
+        # variants of the same org collapse to the same normalized name
+        # instead of creating separate entities.
+        s = s.split("|", 1)[0]
+    s = unidecode(s).upper()
     s = re.sub(r"[^A-Z0-9 ]", " ", s)
     tokens = [t for t in s.split() if t not in LEGAL_SUFFIXES]
     return " ".join(tokens) if tokens else " ".join(s.split())
@@ -294,20 +301,77 @@ class Resolver:
                             self.links.append(EntityLink(eid, source_dataset, name, bn_raw, "fuzzy_accept", score))
                             return eid
 
-        # residual: dedupe unmatched records by normalized name + province
+        # residual: dedupe unmatched records by normalized name + province,
+        # but never silently merge two different BNs into one entity just
+        # because they share a normalized name + province (e.g. several
+        # differently-BN'd "Port Authority"-style orgs). A BN found here is
+        # registered in bn_to_entity so later records with the same BN
+        # exact-match instead of falling through to name-based residual
+        # dedup again and potentially creating a separate entity.
         rkey = (norm, (province or "").strip().upper()[:2])
-        if rkey in self.residual_to_entity:
-            eid = self.residual_to_entity[rkey]
-        else:
+        existing_eid = self.residual_to_entity.get(rkey)
+        existing_bn = self.entities[existing_eid - 1].bn_root if existing_eid is not None else None
+
+        if existing_eid is None:
             eid = self.new_id()
             self.residual_to_entity[rkey] = eid
             self.entities.append(EntityRow(eid, root, name, None, province, "other_org"))
+            if root:
+                self.bn_to_entity[root] = eid
+        elif root and existing_bn and existing_bn != root:
+            # Collision: same normalized name+province, but a different real
+            # BN -- resolve/create a BN-specific entity rather than merging.
+            bn_rkey = (rkey, root)
+            eid = self.residual_to_entity.get(bn_rkey)
+            if eid is None:
+                eid = self.new_id()
+                self.residual_to_entity[bn_rkey] = eid
+                self.entities.append(EntityRow(eid, root, name, None, province, "other_org"))
+                self.bn_to_entity[root] = eid
+        else:
+            eid = existing_eid
+            if root and not existing_bn:
+                # Backfill: attach this record's BN to the existing residual
+                # entity and index it for future exact-BN matches.
+                self.entities[eid - 1] = self.entities[eid - 1]._replace(bn_root=root)
+                self.bn_to_entity[root] = eid
         self.stats["unmatched_new"] += 1
         self.links.append(EntityLink(eid, source_dataset, name, bn_raw, "unmatched_new", None))
         return eid
 
 
 # ── pipeline stages ──────────────────────────────────────────────────────────
+
+def _latest_amendment_sql(source_table):
+    """SQL selecting only the latest-amendment row per (owner_org, ref_number)
+    from a grants-shaped table. Amendment rows restate an agreement's current
+    value rather than adding to it -- summing every row for a given agreement
+    double/triple-counts the same dollars. Keeps the latest state per
+    agreement (current amendment_number, treating missing/blank as 0 =
+    original); amendment history stays fully queryable in the un-deduped
+    source table, so nothing here is destructive.
+
+    ref_number is NOT globally unique on its own: 24,851 refs collide across
+    departments (e.g. GC-2016-Q4-00001 is six different grants -- different
+    recipients, different values, different departments -- all at amendment
+    0). Deduping by ref_number alone collapses 61,075 rows of genuinely
+    distinct agreements ($41.3B) down to one arbitrary row each. The dedup
+    key is (TRIM(owner_org), TRIM(ref_number)) -- verified zero multi-recipient
+    groups remain at max amendment within that key. TRIM matters on both
+    sides: at least one ref has a trailing space.
+
+    Approximation, not a guarantee: docs/data-publishing-problems.md notes
+    some departments publish deltas/negative amendments instead of restated
+    totals, in which case "latest amendment" isn't strictly "current total"
+    -- see docs/entity-resolution-methodology.md for the caveat."""
+    return f"""
+        SELECT * FROM {source_table}
+        QUALIFY ROW_NUMBER() OVER (
+            PARTITION BY TRIM(owner_org), TRIM(ref_number)
+            ORDER BY COALESCE(TRY_CAST(NULLIF(TRIM(amendment_number), '') AS INTEGER), 0) DESC
+        ) = 1
+    """
+
 
 def _load_t3010_table(con, glob_pattern, table_name):
     """Load a T3010 CSV glob into `table_name` (unioned by column name across
@@ -348,6 +412,17 @@ def load_raw(con):
     con.execute(f"CREATE OR REPLACE TABLE raw_grants AS SELECT * FROM read_csv('{GRANTS_CSV}', all_varchar=true)")
     n = con.execute("SELECT COUNT(*) FROM raw_grants").fetchone()[0]
     print(f"  raw_grants: {n:,} rows")
+
+    # Amendment rows restate an agreement's value rather than adding to it --
+    # dedupe to the latest amendment per (owner_org, ref_number) before
+    # anything reads grants values, so grants_unified never double/triple-
+    # counts dollars. ref_number alone is NOT a safe key: refs collide across
+    # departments (see _latest_amendment_sql). raw_grants itself stays
+    # untouched (full amendment history queryable).
+    con.execute(f"CREATE OR REPLACE TABLE raw_grants_latest AS {_latest_amendment_sql('raw_grants')}")
+    n_latest = con.execute("SELECT COUNT(*) FROM raw_grants_latest").fetchone()[0]
+    print(f"  raw_grants_latest: {n_latest:,} rows (latest amendment per (dept, ref); "
+          f"{n - n_latest:,} superseded amendment rows excluded from grants_unified)")
 
     # T3010 (2013-2024): one file per kind per year, unioned by column name
     # since a handful of columns were added/removed across form versions
@@ -431,7 +506,7 @@ def build_entities_and_grants(con):
         "recipient_province", "recipient_country", "agreement_value", "agreement_start_date",
         "prog_name_en", "description_en",
     ]
-    cur = con.execute(f"SELECT {', '.join(cols)} FROM raw_grants")
+    cur = con.execute(f"SELECT {', '.join(cols)} FROM raw_grants_latest")
     processed = 0
     while True:
         batch = cur.fetchmany(50_000)
