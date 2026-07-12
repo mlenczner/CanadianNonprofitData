@@ -1,3 +1,5 @@
+> **DRAFT — research prototype.** This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.
+
 # Canadian Nonprofit Data
 
 Analysis of the Government of Canada's **Proactive Disclosure — Grants and Contributions** dataset: compliance gaps, data quality issues, and spending patterns across federal departments.

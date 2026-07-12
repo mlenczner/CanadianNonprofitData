@@ -19,6 +19,13 @@ from datetime import datetime
 
 import duckdb
 
+DRAFT_DISCLAIMER_MD = (
+    "> **DRAFT — research prototype.** This is an unreleased working draft produced for "
+    "research purposes only. Figures are derived from public data using experimental "
+    "methods, contain known data-quality limitations, and have not been reviewed for "
+    "publication. Do not cite, circulate, or rely on any figure or claim in this document.\n"
+)
+
 FILE = sys.argv[1] if len(sys.argv) > 1 else "grants.csv"
 
 VALID_AGREEMENT_TYPES = {"C", "G", "O"}
@@ -124,6 +131,7 @@ print(f"Departments found: {len(dept_total)}\n")
 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
 
 lines = []
+lines.append(DRAFT_DISCLAIMER_MD)
 lines.append(f"# GC Grants — Per-Department Compliance Report")
 lines.append(f"Generated: {timestamp}  |  Total records: {total:,}  |  Departments: {len(dept_total)}\n")
 

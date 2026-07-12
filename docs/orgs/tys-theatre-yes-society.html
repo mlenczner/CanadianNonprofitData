@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TYS THEATRE YES SOCIETY — Canadian Nonprofit Data</title>
+<title>[DRAFT] TYS THEATRE YES SOCIETY — Canadian Nonprofit Data</title>
 <style>
 :root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
 *{box-sizing:border-box;margin:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-top:40px}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.draft-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:9rem;font-weight:800;color:#000;opacity:.03;pointer-events:none;z-index:0;white-space:nowrap;user-select:none}
+.draft-footer-notice{background:#fff3cd;color:#8a6d00;border:1px solid #8a6d00;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:.8rem}
 .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
 header{padding:40px 0 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
 h1{font-size:2.1rem;letter-spacing:-.02em}
@@ -47,6 +50,8 @@ body.show-work .claim{border-bottom-color:var(--red)}
 footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
 @media(max-width:640px){.barcol i{display:none}}
 </style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="draft-watermark">DRAFT</div>
 <div class="wrap">
 <header>
 <div>
@@ -61,7 +66,8 @@ Show your work
 </header>
 <div class='stats'><div class='stat'><b class='claim' data-drawer='drawer-stat-recv-total' onclick='toggleDrawer(this)'>$16,110</b><span>total received</span></div><div class='stat'><b>1</b><span>grants received</span></div><div class='stat'><b class='claim' data-drawer='drawer-stat-revenue' onclick='toggleDrawer(this)'>$17,985</b><span>latest reported revenue (2024-09-30)</span></div><div class='stat'><b>2024–2024</b><span>years active</span></div></div><h2>Funding timeline</h2><div class='bars'><div class='barcol'><div class='bar-given' style='height:0%'></div><div class='bar-recv' style='height:100.0%'></div><u>FY2024: received $16,110</u><i>2024</i></div></div><h2>Grants received</h2><div class='table-scroll'><table><thead><tr><th>Organization</th><th>Program</th><th class='num'>Amount</th><th>Role</th></tr></thead><tbody><tr class='year-group'><td colspan='4'>FY 2024</td></tr><tr><td><span class='claim' data-drawer='drawer-2' onclick='toggleDrawer(this)'>Canada Council for the Arts</span><span class='src'>Canada Council</span></td><td>Explore and Create</td><td class='num'>$16,110</td><td>Funder</td></tr></tbody></table></div>
 <div id="drawers"><div class='drawer' id='drawer-identity'><p>This organization appears under 1 name variant across 1 source:</p><ul><li><b>Theatre Yes</b> — Canada Council <span class='src'>exact BN</span> · BN 889261012</li></ul></div><div class='drawer' id='drawer-stat-recv-total'><p>Computed as the sum of 1 row in <code>grants_unified</code> ($16,110 total).</p><p>Caveats: federal amounts are latest-amendment-per-agreement (superseded amendment rows are excluded, not summed). T3010 qualified-donee gifts are filer-reported by the giving charity, not independently verified.</p></div><div class='drawer' id='drawer-stat-revenue'><p>From <code>entity_financials</code>: BN 889261012RR0001, fiscal period end 2024-09-30. T3010 line 4700 (total revenue). Only the latest filed fiscal year is kept per organization.</p></div><div class='drawer' id='drawer-2'><p><b>Source:</b> Canada Council</p><p><b>Program:</b> Explore and Create</p></div></div>
-<footer>Generated 2026-07-12 14:03 from the Canadian Nonprofit Data entity graph
+<footer><p class="draft-footer-notice">DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p>
+Generated 2026-07-12 15:12 from the Canadian Nonprofit Data entity graph
 (federal Grants &amp; Contributions, CRA T3010, Canada Council for the Arts).
 Matching methodology &amp; limitations: see
 <a href="../entity-resolution-methodology.md">entity-resolution-methodology.md</a>.</footer>

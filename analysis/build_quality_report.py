@@ -7,6 +7,14 @@ python3 build_quality_report.py /path/to/grants.csv /path/to/output.html
 import duckdb, json, sys
 from datetime import datetime
 
+DRAFT_BANNER_TEXT = "DRAFT — research prototype, not for circulation"
+DRAFT_FULL_TEXT = (
+    "DRAFT — research prototype. This is an unreleased working draft produced for "
+    "research purposes only. Figures are derived from public data using experimental "
+    "methods, contain known data-quality limitations, and have not been reviewed for "
+    "publication. Do not cite, circulate, or rely on any figure or claim in this document."
+)
+
 CSV, OUT = sys.argv[1], sys.argv[2]
 con = duckdb.connect()
 
@@ -137,11 +145,14 @@ data = {
 TEMPLATE = r"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Who Publishes Clean Data? — Federal G&amp;C Publishing Quality</title>
+<title>[DRAFT] Who Publishes Clean Data? — Federal G&amp;C Publishing Quality</title>
 <style>
 :root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
 *{box-sizing:border-box;margin:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-top:40px}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.draft-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:9rem;font-weight:800;color:#000;opacity:.03;pointer-events:none;z-index:0;white-space:nowrap;user-select:none}
+.draft-footer-notice{background:#fff3cd;color:#8a6d00;border:1px solid #8a6d00;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:.8rem}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px 80px}
 header{padding:56px 0 8px}
 h1{font-size:2.2rem;letter-spacing:-.02em}
@@ -175,7 +186,10 @@ tr.det b{color:var(--ink)}
 .spec .amt{font-weight:700}
 .spec .meta{color:var(--mut);font-size:.76rem}
 footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
-</style></head><body><div class="wrap">
+</style></head><body>
+<div class="draft-banner">__DRAFT_BANNER__</div>
+<div class="draft-watermark">DRAFT</div>
+<div class="wrap">
 <header>
 <h1>Who Publishes Clean Data? <span class="maple">&#127809;</span></h1>
 <p class="sub">Every federal department is required to proactively disclose its grants &amp; contributions.
@@ -262,14 +276,17 @@ document.getElementById("specs").innerHTML = jar.map(([t,items,f])=>
  `<div class="spec"><h3>${t}</h3><ul style="margin:0;padding:0">${
    items.map(s=>`<li>${f(s)}<div class="meta">${s.dept} · ${s.ref}</div></li>`).join("")}</ul></div>`).join("");
 document.getElementById("foot").innerHTML =
- `Generated ${D.generated} from the Government of Canada Proactive Disclosure — Grants and Contributions dataset
+ `<p class="draft-footer-notice">__DRAFT_FULL__</p>
+ Generated ${D.generated} from the Government of Canada Proactive Disclosure — Grants and Contributions dataset
  (open.canada.ca). ${D.n_depts} departments with 100+ agreements ranked. One row per agreement
  (latest amendment per department + ref_number). “Implausible date” = before 1990, after 2026, or the
  1899-12-30 Excel null. Weights are editorial judgment, not TBS policy — see docs/data-publishing-problems.md
  in the Canadian Nonprofit Data repository for the full problem taxonomy.`;
 </script></body></html>"""
 
-html = TEMPLATE.replace("__DATA__", json.dumps(data))
+html = (TEMPLATE.replace("__DATA__", json.dumps(data))
+        .replace("__DRAFT_BANNER__", DRAFT_BANNER_TEXT)
+        .replace("__DRAFT_FULL__", DRAFT_FULL_TEXT))
 with open(OUT, "w", encoding="utf-8") as f:
     f.write(html)
 print(f"wrote {OUT} ({len(html):,} bytes)")

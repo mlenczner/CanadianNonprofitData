@@ -1,5 +1,7 @@
+> **DRAFT — research prototype.** This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.
+
 # GC Grants — Weird & Interesting Records
-Generated: 2026-07-11 17:09  |  Total records scanned: 1,303,939
+Generated: 2026-07-12 15:08  |  Total records scanned: 1,303,939
 
 ---
 

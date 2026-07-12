@@ -1,5 +1,7 @@
+> **DRAFT — research prototype.** This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.
+
 # GC Grants — Per-Department Compliance Report
-Generated: 2026-07-11 03:25  |  Total records: 1,303,939  |  Departments: 51
+Generated: 2026-07-12 15:08  |  Total records: 1,303,939  |  Departments: 51
 
 ## 1. Overall Compliance Summary (all departments)
 

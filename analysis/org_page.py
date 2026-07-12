@@ -46,6 +46,14 @@ AMOUNT_EPSILON = 0.01
 
 RED = "#d52b1e"
 
+DRAFT_BANNER_TEXT = "DRAFT — research prototype, not for circulation"
+DRAFT_FULL_TEXT = (
+    "DRAFT — research prototype. This is an unreleased working draft produced for "
+    "research purposes only. Figures are derived from public data using experimental "
+    "methods, contain known data-quality limitations, and have not been reviewed for "
+    "publication. Do not cite, circulate, or rely on any figure or claim in this document."
+)
+
 KIND_LABELS = {
     "charity": "Registered charity",
     "federal_dept": "Federal department",
@@ -368,7 +376,10 @@ def locate_t3010_qd_receipt(con, entity_id, funder_entity_id, amount, fiscal_yea
 CSS = """
 :root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
 *{box-sizing:border-box;margin:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-top:40px}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.draft-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:9rem;font-weight:800;color:#000;opacity:.03;pointer-events:none;z-index:0;white-space:nowrap;user-select:none}
+.draft-footer-notice{background:#fff3cd;color:#8a6d00;border:1px solid #8a6d00;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:.8rem}
 .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
 header{padding:40px 0 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
 h1{font-size:2.1rem;letter-spacing:-.02em}
@@ -676,8 +687,10 @@ def render_page(con, entity_id):
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{esc(name_display)} — Canadian Nonprofit Data</title>
+<title>[DRAFT] {esc(name_display)} — Canadian Nonprofit Data</title>
 <style>{CSS}</style></head><body>
+<div class="draft-banner">{esc(DRAFT_BANNER_TEXT)}</div>
+<div class="draft-watermark">DRAFT</div>
 <div class="wrap">
 <header>
 <div>
@@ -692,7 +705,8 @@ Show your work
 </header>
 {"".join(sections)}
 <div id="drawers">{"".join(drawer_html)}</div>
-<footer>Generated {esc(generated)} from the Canadian Nonprofit Data entity graph
+<footer><p class="draft-footer-notice">{esc(DRAFT_FULL_TEXT)}</p>
+Generated {esc(generated)} from the Canadian Nonprofit Data entity graph
 (federal Grants &amp; Contributions, CRA T3010, Canada Council for the Arts).
 Matching methodology &amp; limitations: see
 <a href="../entity-resolution-methodology.md">entity-resolution-methodology.md</a>.</footer>

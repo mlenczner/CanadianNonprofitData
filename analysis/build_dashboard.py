@@ -6,6 +6,14 @@ python3 build_dashboard.py /path/to/grants.csv /path/to/output.html
 import duckdb, json, sys
 from datetime import datetime
 
+DRAFT_BANNER_TEXT = "DRAFT — research prototype, not for circulation"
+DRAFT_FULL_TEXT = (
+    "DRAFT — research prototype. This is an unreleased working draft produced for "
+    "research purposes only. Figures are derived from public data using experimental "
+    "methods, contain known data-quality limitations, and have not been reviewed for "
+    "publication. Do not cite, circulate, or rely on any figure or claim in this document."
+)
+
 CSV, OUT = sys.argv[1], sys.argv[2]
 con = duckdb.connect()
 
@@ -104,11 +112,14 @@ data = {
 TEMPLATE = r"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Grant Machine — Federal Grants &amp; Contributions</title>
+<title>[DRAFT] The Grant Machine — Federal Grants &amp; Contributions</title>
 <style>
 :root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
 *{box-sizing:border-box;margin:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-top:40px}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.draft-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:9rem;font-weight:800;color:#000;opacity:.03;pointer-events:none;z-index:0;white-space:nowrap;user-select:none}
+.draft-footer-notice{background:#fff3cd;color:#8a6d00;border:1px solid #8a6d00;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:.8rem}
 .wrap{max-width:1060px;margin:0 auto;padding:0 24px 80px}
 header{padding:56px 0 8px}
 h1{font-size:2.4rem;letter-spacing:-.02em}
@@ -145,7 +156,10 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .big .meta{color:var(--mut);font-size:.82rem}
 footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
 @media(max-width:640px){.bar i{display:none}}
-</style></head><body><div class="wrap">
+</style></head><body>
+<div class="draft-banner">__DRAFT_BANNER__</div>
+<div class="draft-watermark">DRAFT</div>
+<div class="wrap">
 <header>
 <h1>The Grant Machine <span class="maple">&#127809;</span></h1>
 <p class="sub">A field guide to Canada&rsquo;s federal Grants &amp; Contributions disclosure data —
@@ -230,14 +244,17 @@ document.getElementById("cards").innerHTML = [
   [F.most_amended.n + "×", `most-amended agreement (${F.most_amended.recip||F.most_amended.ref})`],
 ].map(([b,s])=>`<div class="card"><b>${b}</b><span>${s}</span></div>`).join("");
 document.getElementById("foot").innerHTML =
- `Generated ${D.generated} from the Government of Canada Proactive Disclosure &mdash; Grants and Contributions dataset
+ `<p class="draft-footer-notice">__DRAFT_FULL__</p>
+ Generated ${D.generated} from the Government of Canada Proactive Disclosure &mdash; Grants and Contributions dataset
  (open.canada.ca). Coverage ${H.from} to ${H.to}. Dollar figures keep only the latest amendment per
  (department, ref_number); amendment rows restate agreement values, so summing all rows would overcount.
  Some departments publish amendment deltas instead of restated totals, so totals are best-available approximations.
  Methodology &amp; caveats: see docs/ in the Canadian Nonprofit Data repository.`;
 </script></body></html>"""
 
-html = TEMPLATE.replace("__DATA__", json.dumps(data))
+html = (TEMPLATE.replace("__DATA__", json.dumps(data))
+        .replace("__DRAFT_BANNER__", DRAFT_BANNER_TEXT)
+        .replace("__DRAFT_FULL__", DRAFT_FULL_TEXT))
 with open(OUT, "w", encoding="utf-8") as f:
     f.write(html)
 print(f"wrote {OUT} ({len(html):,} bytes)")

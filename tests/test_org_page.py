@@ -272,6 +272,18 @@ def test_page_parses_and_has_canonical_name_and_totals(db_path):
     assert op.fmt_money(1200000.00) in page  # total received, formatted
 
 
+def test_page_contains_draft_disclaimer(db_path):
+    con = duckdb.connect(db_path, read_only=True)
+    try:
+        page = op.render_page(con, 1)
+    finally:
+        con.close()
+    assert "[DRAFT]" in page  # <title> prefix
+    assert op.DRAFT_BANNER_TEXT in page  # sticky banner
+    assert op.DRAFT_FULL_TEXT in page  # full canonical text in the footer
+    assert "draft-watermark" in page  # screenshot-proofing watermark
+
+
 def test_fuzzy_linked_receipt_contains_raw_name_and_score(db_path):
     con = duckdb.connect(db_path, read_only=True)
     try:

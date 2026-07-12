@@ -1,3 +1,5 @@
+> **DRAFT — research prototype.** This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.
+
 # Why Better Grants & Contributions Data Matters
 ## A Call for Improvement to Canada's Proactive Disclosure of Federal Funding
 
