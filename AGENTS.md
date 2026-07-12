@@ -65,3 +65,12 @@ Run tests:
    On the latest full run (12-year T3010, both refinements in place): **1,164 gate rejects**, and a full regression scan (recomputing pre-refinement digit-token equality against every one of them) found **3 of 1,164 (0.6%)** where the fusion refinement itself newly rejects a pair the simpler pre-refinement logic would have matched — manually reviewed, not just counted. 1 is a confirmed genuine regression and a new failure mode: a T3010 donee-name field truncated mid-word right after a digit (`"...Saskatoon School Division No. 13 T"`, cut off before `TRUST FUND`) gets its truncated single letter fused onto the digit (`"13"`+`"T"`→`"13T"`), no longer matching the untruncated registry name's bare `"13"` — confirmed recurring (multiple donee records for the same org truncated at exactly 60 chars), not a one-off, so it could plausibly affect other long organization names too. Not yet fixed. The other 2 are genuinely ambiguous (JW circuit `1`/`1-B`, `2`/`2-A` pairs) rather than confirmed regressions, since this same dataset has confirmed-different lettered JW sub-circuits elsewhere (`5A`/`7A`, `11B`/`1B`).
 
    Still not addressed: a third, unquantified pattern where a branding/campaign number appears in a common name but not the registered legal name (e.g. `Times Colonist 1000 Christmas Fund` vs `Times Colonist Christmas Fund Society`) — no safe general rule was found for this one. Full writeup with real numbers: `docs/entity-resolution-methodology.md`.
+
+## Dashboards (self-contained HTML, no dependencies)
+
+Two single-file HTML reports live in `docs/`, each rebuilt from `grants.csv` by a script in `analysis/` (~40s each; both apply latest-amendment-per-(owner_org, ref_number) dedup, consistent with `build_entity_graph.py`):
+
+- `docs/grants-dashboard.html` ← `analysis/build_dashboard.py` — headline totals, per-department data-quality grades, fiscal-year funding chart, largest agreements, curiosities ($1 grants, negative values, Excel-null dates).
+- `docs/data-quality-rankings.html` ← `analysis/build_quality_report.py` — departments ranked best-to-worst on publishing quality with expandable per-department evidence (real refs) and a "specimen jar" of egregious records. Scoring weights are documented in the page footer and are editorial judgment, not TBS policy.
+
+Rebuild: `python3 analysis/build_dashboard.py grants.csv docs/grants-dashboard.html` (same pattern for the other).

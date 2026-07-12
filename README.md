@@ -20,6 +20,8 @@ analysis/   Scripts for downloading, profiling, and linking the datasets
 | [`docs/questions-and-insights.md`](docs/questions-and-insights.md) | Working list of research questions and possible insights |
 | [`docs/entity-resolution-methodology.md`](docs/entity-resolution-methodology.md) | How funders/recipients are matched across sources, thresholds, and known limitations |
 | [`analysis/profile_grants.py`](analysis/profile_grants.py) | `grants.csv` profiler — completeness, field distributions, and quality metrics |
+| [`docs/grants-dashboard.html`](docs/grants-dashboard.html) | Self-contained interactive dashboard — totals, department grades, funding chart, curiosities (rebuild: `analysis/build_dashboard.py`) |
+| [`docs/data-quality-rankings.html`](docs/data-quality-rankings.html) | Departments ranked best-to-worst on publishing quality, with per-department evidence (rebuild: `analysis/build_quality_report.py`) |
 | [`analysis/download_sources.py`](analysis/download_sources.py) | Downloads the T3010 charity registry and Canada Council grants data |
 | [`analysis/build_entity_graph.py`](analysis/build_entity_graph.py) | Links grants.csv + T3010 + Canada Council into one entity graph |
 

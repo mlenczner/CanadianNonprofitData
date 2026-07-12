@@ -1,0 +1,134 @@
+# Spec: Organization Profile Pages ("claim and receipt")
+
+**Deliverable:** `analysis/org_page.py` — a CLI that generates one beautiful, self-contained
+HTML profile page per organization from `nonprofit_network.duckdb`, plus a test suite.
+
+## The idea
+
+Every page has two postures, toggled by the reader:
+
+1. **The clean layer** (default). A quiet, elegant profile of one organization — the kind of
+   page you'd show anyone. No jargon, no IDs, no methodology. Reads like a well-made
+   profile card.
+2. **The receipt layer.** Every fact on the page is a *claim*, and every claim carries a
+   *receipt*: the raw record(s) it came from, how they were matched, and with what
+   confidence. Faint dotted underlines mark claims; clicking one opens an inline evidence
+   drawer. A single global toggle in the header — **"Show your work"** — highlights every
+   claim at once.
+
+The receipts are not new data. `entity_links` already records every match decision
+(raw name, raw BN, match method, score, source dataset), and the raw tables retain
+everything the clean tables deduplicate away (e.g. amendment chains in `raw_grants`).
+This feature *surfaces* the audit trail the resolver already writes.
+
+Honesty is a feature: where a fact rests on a fuzzy match, the receipt must show the
+score and both name strings. Do not hide uncertainty to make pages look cleaner.
+
+## CLI
+
+```
+python analysis/org_page.py "Salvation Army"            # fuzzy name lookup
+python analysis/org_page.py --entity-id 12345
+python analysis/org_page.py --bn 107951618
+python analysis/org_page.py "salvation" --list          # print candidate matches, build nothing
+```
+
+- Name lookup: case-insensitive substring against `entities.canonical_name`, ranked by
+  total flow (`entity_role_summary.total_given + total_received`). If multiple candidates
+  and no exact match, print the top 10 with entity_id / kind / city / total flow and exit
+  nonzero asking the user to pick (`--entity-id` or `--list` to browse). Never guess silently.
+- Output: `docs/orgs/<slug>.html` (slugified canonical name; `--out PATH` to override).
+  Create `docs/orgs/` if needed.
+- Open the DB `read_only=True`. Fail with a clear message if the DB is locked or missing.
+- Respect AGENTS.md: never read grants.csv or the t3010 CSVs directly — everything comes
+  from DuckDB queries.
+
+## Page anatomy (clean layer)
+
+Match the visual language of the existing dashboards (`docs/grants-dashboard.html`):
+same palette (`--red:#d52b1e`, warm off-white background, cards, system font stack),
+single file, zero external dependencies, works offline, no localStorage, vanilla JS only.
+
+1. **Header** — canonical name (English half if the stored name is bilingual
+   `"English|Français"`), entity kind as a small badge (Registered charity / Federal
+   department / Organization), city + province, BN root if known. The "Show your work"
+   toggle lives here.
+2. **Stat row** — big numbers: total received, total given (omit if zero), number of
+   grants received/given, latest reported revenue + fiscal period (from
+   `entity_financials`, omit if absent), years active (min–max fiscal_year seen).
+3. **Funding timeline** — pure-CSS bar chart of dollars received per fiscal year
+   (and a second series for dollars given, if the org gives). Hover tooltips.
+4. **Grants received** — table: fiscal year, funder (canonical name), program, amount.
+   Sorted newest first. Group visually by funder or year, whichever reads better.
+   A small source badge per row (Federal G&C / T3010 gift / Canada Council).
+5. **Grants given** — same shape, only if the org gives (regranters are the star case).
+6. **Footer** — generated date, one-line data provenance, link text pointing at
+   `docs/entity-resolution-methodology.md`.
+
+If a section has no data, omit it entirely — no empty placeholders.
+
+**Scale cap:** if an org has more than 300 grants in either direction, embed the 300
+largest by amount plus a per-year rollup of the rest, and say so plainly
+("Showing the 300 largest of 4,112 grants; totals include all of them").
+
+## Receipts (what backs each claim)
+
+| Claim on the page | Receipt drawer contents |
+|---|---|
+| The org's identity/name | All rows from `entity_links` for this entity: raw name, raw BN, source dataset, match method, score. Phrase it: "This organization appears under N name variants across M sources", then list them with method badges (exact BN / fuzzy 92.4 / unmatched-new). |
+| Total received / given | How computed: sum over `grants_unified` rows, count per source dataset, plus the standing caveats: federal amounts are latest-amendment-per-agreement; T3010 qualified-donee gifts are filer-reported. |
+| A single federal grant row | The matching row(s) from `raw_grants` — locate them by joining through this entity's `entity_links.raw_name` variants for `source_dataset='federal_gc'` against `recipient_legal_name`, then match on amount + fiscal year. Show ref_number, department, dates, description, and the **amendment chain** if the agreement was amended: each amendment number and value in order ("$1.0M → $1.4M → $1.2M — the profile shows only the final state"). If the raw row cannot be located unambiguously, say so in the drawer rather than showing a wrong receipt. |
+| A T3010 gift row | Source dataset, filer BN, fiscal period end; note it is self-reported by the giving charity. |
+| Latest revenue | `entity_financials`: BN, fiscal period end, which T3010 line codes (4700 etc.), and that only the latest filing year is kept. |
+| Timeline bars | Per-year sums with per-source breakdown. |
+
+Note: `grants_unified` does not store `ref_number`, so federal receipts require the
+runtime join described above. Implement it as a best-effort lookup with an explicit
+"receipt not located" fallback. Add a note to AGENTS.md open issues suggesting a
+`source_ref` column in `grants_unified` at the next full rebuild — do **not** trigger a
+rebuild for this feature.
+
+Receipt drawers are pre-rendered into the HTML (hidden, expanded by JS) — no fetches,
+the file stays self-contained. This is why the scale cap matters.
+
+## Tests (pytest, in `tests/test_org_page.py`)
+
+Build a **small fixture database in the test** (a temp-file DuckDB with `entities`,
+`entity_links`, `grants_unified`, `entity_role_summary`, `entity_financials`, and a
+minimal `raw_grants` — a dozen rows total, covering: one charity with an exact-BN link,
+one fuzzy link with a score, one amendment chain of 3 rows, one bilingual pipe name,
+one org with zero grants given). Do not depend on the real 1.6GB database for unit tests.
+
+Cover at least:
+- Name lookup: exact hit builds; ambiguous prefix exits nonzero and lists candidates.
+- Generated HTML parses (use `html.parser`), contains the canonical name, the correct
+  totals (assert on formatted numbers), and **no unreplaced template tokens**.
+- The receipt for the fuzzy-linked variant contains the raw name and the score.
+- The amendment-chain receipt shows all three values in order.
+- Bilingual name renders the English half in the header but the full raw string in the
+  identity receipt.
+- Scale cap: an org with >300 fixture grants embeds exactly 300 rows + rollup note.
+- Money/slug helper functions.
+
+One integration test marked `@pytest.mark.skipif(not os.path.exists('nonprofit_network.duckdb'))`
+that builds a real page for the top entity by total flow and checks it parses.
+
+Tests must be fast (<10s), offline, and leave no files outside tmp dirs.
+
+## Definition of done
+
+- [ ] `analysis/org_page.py` with the CLI above, docstring explaining the two-layer design.
+- [ ] All new tests + the existing suite pass via `.venv/bin/python -m pytest tests/`.
+- [ ] Three sample pages generated and committed under `docs/orgs/`:
+      The Salvation Army (regranter — both directions), one small single-source charity,
+      and Prince Rupert Port Authority (formerly-split entity — its identity receipt
+      should show the multiple raw variants now merged).
+- [ ] Eyeball each sample: clean layer readable with receipts hidden; toggle reveals
+      dotted underlines; every drawer opens; nothing overflows on a narrow window.
+- [ ] README file table + AGENTS.md dashboards section updated with one line each.
+- [ ] No network access at page-generation or page-view time.
+
+## Non-goals
+
+No server, no search index, no all-orgs directory page, no schema changes, no rebuild
+of the entity graph. One org in, one file out.
