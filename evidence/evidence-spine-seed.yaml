@@ -1,0 +1,114 @@
+# Evidence spine — SEED / DRAFT (2026-07-12, overnight)
+# Machine-readable starter for the encyclopedia's `interventions` + `evidence_entries` tables.
+# STATUS FLAGS MATTER: `verified_tonight` = read directly from the source this session.
+# `from_model_knowledge` = drafted from Claude's training knowledge — MUST be re-verified
+# against the live source before anything is published. Treat those as scaffolding, not facts.
+
+interventions:
+  - id: housing_first
+    name: Housing First
+    aliases: [HF, "logement d'abord", pathways housing first]
+    mechanism: >
+      Immediate permanent housing without sobriety/treatment preconditions, plus wraparound
+      supports; housing as the foundation for stability rather than the reward for it.
+    evidence:
+      - source: At Home/Chez Soi (Mental Health Commission of Canada RCT, 5 cities, n=2,148)
+        finding: >
+          Substantially improved housing stability across all five cities and both program
+          types vs. usual care; for the highest-need top 10% of users, every $10 invested
+          returned >$21 in public-cost offsets. World's largest Housing First trial.
+        status: verified_2026-07-12  # MHCC national final report (mentalhealthcommission.ca PDF) + PMC4679127 review
+        note: Canadian, landmark scale — the anchor evidence entry for the Canadian site
+      - source: Campbell/Cochrane systematic reviews
+        finding: Consistent housing-stability effects; weaker/mixed effects on health and substance-use outcomes
+        status: from_model_knowledge  # still to verify
+    canadian_relevance: Federal Reaching Home program funds HF explicitly; 6 orgs named in grants.csv text
+
+  - id: nurse_family_partnership
+    name: Nurse-Family Partnership
+    aliases: [NFP, nurse home visitation, VoorZorg (NL), Building Blocks (UK trial name)]
+    mechanism: >
+      Registered nurses conduct structured home visits with low-income first-time mothers from
+      pregnancy to child age 2; targets prenatal health, child development, maternal life course.
+    evidence:
+      - source: Blueprints for Healthy Youth Development
+        finding: Founding RCTs Elmira (1977), Memphis (n=743), Denver (n=735); certified long-term
+          follow-ups incl. 15- and 19-year (JAMA/Arch Pediatr); cost detail published
+        status: verified_tonight  # fetched blueprintsprograms.org NFP page 2026-07-12
+      - source: Building Blocks RCT, The Lancet 2015 (UK)
+        finding: "NULL result for primary outcomes in UK context — the canonical context-transfer exhibit: same model, different health system, effect largely vanished"
+        status: verified_tonight  # cited on the Blueprints page itself
+      - source: HomVEE
+        finding: Meets HHS criteria as an evidence-based home visiting model (MIECHV-eligible)
+        status: verified_2026-07-12  # via search summaries of homvee.acf.gov model page; site is JS-rendered
+      - source: Title IV-E Prevention Services Clearinghouse
+        finding: Rated "well-supported" (their top tier) as an in-home parent skill-based program
+        status: verified_2026-07-12  # preventionservices.acf.hhs.gov/programs/856 — a FOURTH registry rating NFP; good aggregation exhibit
+    canadian_relevance: BC Healthy Connections Project RCT (delivered via health authorities, not charities — explains zero grants.csv hits)
+
+  - id: multisystemic_therapy
+    name: Multisystemic Therapy
+    aliases: [MST]
+    mechanism: >
+      Intensive family- and community-based treatment for serious juvenile offenders, working
+      across home/school/peer systems; caseloads and supervision tightly specified.
+    evidence:
+      - source: Blueprints
+        finding: Rated Model Plus (their top tier, requires independent replication)
+        status: verified_2026-07-12  # blueprintsprograms.org/programs/32999999/multisystemic-therapy-mst/
+      - source: CrimeSolutions
+        finding: Core MST rated Effective; NOTE — MST variants (Substance Abuse, CAN, Psychiatric, FIT, PSB) have separate profiles and may carry different ratings; check each
+        status: verified_2026-07-12  # crimesolutions.ojp.gov/ratedprograms/multisystemic-therapy-mst
+      - source: Campbell/Cochrane meta-analyses
+        finding: Notably weaker pooled effects than model-owner trials — a real cross-clearinghouse disagreement candidate
+        status: from_model_knowledge
+    canadian_relevance: Delivered in Ontario; provincially funded (youth justice), so not in grants.csv
+
+  - id: roots_of_empathy
+    name: Roots of Empathy
+    aliases: [ROE, seeds of empathy]
+    mechanism: >
+      Universal school-based SEL program; a parent and infant visit a classroom across the school
+      year as the anchor for empathy instruction.
+    evidence:
+      - source: org's own site
+        finding: Claims research-proven reductions in aggression, increases in prosocial behaviour ("1.2 million children reached")
+        status: verified_tonight  # self-reported claim, not independent evidence
+      - source: EIF Guidebook / Foundations (UK What Works Centre)
+        finding: >
+          Rated Level 2+ (based on Schonert-Reichl 2012 QED and Connolly 2018 Northern
+          Ireland cluster RCT). The RCT found significant reductions in teacher-reported
+          physical aggression (ES -0.25) and indirect aggression (ES -0.51), but
+          NON-significant results on student-reported measures — a textbook mixed-evidence
+          case the encyclopedia should display honestly rather than flatten.
+        status: verified_2026-07-12  # guidebook.eif.org.uk/programme/roots-of-empathy
+      - source: Public Safety Canada crime prevention inventory
+        finding: Listed in PS Canada's program inventory — a CANADIAN government registry; assess its rating scheme as a jurisdiction-aware source
+        status: verified_2026-07-12  # publicsafety.gc.ca inventory entry i=10018; rating scheme not yet reviewed
+    canadian_relevance: Canadian-founded (Mary Gordon, Toronto); charity BN 896434818RR0001 (from their site footer)
+
+  - id: breaking_the_cycle
+    name: Breaking the Cycle
+    aliases: [BTC]
+    mechanism: >
+      Integrated, relational intervention for pregnant women and mothers with substance-use
+      challenges and their children under 6; single-access-point cross-agency model (Toronto).
+    evidence:
+      - source: PHAC-funded evaluations / Mothercraft research reports
+        finding: Canadian evaluations exist (longitudinal outcome studies); NOT in any US clearinghouse — the proof case for jurisdiction-aware evidence entries
+        status: from_model_knowledge  # Mothercraft publishes evaluation reports; collect and read
+    canadian_relevance: Delivered by Mothercraft (verified from their site tonight); PHAC + Ontario MCCSS funded
+
+  - id: emergency_shelter
+    name: Emergency shelter (category, not a branded model)
+    aliases: [homeless shelter, emergency housing]
+    mechanism: Immediate temporary accommodation; the default/comparison condition in most Housing First trials.
+    evidence:
+      - source: (category-level)
+        finding: "Largely 'untested' as an intervention per se — it is the control condition in the HF literature. Encyclopedia page should say exactly that: ubiquitous, necessary, not evidence-rated."
+        status: editorial_position
+    canadian_relevance: 205 orgs / $286M identifiable in federal grants.csv text (verified tonight)
+
+# Companion dataset: seed-classifications-housing-canada.csv (same folder) — 394 org×category
+# rows from federal funder text, latest-amendment deduped, each with a receipt snippet + ref number.
+# Categories: emergency_shelter 205, supportive_housing 174, transitional_housing 9, housing_first 6.

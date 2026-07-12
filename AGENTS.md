@@ -98,5 +98,6 @@ Two single-file HTML reports live in `docs/`, each rebuilt from `grants.csv` by 
 
 - `docs/grants-dashboard.html` ← `analysis/build_dashboard.py` — headline totals, per-department data-quality grades, fiscal-year funding chart, largest agreements, curiosities ($1 grants, negative values, Excel-null dates).
 - `docs/data-quality-rankings.html` ← `analysis/build_quality_report.py` — departments ranked best-to-worst on publishing quality with expandable per-department evidence (real refs) and a "specimen jar" of egregious records. Scoring weights are documented in the page footer and are editorial judgment, not TBS policy.
+- `docs/evidence/` ← `analysis/build_evidence_site.py` — the evidence-encyclopedia demo: index + one page per intervention with ≥1 non-`from_model_knowledge` evidence entry, built from `evidence/evidence-spine-seed.yaml` + `evidence/seed-classifications-housing-canada.csv`. No DB dependency. Spec: `docs/evidence-site-spec.md`.
 
-Rebuild: `python3 analysis/build_dashboard.py grants.csv docs/grants-dashboard.html` (same pattern for the other).
+Rebuild: `python3 analysis/build_dashboard.py grants.csv docs/grants-dashboard.html` (same pattern for the other). `python3 analysis/build_evidence_site.py` takes no arguments.
