@@ -394,9 +394,9 @@ td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
 td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .src{display:inline-block;font-size:.68rem;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px;white-space:nowrap}
 .year-group{background:#f1ede7 !important;font-weight:600}
-.claim{border-bottom:1px dotted transparent;cursor:pointer}
+.claim{border-bottom:1px dotted #b8ad9c;cursor:pointer}
 body.show-work .claim{border-bottom-color:var(--red)}
-.claim:hover{background:#fdf3d7}
+.claim:hover{background:#fdf3d7;border-bottom-color:var(--red)}
 .drawer{display:none;background:#fffdf7;border:1px solid #f0dfa0;border-radius:8px;padding:12px 14px;margin:6px 0 14px;font-size:.82rem;color:#4a4a4a}
 .drawer.open{display:block}
 .drawer .chain{margin:6px 0;padding-left:18px}

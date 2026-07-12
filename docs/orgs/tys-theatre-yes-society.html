@@ -31,9 +31,9 @@ td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
 td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .src{display:inline-block;font-size:.68rem;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px;white-space:nowrap}
 .year-group{background:#f1ede7 !important;font-weight:600}
-.claim{border-bottom:1px dotted transparent;cursor:pointer}
+.claim{border-bottom:1px dotted #b8ad9c;cursor:pointer}
 body.show-work .claim{border-bottom-color:var(--red)}
-.claim:hover{background:#fdf3d7}
+.claim:hover{background:#fdf3d7;border-bottom-color:var(--red)}
 .drawer{display:none;background:#fffdf7;border:1px solid #f0dfa0;border-radius:8px;padding:12px 14px;margin:6px 0 14px;font-size:.82rem;color:#4a4a4a}
 .drawer.open{display:block}
 .drawer .chain{margin:6px 0;padding-left:18px}
@@ -61,7 +61,7 @@ Show your work
 </header>
 <div class='stats'><div class='stat'><b class='claim' data-drawer='drawer-stat-recv-total' onclick='toggleDrawer(this)'>$16,110</b><span>total received</span></div><div class='stat'><b>1</b><span>grants received</span></div><div class='stat'><b class='claim' data-drawer='drawer-stat-revenue' onclick='toggleDrawer(this)'>$17,985</b><span>latest reported revenue (2024-09-30)</span></div><div class='stat'><b>2024–2024</b><span>years active</span></div></div><h2>Funding timeline</h2><div class='bars'><div class='barcol'><div class='bar-given' style='height:0%'></div><div class='bar-recv' style='height:100.0%'></div><u>FY2024: received $16,110</u><i>2024</i></div></div><h2>Grants received</h2><div class='table-scroll'><table><thead><tr><th>Organization</th><th>Program</th><th class='num'>Amount</th><th>Role</th></tr></thead><tbody><tr class='year-group'><td colspan='4'>FY 2024</td></tr><tr><td><span class='claim' data-drawer='drawer-2' onclick='toggleDrawer(this)'>Canada Council for the Arts</span><span class='src'>Canada Council</span></td><td>Explore and Create</td><td class='num'>$16,110</td><td>Funder</td></tr></tbody></table></div>
 <div id="drawers"><div class='drawer' id='drawer-identity'><p>This organization appears under 1 name variant across 1 source:</p><ul><li><b>Theatre Yes</b> — Canada Council <span class='src'>exact BN</span> · BN 889261012</li></ul></div><div class='drawer' id='drawer-stat-recv-total'><p>Computed as the sum of 1 row in <code>grants_unified</code> ($16,110 total).</p><p>Caveats: federal amounts are latest-amendment-per-agreement (superseded amendment rows are excluded, not summed). T3010 qualified-donee gifts are filer-reported by the giving charity, not independently verified.</p></div><div class='drawer' id='drawer-stat-revenue'><p>From <code>entity_financials</code>: BN 889261012RR0001, fiscal period end 2024-09-30. T3010 line 4700 (total revenue). Only the latest filed fiscal year is kept per organization.</p></div><div class='drawer' id='drawer-2'><p><b>Source:</b> Canada Council</p><p><b>Program:</b> Explore and Create</p></div></div>
-<footer>Generated 2026-07-12 13:47 from the Canadian Nonprofit Data entity graph
+<footer>Generated 2026-07-12 14:03 from the Canadian Nonprofit Data entity graph
 (federal Grants &amp; Contributions, CRA T3010, Canada Council for the Arts).
 Matching methodology &amp; limitations: see
 <a href="../entity-resolution-methodology.md">entity-resolution-methodology.md</a>.</footer>
