@@ -3,4 +3,5 @@ data/
 *.duckdb
 *.duckdb.wal
 .venv/
+__pycache__/
 
