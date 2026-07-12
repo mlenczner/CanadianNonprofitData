@@ -72,7 +72,23 @@ Run tests:
 
    **Separate, unfixed, flagged rather than expanded into this change:** the pipeline attributes a grant's funder department via `split_part(ref_number, '-', 1)` (the ref's prefix) — but the same 24,851 colliding-ref groups above share that prefix while `owner_org` genuinely differs between them, so those records likely get attributed to whichever department's row happened to win an arbitrary tiebreak, not necessarily the correct one. `owner_org` is probably the more reliable funder key than the ref-number prefix. Not investigated or fixed.
 
+   **Severity found while building the org-page feature (issue #4 below):** this is worse than "some collision groups" suggests. Of 120 `federal_dept` entities in `entities`, 97 (81%) have a `canonical_name` that's just a ref-number fragment (`"014"`, `"200607Q2"`, `"Q4"`) rather than a real department name — only entities like `Transport Canada` came through intact. Any feature that displays a grant's funder by name (org profile pages, dashboards) will show these codes verbatim for the large majority of federal_gc grants. Confirmed via `SELECT canonical_name FROM entities WHERE entity_kind='federal_dept'`.
+
    **Also flagged, not this pipeline's scope:** the $972B headline figure in `docs/why-this-matters.md` sums amendment rows the same way `grants_unified` used to before this fix, so it's very likely also inflated by a similar factor and needs independent revisiting — not assumed correct just because this pipeline's own number is now fixed.
+
+4. **`grants_unified` doesn't store `ref_number`, so per-grant receipts require a runtime best-effort join.** `analysis/org_page.py`'s federal-grant receipt drawer locates the underlying `raw_grants` row by joining through `entity_links.raw_name` variants against `recipient_legal_name`, then matching on amount + fiscal year — inherently ambiguous when multiple raw rows share those (drawer says "not located" rather than guessing). A `source_ref` column on `grants_unified` (populated at build time, when the source row is still at hand) would make this exact instead of best-effort. Not implemented — would require a rebuild; suggested for the next one, not done as part of the org-page feature (which was explicitly scoped to not touch `build_entity_graph.py` or trigger a rebuild).
+
+## Organization Profile Pages (self-contained HTML, no dependencies)
+
+`analysis/org_page.py` generates one profile page per organization from `nonprofit_network.duckdb` — a "claim and receipt" design: a clean summary by default (name, stats, funding timeline, grants received/given), with a "Show your work" toggle that reveals every claim's underlying evidence (raw name variants from `entity_links`, amendment chains from `raw_grants`, match scores) in click-to-open drawers. See `docs/org-page-spec.md` for the full spec and its "Decisions" note for choices made where the spec didn't specify. Large regranters (received/given lists, and identity-receipt name-variant lists) are capped at 300 entries by volume, with a rollup note for the rest.
+
+```bash
+.venv/bin/python analysis/org_page.py "Salvation Army"      # fuzzy name lookup -> docs/orgs/<slug>.html
+.venv/bin/python analysis/org_page.py --entity-id 12345
+.venv/bin/python analysis/org_page.py --bn 107951618
+```
+
+Three committed samples under `docs/orgs/`: The Salvation Army (large regranter, both directions), TYS Theatre Yes Society (small single-source charity), Prince Rupert Port Authority (the BN-residual-splitting case from issue #3 above — its identity receipt shows the raw name variants now merged into one entity).
 
 ## Dashboards (self-contained HTML, no dependencies)
 

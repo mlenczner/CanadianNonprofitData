@@ -132,3 +132,38 @@ Tests must be fast (<10s), offline, and leave no files outside tmp dirs.
 
 No server, no search index, no all-orgs directory page, no schema changes, no rebuild
 of the entity graph. One org in, one file out.
+
+## Decisions
+
+Choices made while implementing where this spec didn't specify, smallest-reasonable-choice
+rather than asking:
+
+- **Grants tables grouped by fiscal year** (newest first), amount descending within each
+  year. Reads better than grouping by funder/recipient for orgs with many counterparties,
+  and matches the timeline chart's ordering.
+- **Bilingual pipe names (`English|Français`) only** — the spec's normalization rule is
+  scoped to the pipe format used in `grants.csv` recipient names. T3010 canonical names
+  sometimes use other bilingual separators (e.g. a slash: `"...IN CANADA/CONSEIL DE
+  DIRECTION DE L'ARMÉE..."`), which are left intact and displayed in full. A blanket
+  split on `/` risked corrupting legitimate single-language names that happen to contain
+  one (addresses, "A/B" style names), so it was left alone rather than guessed at.
+- **Identity-receipt list also scale-capped, same as the grants tables.** The spec caps
+  grants tables at 300 but doesn't mention the identity receipt's name-variant list. One
+  real entity (The Salvation Army's national entity) has 8,883 distinct raw name
+  variants across its ~45k linked records — rendering all of them made the page 5.8MB.
+  Applied the same 300-cap-plus-rollup pattern, ordered by how many records each variant
+  backs (most-linked first) rather than alphabetically, since that surfaces the variants
+  that matter most.
+- **`canada_council` and `t3010_non_qualified_donee` grant receipts show fields already
+  in `grants_unified`** (program name, description) rather than doing a raw-table lookup,
+  since the spec's receipts table only describes a raw-row lookup for `federal_gc` and
+  `t3010_qualified_donee`.
+- **Ambiguous name lookup:** exact case-insensitive match (after taking the English half
+  of a bilingual name) auto-selects even when other candidates substring-match; a single
+  substring match always auto-builds regardless of exact match.
+- **Money formatting** mirrors `docs/grants-dashboard.html`'s convention ($B / $M / plain
+  dollar figure) for visual consistency between the two features.
+- **Grants tables wrapped in a horizontally-scrollable container** (`.table-scroll`)
+  rather than clipped — an earlier draft used `overflow:hidden` on the table itself (for
+  rounded corners) which silently clipped the rightmost column on narrow viewports found
+  during the eyeball pass. The wrapper scrolls; nothing is hidden.

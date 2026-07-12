@@ -24,6 +24,7 @@ analysis/   Scripts for downloading, profiling, and linking the datasets
 | [`docs/data-quality-rankings.html`](docs/data-quality-rankings.html) | Departments ranked best-to-worst on publishing quality, with per-department evidence (rebuild: `analysis/build_quality_report.py`) |
 | [`analysis/download_sources.py`](analysis/download_sources.py) | Downloads the T3010 charity registry and Canada Council grants data |
 | [`analysis/build_entity_graph.py`](analysis/build_entity_graph.py) | Links grants.csv + T3010 + Canada Council into one entity graph |
+| [`analysis/org_page.py`](analysis/org_page.py) | Generates a self-contained "claim and receipt" HTML profile page per organization (rebuild samples: `docs/orgs/`, spec: `docs/org-page-spec.md`) |
 
 ---
 
