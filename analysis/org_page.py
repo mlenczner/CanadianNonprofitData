@@ -352,6 +352,8 @@ def locate_t3010_qd_receipt(con, entity_id, funder_entity_id, amount, fiscal_yea
     variant_names = [v[0] for v in variants]
     if not variant_names or not funder_bn:
         return {"found": False, "filer_bn": funder_bn, "reason": "no donee name variant or funder BN on record"}
+    if amount is None:
+        return {"found": False, "filer_bn": funder_bn, "reason": "grant has no recorded amount to match against"}
 
     placeholders = ", ".join("?" for _ in variant_names)
     rows = con.execute(f"""
