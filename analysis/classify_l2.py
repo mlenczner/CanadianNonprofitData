@@ -686,14 +686,30 @@ def load_housing_benchmark(csv_path=HOUSING_CSV):
 def compute_housing_agreement(con, housing_rows):
     """For benchmark rows whose ref_number the pilot classified (status='ok',
     codes non-empty), compare the LLM's code(s) to the mapped PCS code for
-    that row's category. "Agree" = exact match or ancestor/descendant."""
-    agreements, disagreements, matched = [], [], 0
+    that row's category. "Agree" = exact match or ancestor/descendant.
+
+    ref_number is NOT globally unique in grants.csv (confirmed elsewhere in
+    this project: ~24,851 refs collide across departments -- the same ref
+    reused by entirely different grants/recipients/departments). The housing
+    benchmark CSV doesn't carry the raw owner_org needed to disambiguate, so
+    a ref_number with more than one distinct owner_org in l2_grant_text_map
+    is skipped rather than guessing which one the benchmark row actually
+    meant -- silently picking one (as an earlier version of this function
+    did) produced dozens of "disagreements" that were really all the same
+    unrelated grant's classification repeated under different org names."""
+    agreements, disagreements, matched, skipped_ambiguous = [], [], 0, 0
     for row in housing_rows:
         mapped_code = HOUSING_CATEGORY_TO_PCS.get(row["category"])
         if not mapped_code:
             continue
         ref = (row.get("receipt_ref_number") or "").strip()
         if not ref:
+            continue
+        owners = con.execute(
+            "SELECT DISTINCT owner_org FROM l2_grant_text_map WHERE ref_number = ?", [ref],
+        ).fetchall()
+        if len(owners) > 1:
+            skipped_ambiguous += 1
             continue
         result = con.execute(
             "SELECT codes, confidence, quote FROM l2_grant_classifications "
@@ -711,7 +727,10 @@ def compute_housing_agreement(con, housing_rows):
             "confidence": result[1], "quote": result[2], "ref_number": ref,
         }
         (agreements if agree else disagreements).append(entry)
-    return {"matched": matched, "agreements": agreements, "disagreements": disagreements}
+    return {
+        "matched": matched, "agreements": agreements, "disagreements": disagreements,
+        "skipped_ambiguous": skipped_ambiguous,
+    }
 
 
 def write_pilot_report(con, distinct_texts, system_prompt, max_calls, out_path, seed=42, backend="anthropic"):
@@ -753,6 +772,14 @@ def write_pilot_report(con, distinct_texts, system_prompt, max_calls, out_path, 
     bench = compute_housing_agreement(con, housing_rows)
     n_agree = len(bench["agreements"])
     agreement_pct = (n_agree / bench["matched"] * 100) if bench["matched"] else None
+    by_category = {}
+    for d in bench["agreements"]:
+        c = by_category.setdefault(d["category"], {"agree": 0, "total": 0})
+        c["agree"] += 1
+        c["total"] += 1
+    for d in bench["disagreements"]:
+        c = by_category.setdefault(d["category"], {"agree": 0, "total": 0})
+        c["total"] += 1
 
     sample_pool = con.execute(
         "SELECT text, codes, quote, rationale FROM l2_text_classifications "
@@ -788,19 +815,44 @@ def write_pilot_report(con, distinct_texts, system_prompt, max_calls, out_path, 
     for cat, code in HOUSING_CATEGORY_TO_PCS.items():
         lines.append(f"- `{cat}` -> `{code}`")
     lines.append("")
+    lines.append(f"({bench['skipped_ambiguous']} benchmark rows skipped: their ref_number is reused by more "
+                 f"than one distinct owner_org in grants.csv, and the benchmark CSV doesn't carry the raw "
+                 f"owner_org needed to disambiguate which grant it actually meant -- excluded rather than "
+                 f"guessed.)\n")
     if bench["matched"]:
-        lines.append(f"Of {bench['matched']} benchmark grants the pilot classified with a code, "
+        lines.append(f"Of {bench['matched']} benchmark **rows** the pilot classified with a code, "
                      f"{n_agree} agree with the mapped category (match or ancestor/descendant): "
-                     f"**{agreement_pct:.1f}%**.\n")
+                     f"**{agreement_pct:.1f}%**. Note: the benchmark CSV can tag the same underlying "
+                     f"grant under more than one category (168 ref_numbers are tagged both "
+                     f"`emergency_shelter` and `supportive_housing`), so this counts benchmark rows, "
+                     f"not distinct grants -- see the per-category and disagreement-cluster breakdowns "
+                     f"below for what's actually driving the number.\n")
+        lines.append("By category:\n")
+        lines.append("| Category | Agree | Total | Rate |")
+        lines.append("|---|---|---|---|")
+        for cat, c in sorted(by_category.items()):
+            lines.append(f"| {cat} | {c['agree']} | {c['total']} | {c['agree']/c['total']:.1%} |")
+        lines.append("")
     else:
         lines.append("No benchmark grants (by ref_number) were classified in this pilot scope.\n")
     if bench["disagreements"]:
-        lines.append("Disagreements:\n")
-        lines.append("| Recipient | CSV category (mapped code) | LLM code(s) | LLM quote |")
-        lines.append("|---|---|---|---|")
+        # Grouped by the underlying (category, LLM codes, quote) combination rather
+        # than listed one row per org: a single heavily-templated boilerplate text
+        # (expected, per this pipeline's whole cost-shape design) can be shared by
+        # dozens of distinct benchmark orgs, and listing each individually would
+        # make one root cause look like dozens of independent disagreements.
+        groups = {}
         for d in bench["disagreements"]:
-            lines.append(f"| {d['recipient']} | {d['category']} ({d['mapped_code']}) | "
-                         f"{', '.join(d['llm_codes'])} | “{d['quote']}” |")
+            key = (d["category"], d["mapped_code"], tuple(d["llm_codes"]), d["quote"])
+            groups.setdefault(key, []).append(d["recipient"])
+        lines.append(f"Disagreements ({len(bench['disagreements'])} benchmark rows in "
+                     f"{len(groups)} distinct disagreement pattern(s)):\n")
+        lines.append("| Count | CSV category (mapped code) | LLM code(s) | LLM quote | Example recipients |")
+        lines.append("|---|---|---|---|---|")
+        for (category, mapped_code, llm_codes, quote), recipients in sorted(groups.items(), key=lambda kv: -len(kv[1])):
+            examples = ", ".join(recipients[:3]) + (f", and {len(recipients) - 3} more" if len(recipients) > 3 else "")
+            lines.append(f"| {len(recipients)} | {category} ({mapped_code}) | "
+                         f"{', '.join(llm_codes)} | “{quote}” | {examples} |")
         lines.append("")
 
     lines.append("## 25 random high-confidence classifications for review\n")

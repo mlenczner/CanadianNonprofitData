@@ -304,6 +304,55 @@ def test_is_verbatim_substring_case_and_whitespace_insensitive():
     assert not cl2.is_verbatim_substring("", "anything")
 
 
+# ── housing benchmark: ref_number collision safety ───────────────────────────
+
+def test_housing_benchmark_skips_ambiguous_colliding_ref_number(tmp_path):
+    # Regression test: ref_number is NOT globally unique in grants.csv (a
+    # known, unrelated data-quality issue -- the same ref reused by entirely
+    # different grants/departments). An earlier version of
+    # compute_housing_agreement joined on ref_number alone and silently
+    # picked whichever of the colliding rows came back first, producing
+    # dozens of "disagreements" that were really the same unrelated grant's
+    # classification repeated under different benchmark org names.
+    colliding_ref = "GC-COLLIDE-0001"
+    text_a = "Funding for an emergency homeless shelter overnight program."
+    text_b = "Grant to support a folk arts festival celebrating regional traditions."
+    con = make_db(tmp_path, [
+        grant("DeptA", colliding_ref, "Shelter Org", "1", 1000.0, text_a),
+        grant("DeptB", colliding_ref, "Arts Org", "2", 2000.0, text_b),
+    ])
+    dt = cl2.fetch_distinct_texts(con)
+    fake = FakeClient({
+        text_a: make_response(["SS070400"], "high", "emergency homeless shelter", "shelter"),
+        text_b: make_response(["SA020000"], "high", "folk arts festival", "arts"),
+    })
+    cl2.run_pipeline(fake, con, dt, 10, SYS_BLOCKS, {"SS070400", "SA020000"}, sleep_fn=NO_SLEEP)
+
+    housing_rows = [{"category": "emergency_shelter", "receipt_ref_number": colliding_ref,
+                      "recipient_legal_name": "Shelter Org"}]
+    bench = cl2.compute_housing_agreement(con, housing_rows)
+    assert bench["matched"] == 0
+    assert bench["skipped_ambiguous"] == 1
+    assert bench["agreements"] == []
+    assert bench["disagreements"] == []
+
+
+def test_housing_benchmark_matches_non_colliding_ref_number(tmp_path):
+    ref = "GC-UNIQUE-0001"
+    text = "Funding for an emergency homeless shelter overnight program."
+    con = make_db(tmp_path, [grant("DeptA", ref, "Shelter Org", "1", 1000.0, text)])
+    dt = cl2.fetch_distinct_texts(con)
+    fake = FakeClient({text: make_response(["SS070400"], "high", "emergency homeless shelter", "shelter")})
+    cl2.run_pipeline(fake, con, dt, 10, SYS_BLOCKS, {"SS070400"}, sleep_fn=NO_SLEEP)
+
+    housing_rows = [{"category": "emergency_shelter", "receipt_ref_number": ref,
+                      "recipient_legal_name": "Shelter Org"}]
+    bench = cl2.compute_housing_agreement(con, housing_rows)
+    assert bench["matched"] == 1
+    assert bench["skipped_ambiguous"] == 0
+    assert len(bench["agreements"]) == 1
+
+
 # ── real-taxonomy-file integration (skipped if the file isn't present) ───────
 
 @pytest.mark.skipif(not os.path.exists(cl2.TAXONOMY_XLSX), reason="taxonomy file not present")

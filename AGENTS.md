@@ -92,6 +92,29 @@ Run tests:
 
 Three committed samples under `docs/orgs/`: The Salvation Army (large regranter, both directions), TYS Theatre Yes Society (small single-source charity), Prince Rupert Port Authority (the BN-residual-splitting case from issue #3 above — its identity receipt shows the raw name variants now merged into one entity).
 
+## L2 Service Classification
+
+`analysis/classify_l2.py` assigns Candid PCS Subject codes to **distinct** federal grant
+description texts (not every grant row -- descriptions are heavily templated, so dedup first,
+classify each distinct text once, propagate to every grant sharing it). Two interchangeable
+backends: Anthropic (`claude-haiku-4-5-20251001`, needs `ANTHROPIC_API_KEY`) or a local Ollama
+model (`--backend ollama`, no key, no cost -- used for the pilot since no Anthropic key was
+available; see the Decisions note in `docs/l2-classification-spec.md`). Quote/code enforcement
+is mechanical and backend-independent: a `quote` that isn't a verbatim substring of the input,
+or a code not in the taxonomy, downgrades the result to `abstain` with an explicit flag rather
+than trusting an unverifiable classification. `--max-calls` is a required hard cap; results are
+resumable, keyed by `(sha256 of normalized text, prompt_version)`, in
+`evidence/l2_classifications.duckdb` (not `nonprofit_network.duckdb`).
+
+```bash
+.venv/bin/python analysis/classify_l2.py --dry-run --max-calls 1100
+.venv/bin/python analysis/classify_l2.py --backend ollama --limit 1000 --max-calls 1100   # the pilot
+```
+
+Pilot (1,000 texts, Ollama qwen2.5:7b) results: `docs/l2-pilot-report.md`. The pipeline stops
+after the pilot by design -- scaling to the full ~160K distinct-text corpus is a separate,
+future instruction, not something this script does on its own.
+
 ## Dashboards (self-contained HTML, no dependencies)
 
 Two single-file HTML reports live in `docs/`, each rebuilt from `grants.csv` by a script in `analysis/` (~40s each; both apply latest-amendment-per-(owner_org, ref_number) dedup, consistent with `build_entity_graph.py`):

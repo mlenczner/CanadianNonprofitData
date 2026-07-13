@@ -5,3 +5,8 @@ data/
 .venv/
 __pycache__/
 
+# l2_classifications.duckdb is a small, intentionally-committed pilot-result
+# artifact (see docs/l2-classification-spec.md), not a large derived DB like
+# nonprofit_network.duckdb -- exempted from the blanket *.duckdb rule above.
+!evidence/l2_classifications.duckdb
+

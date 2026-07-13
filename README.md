@@ -28,6 +28,7 @@ analysis/   Scripts for downloading, profiling, and linking the datasets
 | [`analysis/build_entity_graph.py`](analysis/build_entity_graph.py) | Links grants.csv + T3010 + Canada Council into one entity graph |
 | [`analysis/org_page.py`](analysis/org_page.py) | Generates a self-contained "claim and receipt" HTML profile page per organization (rebuild samples: `docs/orgs/`, spec: `docs/org-page-spec.md`) |
 | [`analysis/build_evidence_site.py`](analysis/build_evidence_site.py) | Generates the evidence-encyclopedia demo site (`docs/evidence/`) from `evidence/` — intervention pages with side-by-side registry ratings and Canadian org receipts (spec: `docs/evidence-site-spec.md`) |
+| [`analysis/classify_l2.py`](analysis/classify_l2.py) | Assigns Candid PCS subject codes to distinct federal grant description texts, with mechanical quote/code enforcement and a hard cost cap (Anthropic or local-Ollama backend; pilot report: `docs/l2-pilot-report.md`, spec: `docs/l2-classification-spec.md`) |
 
 ---
 
