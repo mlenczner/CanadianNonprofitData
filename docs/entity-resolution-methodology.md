@@ -19,6 +19,7 @@ Federal G&C, the CRA T3010 charity registry, and Canada Council for the Arts gra
 | CRA T3010 Qualified Donees schedule (2013–2024) | `data/t3010/qualified_donees_*.csv` | funder = charity, recipient = another qualified donee (often another charity) |
 | CRA T3010 Non-Qualified Donees schedule (2023–2024 only) | `data/t3010/non_qualified_donees_*.csv` | funder = charity, recipient = non-charity grantee (name only, no BN) |
 | Canada Council for the Arts (2017–2025) | `data/canada_council_grants.csv` | funder = Canada Council, recipient = org/individual |
+| Ontario Trillium Foundation (1999–2026) | `data/otf_grants.csv` | funder = OTF, recipient = charity/municipality/school board/other Ontario org |
 
 T3010 now spans **12 years (2013–2024)**, not just the most recent filing year — this was a known gap in the first pass, since resolved (see multi-year ingestion in `_load_t3010_table`). Each year is a separate set of CSVs per schedule, unioned by column name since the form's columns changed shape over time (e.g. line codes 5045/5840-5843 only exist from 2023 onward); `identification_*.csv` seeds one charity entity per BN using the **latest** filing year, so charities that deregistered before 2024 still get a registry entry.
 

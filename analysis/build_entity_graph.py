@@ -1,10 +1,11 @@
 """
 Canadian Nonprofit Data — Entity Graph Builder
 Links federal Grants & Contributions (grants.csv), the CRA T3010 charity
-registry, and Canada Council for the Arts grants (data/) into one entity
-graph, so the same organization is recognized as funder and/or recipient
-across all three sources regardless of which name variant it appears
-under. See docs/entity-resolution-methodology.md for the approach.
+registry, Canada Council for the Arts grants, and Ontario Trillium
+Foundation grants (all under data/) into one entity graph, so the same
+organization is recognized as funder and/or recipient across all sources
+regardless of which name variant it appears under. See
+docs/entity-resolution-methodology.md for the approach.
 
 Run with: python analysis/build_entity_graph.py
 """
@@ -23,6 +24,7 @@ from unidecode import unidecode
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GRANTS_CSV = os.path.join(ROOT, "grants.csv")
 DATA_DIR = os.path.join(ROOT, "data")
+OTF_CSV = os.path.join(DATA_DIR, "otf_grants.csv")
 DB_PATH = os.path.join(ROOT, "nonprofit_network.duckdb")
 
 FUZZY_ACCEPT = 90   # auto-accept threshold (token_sort_ratio, 0-100)
@@ -59,6 +61,16 @@ LEGAL_SUFFIXES = {
 BN9_RE = re.compile(r"^\d{9}$")
 BN15_RE = re.compile(r"^\d{9}[A-Z]{2}\d{4}$")
 YEAR_RE = re.compile(r"^(?:18|19|20)\d{2}$")  # plausible incorporation/founding year
+
+# OTF's Charitable Registration Number column is deliberately validated
+# stricter than normalize_bn() above (which accepts any 2-letter program-
+# account code, e.g. RP, and strips internal spaces before checking) --
+# docs/otf-ingestion-spec.md calls for only a bare 9-digit root or an
+# RR-suffixed 15-char BN, checked after trimming (not de-spacing) the field,
+# so free-text entries like "10754 2870 RP0001" (a payroll account code, not
+# a charity registration) or "834767352RR001" (3-digit suffix) are discarded
+# rather than accidentally accepted by the looser general-purpose rule.
+OTF_CRN_RE = re.compile(r"^\d{9}(RR\d{4})?$")
 
 GRANTS_NFP_TYPES = {"N", "A", "S"}  # NFP/charity, Indigenous, academic
 
@@ -172,6 +184,44 @@ def to_float(raw):
         return float(str(raw).replace(",", "").replace("$", "").strip())
     except Exception:
         return None
+
+
+def validate_otf_crn(raw):
+    """Strip whitespace and accept only a bare 9-digit root or an RR-suffixed
+    15-char BN (OTF_CRN_RE); returns the 9-digit bn_root, or None for anything
+    else (blank, absent, or malformed/free-text -- see OTF_CRN_RE above).
+    Deliberately does not reuse normalize_bn(), which is looser than the
+    ingestion spec calls for here."""
+    if not raw:
+        return None
+    s = str(raw).strip()
+    if not s:
+        return None
+    if OTF_CRN_RE.match(s):
+        return s[:9]
+    return None
+
+
+def otf_fiscal_year(raw):
+    """OTF's 'Fiscal Year' column is a string like '1999-2000' -- take the
+    start year, matching the canada_council convention (cc_year[:4]) elsewhere
+    in this file."""
+    if raw and raw[:4].isdigit():
+        return int(raw[:4])
+    return None
+
+
+def otf_net_amount(awarded, rescinded):
+    """amount_cad = awarded - COALESCE(rescinded, 0), floored at 0 -- reflects
+    money that actually flowed net of anything rescinded/recovered, same
+    reasoning as the amendment-dedup fix (AGENTS.md issue #3): grants_unified
+    records flows, not announcements. Returns (net_amount, was_floored) so the
+    caller can count/print the rare case where rescinded exceeds awarded
+    rather than letting a negative amount into grants_unified silently."""
+    net = awarded - (rescinded or 0)
+    if net < 0:
+        return 0.0, True
+    return net, False
 
 
 # ── entity resolution state ─────────────────────────────────────────────────
@@ -466,6 +516,32 @@ def load_raw(con):
     n = con.execute("SELECT COUNT(*) FROM cc").fetchone()[0]
     print(f"  cc: {n:,} rows")
 
+    # OTF's headers are bilingual with embedded colons (e.g. "Fiscal
+    # Year:Année fiscal") -- read all_varchar and rename positionally, same
+    # pattern as raw_cc above. sniff_csv handles this file with defaults (no
+    # ignore_errors needed); if any row were rejected here, read_csv would
+    # raise rather than silently drop it, unlike the T3010 ignore_errors=true
+    # loads above -- see AGENTS.md open issue #1 for why that's deliberate.
+    con.execute(
+        f"CREATE OR REPLACE TABLE raw_otf AS "
+        f"SELECT * FROM read_csv('{OTF_CSV}', all_varchar=true)"
+    )
+    cols = [r[0] for r in con.execute("DESCRIBE raw_otf").fetchall()]
+    new_names = [
+        "funding_org", "country_served", "province_served", "fiscal_year_raw", "program_name",
+        "geo_area_served", "cross_catchment", "identifier", "org_name", "submission_date",
+        "approval_date", "amount_applied_for", "amount_awarded", "planned_duration_months",
+        "description_en", "description_fr", "program_area", "budget_fund", "incorporation_number",
+        "charitable_registration_number", "recipient_city", "recipient_postal_code", "co_application",
+        "population_served", "age_group", "grant_result", "rescinded_flag", "rescinded_initiated_by",
+        "amount_rescinded", "grant_status", "statut_subvention", "last_modified",
+    ]
+    assert len(cols) == len(new_names), f"OTF column count changed: {len(cols)} vs expected {len(new_names)}"
+    rename_sql = ", ".join(f'"{c}" AS {n}' for c, n in zip(cols, new_names))
+    con.execute(f"CREATE OR REPLACE TABLE otf AS SELECT {rename_sql} FROM raw_otf")
+    n = con.execute("SELECT COUNT(*) FROM otf").fetchone()[0]
+    print(f"  otf: {n:,} rows")
+
 
 def build_entities_and_grants(con):
     r = Resolver()
@@ -583,6 +659,64 @@ def build_entities_and_grants(con):
             fiscal_year_from_date(fpe, month_cutover=1), "Non-qualified donee grant", None,
         ))
     print(f"  {processed:,} non-qualified donee records processed")
+
+    # ── source 5: Ontario Trillium Foundation grants ────────────────────────
+    # Funding Org is the same single value on all 32,842 rows ("Ontario
+    # Trillium Foundation") -- resolve it once rather than per row. It must
+    # land on the entity already seeded by an earlier source (verified:
+    # entity 253071, bn_root 108091091, an `other_org` residual -- OTF itself
+    # isn't a CRA-registered charity, so it was never seeded from T3010) via
+    # exact_bn, not create a new entity; assert that here rather than only in
+    # verification, so a regression fails loudly at build time.
+    print("\nProcessing OTF grants ...")
+    otf_funder_eid = r.resolve("otf", "Ontario Trillium Foundation", "108091091", "ON", allow_fuzzy=False)
+    assert r.links[-1].match_method == "exact_bn", (
+        f"OTF funder should exact-BN-match the existing Ontario Trillium Foundation "
+        f"entity, got match_method={r.links[-1].match_method!r}"
+    )
+
+    processed = 0
+    crn_discarded = 0
+    rescinded_flag_null_amount = 0
+    floored_negative = 0
+    for (org_name, crn_raw, awarded_raw, rescinded_raw, rescinded_flag, program, desc, fy_raw) in con.execute(
+        "SELECT org_name, charitable_registration_number, amount_awarded, amount_rescinded, "
+        "rescinded_flag, program_name, description_en, fiscal_year_raw FROM otf"
+    ).fetchall():
+        processed += 1
+        awarded = to_float(awarded_raw) or 0.0
+        rescinded = to_float(rescinded_raw)
+        if rescinded_flag == "Yes" and rescinded is None:
+            # "Recovered, amount unrecorded" -- a known unknown (see
+            # docs/otf-ingestion-spec.md and entity-resolution-methodology.md),
+            # treated as 0 rescinded rather than dropping the row.
+            rescinded_flag_null_amount += 1
+        net_amount, was_floored = otf_net_amount(awarded, rescinded)
+        if was_floored:
+            floored_negative += 1
+            print(f"    WARNING: rescinded > awarded for {org_name!r} "
+                  f"(awarded={awarded}, rescinded={rescinded}); floored to 0")
+
+        bn_root = validate_otf_crn(crn_raw)
+        if crn_raw and str(crn_raw).strip() and bn_root is None:
+            crn_discarded += 1
+
+        # allow_fuzzy=True unconditionally: unlike federal_gc/canada_council,
+        # OTF has no recipient-type field to gate on, and the ingestion spec
+        # expects the ~40% that don't carry a valid CRN (municipalities,
+        # school boards, First Nations) to mostly land as unmatched_new
+        # other_org rows via this same fuzzy attempt -- that's correct
+        # behavior, not a failure to fix.
+        recipient_eid = r.resolve("otf", org_name, bn_root, "ON", allow_fuzzy=True)
+        grants_unified.append((
+            "otf", otf_funder_eid, recipient_eid, net_amount, otf_fiscal_year(fy_raw), program, desc,
+        ))
+    print(f"  {processed:,} OTF records processed")
+    print(f"  {crn_discarded:,} charitable registration numbers discarded "
+          f"(present but not matching ^\\d{{9}}(RR\\d{{4}})?$)")
+    print(f"  {rescinded_flag_null_amount:,} rows with rescinded flag = Yes but "
+          f"amount_rescinded NULL (treated as 0 -- recovered, amount unrecorded)")
+    print(f"  {floored_negative:,} rows had rescinded > awarded, floored to 0")
 
     print(f"\nEntity resolution summary: {dict(r.stats)}")
     print(f"Total entities: {len(r.entities):,}")

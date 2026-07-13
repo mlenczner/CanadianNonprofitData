@@ -39,6 +39,12 @@ RESOURCE_KIND_BY_NAME = {
 
 CANADA_COUNCIL_URL = "https://canadacouncil.ca/-/media/Files/CCA/Research/stats-and-stories/data-tables/2024-25/en/Open-Data-2017-2025.csv"
 
+# Linked from https://otf.ca/open. Open Government Licence -- Ontario. This
+# URL was unreachable from a sandboxed environment during spec-writing (see
+# docs/otf-ingestion-spec.md) -- download_otf() below prints manual-download
+# instructions on failure rather than failing the whole script.
+OTF_URL = "https://otf.ca/document/664"
+
 
 def ckan_get(url):
     # open.canada.ca's WAF rejects urllib's default request signature but
@@ -114,9 +120,21 @@ def download_canada_council():
     download("canada_council_grants.csv", CANADA_COUNCIL_URL, dest)
 
 
+def download_otf():
+    dest = os.path.join(DATA_DIR, "otf_grants.csv")
+    try:
+        download("otf_grants.csv", OTF_URL, dest)
+    except Exception as e:
+        print(f"  WARNING: OTF download failed ({e}). This URL was unreachable "
+              f"from a sandboxed environment during spec-writing -- download it "
+              f"manually from https://otf.ca/open and save it to {dest}, "
+              f"rather than treating this as a fatal error.")
+
+
 if __name__ == "__main__":
     os.makedirs(DATA_DIR, exist_ok=True)
     print(f"Downloading source files into {DATA_DIR}/\n")
     download_t3010()
     download_canada_council()
+    download_otf()
     print("\nAll sources ready.")

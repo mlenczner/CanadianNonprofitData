@@ -1,6 +1,6 @@
 # Canadian Nonprofit Data
 
-Links federal Grants & Contributions (`grants.csv`), the CRA T3010 charity registry (`data/t3010/`), and Canada Council for the Arts grants (`data/canada_council_grants.csv`) into one entity graph in `nonprofit_network.duckdb`, built by `analysis/build_entity_graph.py`. See `docs/entity-resolution-methodology.md` for the matching approach and match-rate results.
+Links federal Grants & Contributions (`grants.csv`), the CRA T3010 charity registry (`data/t3010/`), Canada Council for the Arts grants (`data/canada_council_grants.csv`), and Ontario Trillium Foundation grants (`data/otf_grants.csv`) into one entity graph in `nonprofit_network.duckdb`, built by `analysis/build_entity_graph.py`. See `docs/entity-resolution-methodology.md` for the matching approach and match-rate results.
 
 ## Setup & commands
 
@@ -9,7 +9,7 @@ python3 -m venv .venv
 .venv/bin/pip install -r requirements-dev.txt   # requirements.txt (runtime) + pytest (dev/test)
 ```
 
-Build the entity graph (fetches T3010 + Canada Council data first, then links everything):
+Build the entity graph (fetches T3010 + Canada Council + OTF data first, then links everything):
 
 ```bash
 .venv/bin/python analysis/download_sources.py
@@ -24,7 +24,7 @@ Run tests:
 
 ## Rule: never read the raw data files directly
 
-`grants.csv` (~2GB), `nonprofit_network.duckdb`/`.wal`, and everything under `data/t3010/` (48 files, 12 years × 4 kinds) are large. **Never read them directly — always query via DuckDB aggregates**, e.g.:
+`grants.csv` (~2GB), `nonprofit_network.duckdb`/`.wal`, everything under `data/t3010/` (48 files, 12 years × 4 kinds), and `data/otf_grants.csv` (~28MB, 32,842 rows) are large or numerous enough that they should never be read directly — **always query via DuckDB aggregates**, e.g.:
 
 ```bash
 .venv/bin/python -c "import duckdb; con = duckdb.connect('nonprofit_network.duckdb', read_only=True); print(con.execute('SELECT ... LIMIT 20').fetchall())"
@@ -36,7 +36,7 @@ Run tests:
 - `entity_id` INTEGER, `bn_root` VARCHAR (9-digit CRA business number root, nullable), `canonical_name` VARCHAR, `city` VARCHAR, `province` VARCHAR, `entity_kind` VARCHAR (`charity` / `federal_dept` / `funder_org` / `other_org`)
 
 **`entity_links`** — audit trail of every match decision
-- `entity_id` INTEGER, `source_dataset` VARCHAR (`federal_gc` / `canada_council` / `t3010_qualified_donee` / `t3010_non_qualified_donee`), `raw_name` VARCHAR, `raw_bn` VARCHAR, `match_method` VARCHAR (`exact_bn` / `fuzzy_accept` / `unmatched_new`), `match_score` DOUBLE (nullable)
+- `entity_id` INTEGER, `source_dataset` VARCHAR (`federal_gc` / `canada_council` / `t3010_qualified_donee` / `t3010_non_qualified_donee` / `otf`), `raw_name` VARCHAR, `raw_bn` VARCHAR, `match_method` VARCHAR (`exact_bn` / `fuzzy_accept` / `unmatched_new`), `match_score` DOUBLE (nullable)
 
 **`grants_unified`** — one row per grant/gift from any source
 - `grant_id` INTEGER, `source_dataset` VARCHAR, `funder_entity_id` INTEGER, `recipient_entity_id` INTEGER, `amount_cad` DOUBLE, `fiscal_year` INTEGER, `program_name` VARCHAR, `description` VARCHAR (nullable)
