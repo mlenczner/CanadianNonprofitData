@@ -221,16 +221,47 @@ def test_malformed_response_records_error_not_crash(tmp_path):
     assert row[1] is not None
 
 
-def test_malformed_response_missing_required_key_is_error(tmp_path):
+def test_malformed_response_missing_confidence_is_error(tmp_path):
     text = "Another text with an incomplete fake response."
     con = make_db(tmp_path, [grant("D", "R1", "Org", "1", 10.0, text)])
     dt = cl2.fetch_distinct_texts(con)
-    block = SimpleNamespace(type="tool_use", input={"codes": ["AAA00000"], "confidence": "high"})  # missing quote/rationale
+    block = SimpleNamespace(type="tool_use", input={"codes": ["AAA00000"]})  # confidence missing entirely
     bad_response = SimpleNamespace(content=[block], usage=None)
     fake = FakeClient({text: bad_response})
     cl2.run_pipeline(fake, con, dt, 10, SYS_BLOCKS, {"AAA00000"}, sleep_fn=NO_SLEEP)
     row = con.execute("SELECT status FROM l2_text_classifications").fetchone()
     assert row[0] == "error"
+
+
+def test_omitted_quote_and_rationale_default_to_empty_not_a_parse_error(tmp_path):
+    # A local model was observed, in practice, to omit optional-seeming keys
+    # entirely on an abstain response rather than sending empty values --
+    # that's parser leniency, not weaker enforcement: an omitted, non-abstain
+    # "quote" still fails the mechanical verbatim-substring check and
+    # downgrades through the normal quote_failed path, exactly like a wrong
+    # quote would, rather than crashing as "malformed".
+    text = "Some grant text that should be flagged for a missing quote."
+    con = make_db(tmp_path, [grant("D", "R1", "Org", "1", 10.0, text)])
+    dt = cl2.fetch_distinct_texts(con)
+    block = SimpleNamespace(type="tool_use", input={"codes": ["AAA00000"], "confidence": "high"})
+    fake = FakeClient({text: SimpleNamespace(content=[block], usage=None)})
+    cl2.run_pipeline(fake, con, dt, 10, SYS_BLOCKS, {"AAA00000"}, sleep_fn=NO_SLEEP)
+    row = con.execute("SELECT status, confidence, codes, flags FROM l2_text_classifications").fetchone()
+    assert row[0] == "ok"
+    assert row[1] == "abstain"
+    assert row[2] == ""
+    assert "quote_failed" in row[3]
+
+
+def test_omitted_codes_on_genuine_abstain_is_accepted(tmp_path):
+    text = "Not a Project (Mandated or Core Funding)"
+    con = make_db(tmp_path, [grant("D", "R1", "Org", "1", 10.0, text)])
+    dt = cl2.fetch_distinct_texts(con)
+    block = SimpleNamespace(type="tool_use", input={"confidence": "abstain"})  # codes/quote/rationale all omitted
+    fake = FakeClient({text: SimpleNamespace(content=[block], usage=None)})
+    cl2.run_pipeline(fake, con, dt, 10, SYS_BLOCKS, {"AAA00000"}, sleep_fn=NO_SLEEP)
+    row = con.execute("SELECT status, confidence, codes, flags FROM l2_text_classifications").fetchone()
+    assert row == ("ok", "abstain", "", "")
 
 
 def test_retry_recovers_after_a_transient_malformed_response(tmp_path):

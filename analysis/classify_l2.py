@@ -2,10 +2,14 @@
 Level 2 Service Classification ("what does every org do")
 
 Classifies distinct federal grant description texts with Candid PCS Subject
-codes via the Anthropic API, with per-classification receipts, explicit
-abstention, resumability, and a hard cost cap. See docs/l2-classification-spec.md
-for the full spec (including a "Decisions" note at the bottom for judgment
-calls this file had to make).
+codes, with per-classification receipts, explicit abstention, resumability,
+and a hard cost cap. Two interchangeable backends: Anthropic's API (the
+spec's original design) or a local Ollama model over its OpenAI-compatible
+endpoint (used when no ANTHROPIC_API_KEY is available -- see the Decisions
+note in docs/l2-classification-spec.md). Quote/code enforcement, dedup,
+resumability, and storage are 100% backend-independent: OllamaClient just
+mimics the exact minimal shape classify_l2.py already expects from the real
+Anthropic client, so none of that logic branches on backend at all.
 
 The cost-shape insight this is built around: federal grant descriptions are
 heavily templated, so classifying 1.17M grant rows would mean classifying
@@ -16,7 +20,7 @@ in descending order of grants covered -> propagate to every grant sharing it.
 
 Run with:
     python analysis/classify_l2.py --dry-run --max-calls 1100
-    python analysis/classify_l2.py --limit 1000 --max-calls 1100   # the pilot
+    python analysis/classify_l2.py --backend ollama --limit 1000 --max-calls 1100   # the pilot
     python analysis/classify_l2.py --report docs/l2-pilot-report.md --max-calls 0
 
 Respects AGENTS.md: reads grants.csv only via DuckDB aggregates.
@@ -24,12 +28,16 @@ Respects AGENTS.md: reads grants.csv only via DuckDB aggregates.
 
 import argparse
 import hashlib
+import json
 import os
 import random
 import re
 import sys
 import time
+import urllib.error
+import urllib.request
 from datetime import datetime, timezone
+from types import SimpleNamespace
 
 import duckdb
 import openpyxl
@@ -41,7 +49,17 @@ DB_PATH = os.path.join(ROOT, "evidence", "l2_classifications.duckdb")
 HOUSING_CSV = os.path.join(ROOT, "evidence", "seed-classifications-housing-canada.csv")
 
 MODEL = "claude-haiku-4-5-20251001"
-PROMPT_VERSION = 1
+OLLAMA_BASE_URL = "http://localhost:11434/v1"
+OLLAMA_MODEL = "qwen2.5:7b"
+OLLAMA_NUM_CTX = 32768  # the taxonomy system prompt is large; Ollama's default num_ctx is far too small
+OLLAMA_TIMEOUT = 180
+
+# Bumped from 1 -> 2 for the Ollama-backend pilot: no Anthropic classification
+# ever actually completed under version 1 (blocked on a missing API key), but
+# resume-skip logic only keys on (text_hash, prompt_version), not model -- so
+# a future Anthropic pilot must not silently inherit Ollama's results under
+# the same version. Version 1 stays reserved/unused.
+PROMPT_VERSION = 2
 MAX_RETRIES = 3
 RETRY_BACKOFF_BASE = 2.0
 
@@ -139,13 +157,25 @@ an empty string.
 """
 
 
-def build_system_prompt(taxonomy):
+def build_system_prompt(taxonomy, include_definitions=True):
+    """include_definitions=False drops the ~1-sentence definition per code,
+    keeping only the code + full hierarchy path -- ~75% smaller (61K -> 15.6K
+    estimated tokens). Used for the Ollama backend: with no prompt caching,
+    a local 7B model re-processes the whole system prompt from scratch on
+    every single call, so the full definition-annotated version (economical
+    under Anthropic's caching) is impractically slow there. The hierarchy
+    path is kept because it's what disambiguates similar-sounding leaf names
+    (e.g. multiple different "...services" codes) -- only the prose
+    definition is dropped."""
     lines = ["# Candid PCS Subject Taxonomy (v1, Subjects only)\n"]
     for t in taxonomy:
-        sentence = t["definition"].split(". ")[0].strip()
-        if sentence and not sentence.endswith("."):
-            sentence += "."
-        lines.append(f"- {t['code']} ({t['path']}): {sentence}")
+        if include_definitions:
+            sentence = t["definition"].split(". ")[0].strip()
+            if sentence and not sentence.endswith("."):
+                sentence += "."
+            lines.append(f"- {t['code']} ({t['path']}): {sentence}")
+        else:
+            lines.append(f"- {t['code']}: {t['path']}")
     lines.append("\n" + INSTRUCTIONS)
     return "\n".join(lines)
 
@@ -311,8 +341,18 @@ class MalformedResponse(Exception):
 
 
 def parse_tool_response(response):
-    """Defensive parsing of the tool-use block, even though the SDK's schema
-    validation makes a badly-shaped result unlikely -- spec requires it."""
+    """Defensive parsing of the tool-use block. The Anthropic SDK's schema
+    validation makes a badly-shaped result unlikely, but a local model over
+    Ollama's OpenAI-compatible endpoint is noticeably less strict: qwen2.5:7b
+    was observed, on real requests, to sometimes omit "codes"/"quote"/
+    "rationale" entirely for an abstain response rather than sending empty
+    values. A merely-omitted-but-implicitly-empty key defaults to its
+    zero-value here instead of raising -- this is parser leniency, not an
+    enforcement change: quote verification and code validation below still
+    run in full on whatever value results (an omitted quote defaults to ""
+    and then fails is_verbatim_substring() exactly like a wrong quote would,
+    downgrading to abstain+quote_failed through the normal path, not a
+    special case). A wrong-typed value that IS present still raises."""
     content = getattr(response, "content", None)
     if not content:
         raise MalformedResponse("empty response content")
@@ -323,15 +363,21 @@ def parse_tool_response(response):
     if not isinstance(data, dict):
         raise MalformedResponse("tool_use input is not a dict")
     codes = data.get("codes")
+    if codes is None:
+        codes = []
     confidence = data.get("confidence")
     quote = data.get("quote")
+    if quote is None:
+        quote = ""
     rationale = data.get("rationale")
+    if rationale is None:
+        rationale = ""
     if not isinstance(codes, list) or not all(isinstance(c, str) for c in codes):
         raise MalformedResponse("codes is not a list of strings")
     if confidence not in ("high", "medium", "abstain"):
         raise MalformedResponse(f"unexpected confidence value {confidence!r}")
     if not isinstance(quote, str) or not isinstance(rationale, str):
-        raise MalformedResponse("quote/rationale missing or not strings")
+        raise MalformedResponse("quote/rationale present but not strings")
     if confidence == "abstain" and codes:
         raise MalformedResponse("abstain must have an empty codes list")
     if confidence != "abstain" and not codes:
@@ -374,15 +420,144 @@ def call_model(client, text, system_blocks, model=MODEL):
     return parse_tool_response(response)
 
 
+class OllamaError(Exception):
+    pass
+
+
+def _ollama_model_exists(base_url, tag, timeout):
+    req = urllib.request.Request(f"{base_url}/api/tags", method="GET")
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        data = json.loads(resp.read().decode("utf-8"))
+    return any(m.get("model") == tag or m.get("name") == tag for m in data.get("models", []))
+
+
+def _ollama_ensure_context_model(base_url, base_model, num_ctx, timeout):
+    """Returns a model tag guaranteed to have num_ctx configured, creating it
+    via Ollama's native /api/create if needed. Empirically required: Ollama's
+    OpenAI-compatible /v1/chat/completions endpoint was observed to silently
+    ignore a "num_ctx" passed under "options" (verified via a raw request --
+    prompt_tokens came back far lower than the actual prompt length implied,
+    consistent with silent truncation to a much smaller default context). A
+    derived model with PARAMETER num_ctx baked in, via the native API, is the
+    reliable fix. Same base weights either way -- classify_l2.py still
+    records the base model name (e.g. "qwen2.5:7b") in the DB, since this
+    tag only exists to work around a context-configuration gap, not because
+    a different model was actually used."""
+    api_base = base_url.rsplit("/v1", 1)[0]
+    tag = f"{base_model}-ctx{num_ctx}"
+    if _ollama_model_exists(api_base, tag, timeout):
+        return tag
+    body = json.dumps({"model": tag, "from": base_model, "parameters": {"num_ctx": num_ctx}}).encode("utf-8")
+    req = urllib.request.Request(f"{api_base}/api/create", data=body, method="POST")
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        for line in resp:
+            status = json.loads(line.decode("utf-8"))
+            if status.get("error"):
+                raise OllamaError(f"failed to create context model {tag!r}: {status['error']}")
+    return tag
+
+
+class OllamaClient:
+    """Adapts Ollama's OpenAI-compatible /v1/chat/completions endpoint (local,
+    no API key, no cost) to the exact minimal interface classify_l2.py already
+    expects from the real Anthropic client: client.messages.create(...) ->
+    an object with .content[0].type/.input and .usage. Because the shape
+    matches exactly, call_model(), parse_tool_response(), classify_one(), and
+    every bit of quote/code enforcement run completely unchanged -- this
+    class is the only backend-specific code in the whole pipeline.
+
+    num_ctx defaults high (32768) because the taxonomy system prompt is large
+    and Ollama's own default context window is far too small to fit it. See
+    _ollama_ensure_context_model()'s docstring for why this goes through a
+    derived model tag rather than a per-request "options" override.
+    """
+
+    def __init__(self, base_url=OLLAMA_BASE_URL, num_ctx=OLLAMA_NUM_CTX, timeout=OLLAMA_TIMEOUT):
+        self.base_url = base_url.rstrip("/")
+        self.num_ctx = num_ctx
+        self.timeout = timeout
+        self.messages = self
+        self._context_model_cache = {}
+
+    def create(self, model, max_tokens, system, tools, tool_choice, messages):
+        wire_model = self._context_model_cache.get(model)
+        if wire_model is None:
+            wire_model = _ollama_ensure_context_model(self.base_url, model, self.num_ctx, self.timeout)
+            self._context_model_cache[model] = wire_model
+        system_text = "\n".join(b["text"] for b in system) if isinstance(system, list) else system
+        tool = tools[0]
+        payload = {
+            "model": wire_model,
+            "messages": [{"role": "system", "content": system_text}] + list(messages),
+            "tools": [{
+                "type": "function",
+                "function": {"name": tool["name"], "description": tool["description"], "parameters": tool["input_schema"]},
+            }],
+            "tool_choice": {"type": "function", "function": {"name": tool["name"]}},
+            "max_tokens": max_tokens,
+        }
+        body = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            f"{self.base_url}/chat/completions", data=body,
+            headers={"Content-Type": "application/json"}, method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            raise OllamaError(f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:500]}") from e
+        except urllib.error.URLError as e:
+            raise OllamaError(f"connection error: {e}") from e
+        except TimeoutError as e:
+            raise OllamaError(f"timeout: {e}") from e
+        return _wrap_openai_response(data)
+
+
+def _wrap_usage(usage):
+    usage = usage or {}
+    return SimpleNamespace(
+        input_tokens=usage.get("prompt_tokens"), output_tokens=usage.get("completion_tokens"),
+        cache_creation_input_tokens=0, cache_read_input_tokens=0,
+    )
+
+
+def _wrap_openai_response(data):
+    """Reshapes an OpenAI-compatible chat-completion response into the same
+    .content[0].type/.input / .usage shape parse_tool_response() expects.
+    Unlike the Anthropic SDK (which parses tool-use input into a dict for
+    you), OpenAI-style tool_calls[].function.arguments is a raw JSON
+    string -- genuinely-malformed JSON is a real possibility here, not just
+    a defensive-coding nicety, and is passed through as block.input=None so
+    parse_tool_response()'s existing isinstance(data, dict) check catches it."""
+    choice = (data.get("choices") or [{}])[0]
+    message = choice.get("message") or {}
+    tool_calls = message.get("tool_calls") or []
+    if not tool_calls:
+        return SimpleNamespace(content=[], usage=_wrap_usage(data.get("usage")))
+    fn = tool_calls[0].get("function", {})
+    try:
+        parsed_input = json.loads(fn.get("arguments", ""))
+    except (json.JSONDecodeError, TypeError):
+        parsed_input = None
+    block_type = "tool_use" if isinstance(parsed_input, dict) else "malformed"
+    block = SimpleNamespace(type=block_type, input=parsed_input)
+    return SimpleNamespace(content=[block], usage=_wrap_usage(data.get("usage")))
+
+
 def _retryable_exceptions():
     global RETRYABLE_EXCEPTIONS
     if RETRYABLE_EXCEPTIONS is None:
-        import anthropic
-        RETRYABLE_EXCEPTIONS = (
-            anthropic.APIConnectionError, anthropic.RateLimitError,
-            anthropic.InternalServerError, anthropic.APITimeoutError,
-            anthropic.OverloadedError,
-        )
+        exceptions = [OllamaError]
+        try:
+            import anthropic
+            exceptions.extend([
+                anthropic.APIConnectionError, anthropic.RateLimitError,
+                anthropic.InternalServerError, anthropic.APITimeoutError,
+                anthropic.OverloadedError,
+            ])
+        except ImportError:
+            pass
+        RETRYABLE_EXCEPTIONS = tuple(exceptions)
     return RETRYABLE_EXCEPTIONS
 
 
@@ -471,13 +646,22 @@ def estimate_cost(distinct_texts, system_prompt, max_calls):
     }
 
 
-def print_dry_run_report(distinct_texts, system_prompt, max_calls, out=sys.stdout):
+def print_dry_run_report(distinct_texts, system_prompt, max_calls, backend="anthropic", out=sys.stdout):
     total_grants = sum(t[2] for t in distinct_texts)
-    est = estimate_cost(distinct_texts, system_prompt, max_calls)
+    planned = min(len(distinct_texts), max_calls)
     print("L2 classification -- dry run", file=out)
+    print(f"  Backend: {backend}", file=out)
     print(f"  Distinct texts: {len(distinct_texts):,}", file=out)
     print(f"  Grants covered by those distinct texts: {total_grants:,}", file=out)
-    print(f"  Planned calls (min of distinct texts and --max-calls {max_calls}): {est['planned_calls']:,}", file=out)
+    print(f"  Planned calls (min of distinct texts and --max-calls {max_calls}): {planned:,}", file=out)
+    if backend == "ollama":
+        print(f"  Local model (Ollama, {OLLAMA_MODEL}) -- no API cost. No prompt caching either "
+              f"(that's an Anthropic-specific optimization); system prompt re-sent every call.", file=out)
+        print(f"    ~{CHARS_PER_TOKEN_ESTIMATE} chars/token (heuristic, no live tokenizer call);"
+              f" system prompt ~{len(system_prompt) // CHARS_PER_TOKEN_ESTIMATE:,} tokens"
+              f" (num_ctx={OLLAMA_NUM_CTX})", file=out)
+        return
+    est = estimate_cost(distinct_texts, system_prompt, max_calls)
     print("  Cost assumptions (Haiku 4.5, verified 2026-07-12 via Anthropic pricing docs):", file=out)
     print(f"    input ${PRICE_PER_MTOK_INPUT:.2f}/MTok, output ${PRICE_PER_MTOK_OUTPUT:.2f}/MTok,"
           f" 5-min cache write ${PRICE_PER_MTOK_CACHE_WRITE_5MIN:.2f}/MTok,"
@@ -530,7 +714,7 @@ def compute_housing_agreement(con, housing_rows):
     return {"matched": matched, "agreements": agreements, "disagreements": disagreements}
 
 
-def write_pilot_report(con, distinct_texts, system_prompt, max_calls, out_path, seed=42):
+def write_pilot_report(con, distinct_texts, system_prompt, max_calls, out_path, seed=42, backend="anthropic"):
     rows = con.execute(
         "SELECT status, confidence, flags, input_tokens, output_tokens, cache_write_tokens, cache_read_tokens "
         "FROM l2_text_classifications WHERE prompt_version = ?", [PROMPT_VERSION],
@@ -548,13 +732,22 @@ def write_pilot_report(con, distinct_texts, system_prompt, max_calls, out_path, 
     actual_output = sum(r[4] or 0 for r in rows)
     actual_cache_write = sum(r[5] or 0 for r in rows)
     actual_cache_read = sum(r[6] or 0 for r in rows)
-    actual_cost = (
-        actual_input * PRICE_PER_MTOK_INPUT
-        + actual_output * PRICE_PER_MTOK_OUTPUT
-        + actual_cache_write * PRICE_PER_MTOK_CACHE_WRITE_5MIN
-        + actual_cache_read * PRICE_PER_MTOK_CACHE_READ
-    ) / 1e6
-    est = estimate_cost(distinct_texts, system_prompt, max_calls)
+    if backend == "ollama":
+        cost_line = (f"- Actual cost: $0.00 (local Ollama model, {OLLAMA_MODEL})."
+                     f" Token usage: {actual_input:,} input / {actual_output:,} output"
+                     f" (no prompt caching -- Anthropic-specific optimization, not applicable here)\n")
+    else:
+        actual_cost = (
+            actual_input * PRICE_PER_MTOK_INPUT
+            + actual_output * PRICE_PER_MTOK_OUTPUT
+            + actual_cache_write * PRICE_PER_MTOK_CACHE_WRITE_5MIN
+            + actual_cache_read * PRICE_PER_MTOK_CACHE_READ
+        ) / 1e6
+        est = estimate_cost(distinct_texts, system_prompt, max_calls)
+        cost_line = (f"- Dry-run cost estimate for this scope: ${est['total_cost']:.2f}\n"
+                     f"- Actual cost (from real token usage): ${actual_cost:.2f}"
+                     f" ({actual_input:,} input / {actual_output:,} output /"
+                     f" {actual_cache_write:,} cache-write / {actual_cache_read:,} cache-read tokens)\n")
 
     housing_rows = load_housing_benchmark()
     bench = compute_housing_agreement(con, housing_rows)
@@ -577,12 +770,10 @@ def write_pilot_report(con, distinct_texts, system_prompt, max_calls, out_path, 
     lines.append(f"Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}\n")
 
     lines.append("## Dry-run vs. pilot\n")
+    lines.append(f"- Backend: {backend}" + (f" ({OLLAMA_MODEL})" if backend == "ollama" else f" ({MODEL})"))
     lines.append(f"- Distinct texts in scope: {len(distinct_texts):,}")
-    lines.append(f"- Dry-run cost estimate for this scope: ${est['total_cost']:.2f}")
     lines.append(f"- Pilot classification rows written: {n:,} (ok: {n_ok:,}, error: {n_error:,})")
-    lines.append(f"- Actual cost (from real token usage): ${actual_cost:.2f}"
-                 f" ({actual_input:,} input / {actual_output:,} output /"
-                 f" {actual_cache_write:,} cache-write / {actual_cache_read:,} cache-read tokens)\n")
+    lines.append(cost_line)
 
     lines.append("## Confidence distribution\n")
     if n_ok:
@@ -631,6 +822,11 @@ def main(argv=None):
     parser.add_argument("--limit", type=int, default=None, help="classify only the top-N distinct texts by grants covered")
     parser.add_argument("--max-calls", type=int, required=True, help="hard cap on classification calls this run (required)")
     parser.add_argument("--report", metavar="PATH", help="write a pilot report from the current DB state; makes no API calls")
+    parser.add_argument("--backend", choices=["anthropic", "ollama"], default="anthropic",
+                         help="anthropic (default, needs ANTHROPIC_API_KEY) or a local Ollama model")
+    parser.add_argument("--ollama-base-url", default=OLLAMA_BASE_URL)
+    parser.add_argument("--ollama-model", default=OLLAMA_MODEL)
+    parser.add_argument("--ollama-num-ctx", type=int, default=OLLAMA_NUM_CTX)
     parser.add_argument("--grants-csv", default=GRANTS_CSV)
     parser.add_argument("--taxonomy", default=TAXONOMY_XLSX)
     parser.add_argument("--db", default=DB_PATH)
@@ -638,31 +834,36 @@ def main(argv=None):
 
     taxonomy = load_taxonomy(args.taxonomy)
     valid_codes = {t["code"] for t in taxonomy}
-    system_prompt = build_system_prompt(taxonomy)
+    system_prompt = build_system_prompt(taxonomy, include_definitions=(args.backend != "ollama"))
 
     con = open_db(args.db)
     build_grant_text_map(con, args.grants_csv)
     distinct_texts = fetch_distinct_texts(con, limit=args.limit)
 
     if args.report:
-        path = write_pilot_report(con, distinct_texts, system_prompt, args.max_calls, args.report)
+        path = write_pilot_report(con, distinct_texts, system_prompt, args.max_calls, args.report, backend=args.backend)
         print(f"Wrote {path}")
         return
 
     if args.dry_run:
-        print_dry_run_report(distinct_texts, system_prompt, args.max_calls)
+        print_dry_run_report(distinct_texts, system_prompt, args.max_calls, backend=args.backend)
         return
 
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("ERROR: ANTHROPIC_API_KEY environment variable is not set.", file=sys.stderr)
-        sys.exit(1)
+    if args.backend == "ollama":
+        client = OllamaClient(base_url=args.ollama_base_url, num_ctx=args.ollama_num_ctx)
+        model = args.ollama_model
+    else:
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
+        if not api_key:
+            print("ERROR: ANTHROPIC_API_KEY environment variable is not set.", file=sys.stderr)
+            sys.exit(1)
+        import anthropic
+        client = anthropic.Anthropic(api_key=api_key)
+        model = MODEL
 
-    import anthropic
-    client = anthropic.Anthropic(api_key=api_key)
     system_blocks = [{"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}]
-    calls_made = run_pipeline(client, con, distinct_texts, args.max_calls, system_blocks, valid_codes)
-    print(f"Made {calls_made} classification calls (prompt_version={PROMPT_VERSION}).")
+    calls_made = run_pipeline(client, con, distinct_texts, args.max_calls, system_blocks, valid_codes, model=model)
+    print(f"Made {calls_made} classification calls (backend={args.backend}, model={model}, prompt_version={PROMPT_VERSION}).")
 
 
 if __name__ == "__main__":
