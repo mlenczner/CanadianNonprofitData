@@ -58,21 +58,24 @@ def make_fixture_db(path):
         CREATE TABLE grants_unified (
             grant_id INTEGER, source_dataset VARCHAR, funder_entity_id INTEGER,
             recipient_entity_id INTEGER, amount_cad DOUBLE, fiscal_year INTEGER,
-            program_name VARCHAR, description VARCHAR
+            program_name VARCHAR, description VARCHAR, source_ref VARCHAR
         )
     """)
     grants = [
-        (1, "federal_gc", 3, 1, 1200000.00, 2019, "Foo Program", "desc"),
-        (2, "t3010_qualified_donee", 6, 2, 50000.00, 2021, None, None),
-        (3, "canada_council", 7, 4, 15000.00, 2022, "Grant to Artists", None),
+        # source_ref left NULL here on purpose -- exercises the pre-issue-#4
+        # best-effort fallback path in locate_federal_receipt() (see
+        # test_amendment_chain_receipt_shows_all_three_values_in_order).
+        (1, "federal_gc", 3, 1, 1200000.00, 2019, "Foo Program", "desc", None),
+        (2, "t3010_qualified_donee", 6, 2, 50000.00, 2021, None, None, None),
+        (3, "canada_council", 7, 4, 15000.00, 2022, "Grant to Artists", None, None),
     ]
     N_SCALE = 305
     for i in range(N_SCALE):
         grants.append((
             100 + i, "canada_council", 5, 8, float(300000 - i * 100), 2015 + (i % 10),
-            f"Regrant #{i}", None,
+            f"Regrant #{i}", None, None,
         ))
-    con.executemany("INSERT INTO grants_unified VALUES (?, ?, ?, ?, ?, ?, ?, ?)", grants)
+    con.executemany("INSERT INTO grants_unified VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", grants)
 
     con.execute("""
         CREATE TABLE entity_role_summary (
@@ -323,6 +326,71 @@ def test_bilingual_name_english_in_header_full_string_in_receipt(db_path):
     assert "Bilingual Org" in header
     assert "Org Bilingue" not in header
     assert "Bilingual Org|Org Bilingue" in page
+
+
+# ── source_ref receipt disambiguation (AGENTS.md issue #4) ──────────────────
+# Standalone/unit-level rather than through the shared fixture DB above:
+# demonstrating the fix needs a genuine name+amount+fiscal-year collision
+# across two different departments/refs, which the shared fixture doesn't
+# have (and adding one there would require re-deriving several other tests'
+# expected totals). locate_federal_receipt() is exercised directly instead.
+
+def _make_collision_con():
+    con = duckdb.connect(":memory:")
+    con.execute("""
+        CREATE TABLE raw_grants_latest (
+            owner_org VARCHAR, ref_number VARCHAR, recipient_legal_name VARCHAR,
+            agreement_value VARCHAR, agreement_start_date VARCHAR,
+            prog_name_en VARCHAR, description_en VARCHAR
+        )
+    """)
+    con.executemany("INSERT INTO raw_grants_latest VALUES (?, ?, ?, ?, ?, ?, ?)", [
+        ("Global Affairs Canada", "GC-2019-Q2-00001", "Test Charity Inc", "1200000",
+         "2019-06-01", "Foo Program", "desc A"),
+        ("Global Affairs Canada", "GC-2020-Q1-99999", "Test Charity Inc", "1200000",
+         "2019-06-01", "Foo Program Two", "desc B"),
+    ])
+    con.execute("""
+        CREATE TABLE raw_grants (
+            owner_org VARCHAR, ref_number VARCHAR, amendment_number VARCHAR, agreement_value VARCHAR
+        )
+    """)
+    con.executemany("INSERT INTO raw_grants VALUES (?, ?, ?, ?)", [
+        ("Global Affairs Canada", "GC-2019-Q2-00001", "0", "1200000"),
+        ("Global Affairs Canada", "GC-2020-Q1-99999", "0", "1200000"),
+    ])
+    con.execute("""
+        CREATE TABLE entity_links (entity_id INTEGER, source_dataset VARCHAR, raw_name VARCHAR,
+                                    raw_bn VARCHAR, match_method VARCHAR, match_score DOUBLE)
+    """)
+    con.execute("INSERT INTO entity_links VALUES (1, 'federal_gc', 'Test Charity Inc', NULL, 'exact_bn', NULL)")
+    return con
+
+
+def test_locate_federal_receipt_is_ambiguous_without_source_ref_on_a_real_collision():
+    # Same recipient, same amount, same fiscal year, two different
+    # departments/refs -- exactly the confirmed real-world collision shape
+    # from AGENTS.md issue #3 (24,851 colliding ref_numbers). Without
+    # source_ref this is genuinely unresolvable from name+amount+year alone.
+    con = _make_collision_con()
+    r = op.locate_federal_receipt(con, 1, 1200000.0, 2019)
+    assert r["found"] is False
+    assert "2 raw rows" in r["reason"]
+
+
+def test_locate_federal_receipt_uses_source_ref_to_disambiguate_collision():
+    con = _make_collision_con()
+    r1 = op.locate_federal_receipt(con, 1, 1200000.0, 2019,
+                                    source_ref="Global Affairs Canada|GC-2019-Q2-00001")
+    assert r1["found"] is True
+    assert r1["ref_number"] == "GC-2019-Q2-00001"
+    assert r1["description"] == "desc A"
+
+    r2 = op.locate_federal_receipt(con, 1, 1200000.0, 2019,
+                                    source_ref="Global Affairs Canada|GC-2020-Q1-99999")
+    assert r2["found"] is True
+    assert r2["ref_number"] == "GC-2020-Q1-99999"
+    assert r2["description"] == "desc B"
 
 
 def test_scale_cap_embeds_300_rows_and_rollup_note(db_path):

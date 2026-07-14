@@ -118,6 +118,50 @@ def test_fuse_does_not_merge_11B_and_1B():
     assert digit_tokens(normalize_name("Circuit 11B")) != digit_tokens(normalize_name("Circuit 1B"))
 
 
+# ── Pattern C: 60-char truncation cutting a word right after a digit ────────
+# Confirmed on real production data (see AGENTS.md open issue #2): multiple
+# independent T3010 qualified-donee filings for the same Saskatoon school
+# division are truncated at exactly 60 characters, cutting "...No. 13 TRUST
+# FUND" down to "...No. 13 T". The fusion rule above turned that trailing "T"
+# into digit token "13T", which no longer matched the untruncated registry
+# name's bare "13" -- a confirmed regression, not a hypothetical one.
+
+def test_truncated_letter_at_60_chars_does_not_block_match():
+    r = Resolver()
+    r.add_charity(
+        "121212121",
+        "Board of Education of the Saskatoon School Division No. 13",
+        "Saskatoon", "SK",
+    )
+    truncated = "Board of Education of the Saskatoon School Division No. 13 T"
+    assert len(truncated) == 60, f"fixture drifted off the confirmed truncation length ({len(truncated)})"
+    method = fuzzy_result(r, truncated, "SK")
+    assert method == "fuzzy_accept", (
+        f"regression: truncated '...13 T' (60 chars) split from untruncated '...13' (method={method})"
+    )
+
+
+def test_digit_tokens_drops_truncated_trailing_letter_at_60_chars():
+    truncated = "Board of Education of the Saskatoon School Division No. 13 T"
+    assert len(truncated) == 60
+    norm = normalize_name(truncated)
+    assert digit_tokens(norm, raw_len=60) == frozenset({"13"}), (
+        "expected the truncation-artifact letter to be dropped, not fused into '13T'"
+    )
+    # Without a raw_len hint, the old fuse-everything behavior is unchanged --
+    # this documents why passing raw_len through from the caller matters.
+    assert digit_tokens(norm, raw_len=None) == frozenset({"13T"})
+
+
+def test_letter_suffix_still_fuses_when_not_at_truncation_length():
+    # Same shape (digit token immediately followed by a lone trailing letter)
+    # but the raw name isn't 60 chars, so this is presumed to be a genuine
+    # branch/circuit suffix and must still fuse as before.
+    name = "Circuit 5 A"
+    assert len(name) != 60
+    assert digit_tokens(normalize_name(name), raw_len=len(name)) == frozenset({"5A"})
+
+
 # ── Pattern B: incidental year embedded in a legal name ──────────────────────
 # Confirmed on real production data: 13.9% of all digit-gate rejects (207 of
 # 1,492) were an incorporation/founding year in one name ("Society (1992)")
@@ -181,6 +225,9 @@ TESTS = [
     test_fuse_is_symmetric_at_token_level,
     test_fuse_leaves_possessive_s_alone,
     test_fuse_does_not_merge_11B_and_1B,
+    test_truncated_letter_at_60_chars_does_not_block_match,
+    test_digit_tokens_drops_truncated_trailing_letter_at_60_chars,
+    test_letter_suffix_still_fuses_when_not_at_truncation_length,
     test_bare_year_suffix_matches,
     test_parenthetical_year_matches,
     test_same_year_on_both_sides_matches,

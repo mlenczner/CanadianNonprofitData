@@ -111,30 +111,66 @@ def normalize_name(raw):
     return " ".join(tokens) if tokens else " ".join(s.split())
 
 
+def display_name(raw):
+    """Strip the bilingual pipe format ("English Name|Nom français") down to
+    its English half for storage as canonical_name, mirroring what
+    normalize_name() already does for the match key -- otherwise an entity
+    resolved from a pipe-formatted source record displays the raw
+    "Name|Nom" string verbatim instead of a clean name (AGENTS.md issue #3).
+    Unlike normalize_name(), this doesn't touch case, punctuation, or legal
+    suffixes -- canonical_name is a display value, not a match key."""
+    if not raw:
+        return raw
+    s = str(raw)
+    return s.split("|", 1)[0] if "|" in s else s
+
+
 def block_key(province, norm_name):
     prov = (province or "").strip().upper()[:2]
     prefix = norm_name[:4] if norm_name else ""
     return f"{prov}|{prefix}"
 
 
-def _fuse_digit_letter_tokens(tokens):
+# T3010 donee-name fields aren't reliably truncated at one fixed length (some
+# filing years/pathways allow well over 100 chars), but a large cluster of
+# names (34,395 distinct raw_names in the current build) hits exactly this
+# length -- confirmed, e.g., across multiple independent filings for the same
+# Saskatoon school division, each cut off mid-word right after a digit
+# ("...No. 13 T", truncated before "TRUST FUND"). A name landing exactly on
+# this cliff is treated as a truncation risk; anything shorter or longer is not.
+RAW_NAME_TRUNCATION_LEN = 60
+
+
+def _fuse_digit_letter_tokens(tokens, raw_len=None):
     """Join a standalone single-letter token onto an immediately-preceding
     pure-digit token, so 'CIRCUIT 1 B' (produced from a raw '1-B' or '1 B'
     once normalize_name turns the hyphen/extra space into a plain space)
     collapses to the same 'CIRCUIT 1B' that a source writing '1B' fused
     already yields. Leaves an unrelated standalone letter alone (e.g. the
     possessive 'S' in 'JEHOVAH S') since the preceding token isn't pure-digit,
-    and never touches an already-fused multi-char token like '11B'."""
+    and never touches an already-fused multi-char token like '11B'.
+
+    Exception: if this is the trailing token of a raw name truncated at
+    exactly RAW_NAME_TRUNCATION_LEN characters, it's far more likely to be
+    the first letter of a cut-off word (e.g. '13' + 'T' from '...No. 13
+    TRUST FUND') than a genuine branch/circuit suffix -- fusing it would
+    produce a digit token ('13T') that can never match the untruncated
+    name's bare '13'. Dropped instead of fused, since a single truncated
+    letter carries no reliable information either way."""
     out = []
-    for tok in tokens:
+    n = len(tokens)
+    for i, tok in enumerate(tokens):
+        is_truncated_tail = i == n - 1 and raw_len == RAW_NAME_TRUNCATION_LEN
         if len(tok) == 1 and tok.isalpha() and out and out[-1].isdigit():
-            out[-1] = out[-1] + tok
+            if not is_truncated_tail:
+                out[-1] = out[-1] + tok
+            # else: drop the letter -- neither fused nor kept as its own token
         else:
             out.append(tok)
     return out
 
 
-def digit_tokens(norm_name):
+def digit_tokens(norm_name, raw_len=None):
     """Whitespace tokens containing a digit (e.g. '5A', '60', '1992') from an
     already normalize_name()-processed string, after fusing split digit+
     single-letter suffixes ('1 B' -> '1B'). Gates fuzzy matches: two org names
@@ -143,8 +179,10 @@ def digit_tokens(norm_name):
     token_sort_ratio scores the rest of the name. Deliberately splits on
     whitespace rather than a \\d+ regex, since a regex would collapse '5A' to
     '5' and fail to distinguish it from '5B' or '7A'. Year-like tokens are
-    kept here and handled by digit_tokens_match() at comparison time."""
-    fused = _fuse_digit_letter_tokens(norm_name.split())
+    kept here and handled by digit_tokens_match() at comparison time.
+    `raw_len` (the pre-normalization raw name length, if known) is passed
+    through to _fuse_digit_letter_tokens() to detect the truncation case."""
+    fused = _fuse_digit_letter_tokens(norm_name.split(), raw_len=raw_len)
     return frozenset(t for t in fused if any(ch.isdigit() for ch in t))
 
 
@@ -284,9 +322,10 @@ class Resolver:
             return self.bn_to_entity[bn_root]
         eid = self.new_id()
         self.bn_to_entity[bn_root] = eid
-        self.entities.append(EntityRow(eid, bn_root, legal_name, city, province, "charity"))
+        self.entities.append(EntityRow(eid, bn_root, display_name(legal_name), city, province, "charity"))
         norm = normalize_name(legal_name)
-        self.fuzzy_index[block_key(province, norm)].append(FuzzyCandidate(norm, digit_tokens(norm), eid))
+        raw_len = len(legal_name) if legal_name else None
+        self.fuzzy_index[block_key(province, norm)].append(FuzzyCandidate(norm, digit_tokens(norm, raw_len=raw_len), eid))
         return eid
 
     def add_dept(self, code):
@@ -296,12 +335,12 @@ class Resolver:
         eid = self.new_id()
         self.dept_to_entity[code] = eid
         name = DEPT_NAMES.get(code, code.upper())
-        self.entities.append(EntityRow(eid, None, name, None, None, "federal_dept"))
+        self.entities.append(EntityRow(eid, None, display_name(name), None, None, "federal_dept"))
         return eid
 
     def add_funder_org(self, name):
         eid = self.new_id()
-        self.entities.append(EntityRow(eid, None, name, None, None, "funder_org"))
+        self.entities.append(EntityRow(eid, None, display_name(name), None, None, "funder_org"))
         return eid
 
     def resolve(self, source_dataset, name, bn_raw, province, allow_fuzzy):
@@ -317,7 +356,7 @@ class Resolver:
             key = block_key(province, norm)
             candidates = self.fuzzy_index.get(key, [])
             if candidates:
-                q_nums = digit_tokens(norm)
+                q_nums = digit_tokens(norm, raw_len=len(name) if name else None)
                 all_choices = [c.norm_name for c in candidates]
 
                 # Would this record have fuzzy-matched before the digit-token
@@ -365,7 +404,7 @@ class Resolver:
         if existing_eid is None:
             eid = self.new_id()
             self.residual_to_entity[rkey] = eid
-            self.entities.append(EntityRow(eid, root, name, None, province, "other_org"))
+            self.entities.append(EntityRow(eid, root, display_name(name), None, province, "other_org"))
             if root:
                 self.bn_to_entity[root] = eid
         elif root and existing_bn and existing_bn != root:
@@ -376,7 +415,7 @@ class Resolver:
             if eid is None:
                 eid = self.new_id()
                 self.residual_to_entity[bn_rkey] = eid
-                self.entities.append(EntityRow(eid, root, name, None, province, "other_org"))
+                self.entities.append(EntityRow(eid, root, display_name(name), None, province, "other_org"))
                 self.bn_to_entity[root] = eid
         else:
             eid = existing_eid
@@ -573,14 +612,22 @@ def build_entities_and_grants(con):
     cc_eid = r.add_funder_org("Canada Council for the Arts")
 
     grants_unified = []  # (source_dataset, funder_entity_id, recipient_entity_id, amount_cad,
-                          #  fiscal_year, program_name, description)
+                          #  fiscal_year, program_name, description, source_ref)
 
     # ── source 1: federal Grants & Contributions ────────────────────────────
+    # source_ref = TRIM(owner_org) + "|" + TRIM(ref_number), the exact key
+    # _latest_amendment_sql() dedupes raw_grants_latest on -- populated here,
+    # when the source row is still at hand, so org_page.py's receipt drawer
+    # can look it up directly instead of an ambiguous runtime join on
+    # recipient name + amount + fiscal year (AGENTS.md issue #4). The other
+    # four sources have no comparably unique per-row key in their raw schedules
+    # (T3010 donee schedules) or explicitly-documented-non-unique one (OTF's
+    # "Identifier") without inventing one, so their source_ref stays NULL.
     print("\nProcessing federal G&C records (grants.csv) ...")
     cols = [
-        "ref_number", "recipient_legal_name", "recipient_business_number", "recipient_type",
-        "recipient_province", "recipient_country", "agreement_value", "agreement_start_date",
-        "prog_name_en", "description_en",
+        "owner_org", "ref_number", "recipient_legal_name", "recipient_business_number",
+        "recipient_type", "recipient_province", "recipient_country", "agreement_value",
+        "agreement_start_date", "prog_name_en", "description_en",
     ]
     cur = con.execute(f"SELECT {', '.join(cols)} FROM raw_grants_latest")
     processed = 0
@@ -588,7 +635,7 @@ def build_entities_and_grants(con):
         batch = cur.fetchmany(50_000)
         if not batch:
             break
-        for (ref, name, bn, rtype, province, country, value, start_date, prog, desc) in batch:
+        for (owner_org, ref, name, bn, rtype, province, country, value, start_date, prog, desc) in batch:
             processed += 1
             if processed % 200_000 == 0:
                 print(f"  ... {processed:,} rows")
@@ -600,9 +647,10 @@ def build_entities_and_grants(con):
                 continue
             allow_fuzzy = (rtype in GRANTS_NFP_TYPES) and (country or "").strip().upper() == "CA"
             recipient_eid = r.resolve("federal_gc", name, bn, province, allow_fuzzy)
+            source_ref = f"{owner_org.strip()}|{ref.strip()}" if owner_org else None
             grants_unified.append((
                 "federal_gc", funder_eid, recipient_eid, to_float(value),
-                fiscal_year_from_date(start_date), prog, desc,
+                fiscal_year_from_date(start_date), prog, desc, source_ref,
             ))
     print(f"  {processed:,} federal G&C records processed")
 
@@ -619,7 +667,7 @@ def build_entities_and_grants(con):
         if year and year[:4].isdigit():
             fy = int(year[:4])
         grants_unified.append((
-            "canada_council", cc_eid, recipient_eid, to_float(amount), fy, program, None,
+            "canada_council", cc_eid, recipient_eid, to_float(amount), fy, program, None, None,
         ))
     print(f"  {processed:,} Canada Council records processed")
 
@@ -637,7 +685,7 @@ def build_entities_and_grants(con):
         recipient_eid = r.resolve("t3010_qualified_donee", donee_name, donee_bn, province, allow_fuzzy=True)
         grants_unified.append((
             "t3010_qualified_donee", funder_eid, recipient_eid, to_float(total_gifts),
-            fiscal_year_from_date(fpe, month_cutover=1), "Qualified donee gift", None,
+            fiscal_year_from_date(fpe, month_cutover=1), "Qualified donee gift", None, None,
         ))
     print(f"  {processed:,} qualified donee records processed")
 
@@ -656,7 +704,7 @@ def build_entities_and_grants(con):
         amount = (to_float(cash) or 0) + (to_float(noncash) or 0)
         grants_unified.append((
             "t3010_non_qualified_donee", funder_eid, recipient_eid, amount,
-            fiscal_year_from_date(fpe, month_cutover=1), "Non-qualified donee grant", None,
+            fiscal_year_from_date(fpe, month_cutover=1), "Non-qualified donee grant", None, None,
         ))
     print(f"  {processed:,} non-qualified donee records processed")
 
@@ -709,7 +757,7 @@ def build_entities_and_grants(con):
         # behavior, not a failure to fix.
         recipient_eid = r.resolve("otf", org_name, bn_root, "ON", allow_fuzzy=True)
         grants_unified.append((
-            "otf", otf_funder_eid, recipient_eid, net_amount, otf_fiscal_year(fy_raw), program, desc,
+            "otf", otf_funder_eid, recipient_eid, net_amount, otf_fiscal_year(fy_raw), program, desc, None,
         ))
     print(f"  {processed:,} OTF records processed")
     print(f"  {crn_discarded:,} charitable registration numbers discarded "
@@ -759,11 +807,11 @@ def build_entities_and_grants(con):
         CREATE TABLE grants_unified (
             grant_id INTEGER, source_dataset VARCHAR, funder_entity_id INTEGER,
             recipient_entity_id INTEGER, amount_cad DOUBLE, fiscal_year INTEGER,
-            program_name VARCHAR, description VARCHAR
+            program_name VARCHAR, description VARCHAR, source_ref VARCHAR
         )
     """)
     con.executemany(
-        "INSERT INTO grants_unified VALUES (?,?,?,?,?,?,?,?)",
+        "INSERT INTO grants_unified VALUES (?,?,?,?,?,?,?,?,?)",
         [(i + 1,) + row for i, row in enumerate(grants_unified)],
     )
     print(f"grants_unified: {len(grants_unified):,} rows")

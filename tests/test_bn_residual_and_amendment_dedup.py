@@ -39,7 +39,7 @@ import duckdb
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from analysis.build_entity_graph import Resolver, _latest_amendment_sql, normalize_name
+from analysis.build_entity_graph import Resolver, _latest_amendment_sql, display_name, normalize_name
 
 
 def resolve_link(resolver, name, bn, province):
@@ -129,6 +129,46 @@ def test_normalize_name_without_pipe_is_unaffected():
     # of the pipe logic -- this just confirms the pipe change didn't touch
     # ordinary (non-bilingual) names.
     assert normalize_name("Toronto Humane Society") == "TORONTO HUMANE"
+
+
+# ── Related gap found during verification: canonical_name still stored the ──
+# raw pipe string even though normalize_name() strips it for matching (e.g.
+# Prince Rupert Port Authority's canonical_name was literally "Prince Rupert
+# Port Authority|Administration portuaire de Prince Rupert"). display_name()
+# applies the same pipe-split for display, without normalize_name()'s
+# uppercasing/legal-suffix-stripping, since canonical_name is a display value.
+
+def test_display_name_strips_pipe_but_preserves_case_and_suffixes():
+    assert display_name("Prince Rupert Port Authority|Administration portuaire de Prince Rupert") == \
+        "Prince Rupert Port Authority"
+
+
+def test_display_name_without_pipe_is_unchanged():
+    assert display_name("Ontario Trillium Foundation") == "Ontario Trillium Foundation"
+
+
+def test_display_name_handles_none_and_empty():
+    assert display_name(None) is None
+    assert display_name("") == ""
+
+
+def test_residual_entity_canonical_name_is_english_half_not_raw_pipe_string():
+    r = Resolver()
+    link = resolve_link(
+        r, "Prince Rupert Port Authority|Administration portuaire de Prince Rupert", None, "BC"
+    )
+    stored = r.entities[link.entity_id - 1].canonical_name
+    assert stored == "Prince Rupert Port Authority", (
+        f"canonical_name still stores the raw bilingual pipe string: {stored!r}"
+    )
+
+
+def test_charity_canonical_name_is_english_half_not_raw_pipe_string():
+    r = Resolver()
+    eid = r.add_charity(
+        "123456789", "Ottawa Humane Society|Societe humaine d'Ottawa", "Ottawa", "ON"
+    )
+    assert r.entities[eid - 1].canonical_name == "Ottawa Humane Society"
 
 
 # ── Bug 1: amendment dedup SQL ────────────────────────────────────────────────
@@ -226,6 +266,11 @@ TESTS = [
     test_normalize_name_splits_on_pipe_and_keeps_english_half,
     test_pipe_formatted_bilingual_name_collapses_to_one_entity,
     test_normalize_name_without_pipe_is_unaffected,
+    test_display_name_strips_pipe_but_preserves_case_and_suffixes,
+    test_display_name_without_pipe_is_unchanged,
+    test_display_name_handles_none_and_empty,
+    test_residual_entity_canonical_name_is_english_half_not_raw_pipe_string,
+    test_charity_canonical_name_is_english_half_not_raw_pipe_string,
     test_latest_amendment_dedup_keeps_max_amendment_per_dept_and_ref,
     test_latest_amendment_dedup_row_count_matches_distinct_dept_ref_pairs,
     test_latest_amendment_dedup_keeps_both_sides_of_a_ref_number_collision,

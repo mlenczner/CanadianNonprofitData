@@ -251,14 +251,14 @@ def fetch_grants(con, entity_id, direction):
     this_col = "recipient_entity_id" if direction == "received" else "funder_entity_id"
     rows = con.execute(f"""
         SELECT g.grant_id, g.fiscal_year, o.canonical_name AS other_name, o.entity_id AS other_entity_id,
-               g.program_name, g.description, g.amount_cad, g.source_dataset
+               g.program_name, g.description, g.amount_cad, g.source_dataset, g.source_ref
         FROM grants_unified g
         JOIN entities o ON o.entity_id = g.{other_col}
         WHERE g.{this_col} = ?
         ORDER BY g.fiscal_year DESC NULLS LAST, g.amount_cad DESC NULLS LAST
     """, [entity_id]).fetchall()
     cols = ["grant_id", "fiscal_year", "other_name", "other_entity_id", "program_name",
-            "description", "amount_cad", "source_dataset"]
+            "description", "amount_cad", "source_dataset", "source_ref"]
     return [dict(zip(cols, r)) for r in rows]
 
 
@@ -279,13 +279,27 @@ def fetch_timeline(con, entity_id):
 
 # ── receipt lookups (best-effort; say so if ambiguous/not found) ────────────
 
-def locate_federal_receipt(con, entity_id, amount, fiscal_year):
-    """Best-effort lookup of the raw_grants row(s) behind a federal_gc grant.
-    Joins through this entity's entity_links raw_name variants for
-    source_dataset='federal_gc' against raw_grants_latest.recipient_legal_name,
-    then matches on amount + fiscal year (computed from agreement_start_date
-    the same way build_entity_graph.py does). Returns a dict with either the
-    located row + its full amendment chain, or an explicit not-found marker."""
+def locate_federal_receipt(con, entity_id, amount, fiscal_year, source_ref=None):
+    """Locate the raw_grants row(s) behind a federal_gc grant.
+
+    If source_ref (TRIM(owner_org)+"|"+TRIM(ref_number), populated at build
+    time -- AGENTS.md issue #4) is present, looks it up directly: exact,
+    not best-effort. Falls back to the original best-effort join -- entity
+    name variants against raw_grants_latest.recipient_legal_name, narrowed by
+    amount + fiscal year -- only for a grants_unified row built before this
+    column existed (source_ref is None)."""
+    if source_ref and "|" in source_ref:
+        owner_org, ref_number = source_ref.split("|", 1)
+        rows = con.execute("""
+            SELECT owner_org, ref_number, recipient_legal_name, agreement_value, agreement_start_date,
+                   prog_name_en, description_en
+            FROM raw_grants_latest
+            WHERE TRIM(owner_org) = TRIM(?) AND TRIM(ref_number) = TRIM(?)
+        """, [owner_org, ref_number]).fetchall()
+        if len(rows) == 1:
+            return _federal_receipt_from_row(con, rows[0])
+        return {"found": False, "reason": f"source_ref {source_ref!r} matched {len(rows)} raw rows, expected 1"}
+
     variants = con.execute("""
         SELECT DISTINCT raw_name FROM entity_links
         WHERE entity_id = ? AND source_dataset = 'federal_gc'
@@ -321,7 +335,14 @@ def locate_federal_receipt(con, entity_id, amount, fiscal_year):
     if len(matches) != 1:
         return {"found": False, "reason": f"{len(matches)} raw rows matched name+amount+year — not unambiguous"}
 
-    owner_org, ref_number, recipient_name, value, start_date, prog, desc = matches[0]
+    return _federal_receipt_from_row(con, matches[0])
+
+
+def _federal_receipt_from_row(con, row):
+    """Build the found-receipt dict (+ full amendment chain) for a single
+    located raw_grants_latest row. Shared by both the exact source_ref path
+    and the best-effort fallback path in locate_federal_receipt()."""
+    owner_org, ref_number, recipient_name, value, start_date, prog, desc = row
     chain = con.execute("""
         SELECT amendment_number,
                TRY_CAST(REPLACE(REPLACE(TRIM(agreement_value), ',', ''), '$', '') AS DOUBLE)
@@ -504,7 +525,8 @@ def render_grant_receipt(con, entity_id, grant, direction):
     src = grant["source_dataset"]
     if src == "federal_gc":
         fed_entity = entity_id if direction == "received" else grant["other_entity_id"]
-        r = locate_federal_receipt(con, fed_entity, grant["amount_cad"], grant["fiscal_year"])
+        r = locate_federal_receipt(con, fed_entity, grant["amount_cad"], grant["fiscal_year"],
+                                    source_ref=grant.get("source_ref"))
         if not r["found"]:
             return f"<div class='not-found'>Receipt not located: {esc(r['reason'])}.</div>"
         out = [f"<p><b>Ref:</b> {esc(r['ref_number'])} &middot; <b>Department:</b> {esc(r['department'])} "
