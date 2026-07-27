@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] Entity Resolution Methodology — Canadian Nonprofit Data</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding-top:40px;margin:0}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.wrap{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.back{color:var(--mut);text-decoration:none;font-size:.85rem}
+.back:hover{color:var(--red)}
+h1{font-size:2rem;letter-spacing:-.02em;margin:18px 0 8px}
+h2{font-size:1.3rem;margin:40px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--red)}
+h3{font-size:1.05rem;margin:26px 0 8px}
+p{margin:10px 0}
+a{color:var(--red)}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.88rem;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th,td{padding:7px 10px;border-top:1px solid var(--line);text-align:left}
+th{background:#f1ede7;font-weight:700}
+code{background:#f1ede7;border-radius:4px;padding:1px 5px;font-size:.88em}
+blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--red);background:var(--card);color:var(--mut)}
+hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+strong{color:var(--ink)}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="wrap">
+<a class="back" href="index.html">&larr; Canadian Nonprofit Data</a>
+<h1>Entity Resolution Methodology</h1>
+<p><strong>Project:</strong> Canadian Nonprofit Data
+<strong>Script:</strong> <a href="https://github.com/mlenczner/CanadianNonprofitData/blob/main/analysis/build_entity_graph.py"><code>analysis/build_entity_graph.py</code></a>
+<strong>Status:</strong> Iterated well past the first pass — multi-year T3010 (2013–2024), a digit-token gate for numeric-suffix false positives (plus two refinements), a fixed amendment-double-counting bug (federal_gc corrected from a reported $952.2B down to a verified $831.2B), a fixed BN-residual entity-splitting bug, a fixed province-blank fuzzy-blocking gap plus a fixed bilingual "/"-name scoring gap (+64,382 fuzzy_accept matches on rebuild), and two documented-but-unresolved gaps (T3010 reject-row data loss; funder attribution for colliding ref_numbers). Thresholds and scope below can still be revisited.</p>
+<hr />
+<h2>Goal</h2>
+<p>Federal G&amp;C, the CRA T3010 charity registry, and Canada Council for the Arts grants each name organizations independently, with no shared key linking them (only 44.7% of <code>grants.csv</code> records carry a business number). This pipeline links all three into one entity graph so a single organization — whichever name variant it appears under — is recognized consistently as a funder and/or recipient across all sources. This is what makes it possible to answer "how much did org X receive in total" or "which organizations both receive government funding and regrant it to others."</p>
+<h2>Sources linked</h2>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Federal Grants &amp; Contributions</td>
+<td><code>grants.csv</code></td>
+<td>funder = federal department, recipient = org</td>
+</tr>
+<tr>
+<td>CRA T3010 charity registry (2013–2024)</td>
+<td><code>data/t3010/identification_*.csv</code></td>
+<td>anchor registry: BN ↔ legal name ↔ address, latest filing year per BN wins</td>
+</tr>
+<tr>
+<td>CRA T3010 Qualified Donees schedule (2013–2024)</td>
+<td><code>data/t3010/qualified_donees_*.csv</code></td>
+<td>funder = charity, recipient = another qualified donee (often another charity)</td>
+</tr>
+<tr>
+<td>CRA T3010 Non-Qualified Donees schedule (2023–2024 only)</td>
+<td><code>data/t3010/non_qualified_donees_*.csv</code></td>
+<td>funder = charity, recipient = non-charity grantee (name only, no BN)</td>
+</tr>
+<tr>
+<td>Canada Council for the Arts (2017–2025)</td>
+<td><code>data/canada_council_grants.csv</code></td>
+<td>funder = Canada Council, recipient = org/individual</td>
+</tr>
+<tr>
+<td>Ontario Trillium Foundation (1999–2026)</td>
+<td><code>data/otf_grants.csv</code></td>
+<td>funder = OTF, recipient = charity/municipality/school board/other Ontario org</td>
+</tr>
+</tbody>
+</table>
+<p>T3010 now spans <strong>12 years (2013–2024)</strong>, not just the most recent filing year — this was a known gap in the first pass, since resolved (see multi-year ingestion in <code>_load_t3010_table</code>). Each year is a separate set of CSVs per schedule, unioned by column name since the form's columns changed shape over time (e.g. line codes 5045/5840-5843 only exist from 2023 onward); <code>identification_*.csv</code> seeds one charity entity per BN using the <strong>latest</strong> filing year, so charities that deregistered before 2024 still get a registry entry.</p>
+<h2>Matching approach</h2>
+<p>Applied in order, cheapest and most reliable first:</p>
+<ol>
+<li>
+<p><strong>Normalize.</strong> Names: transliterate accents, uppercase, strip punctuation, drop legal-form stopwords (Inc./Ltd./Society/Foundation/Association and French equivalents) and common connector words (of/the/and/de/du/la). Business numbers: reduce to the 9-digit root, since one legal entity can hold multiple CRA program accounts (<code>870814944RR0001</code> → <code>870814944</code>). Note: Canada Council's "Business Number" column is not reliably a CRA BN — it contains a mix of real BNs, corporate program accounts, and what look like internal Canada Council client IDs (<code>429917-5</code>, <code>1167722652</code>, <code>S-50887</code>). Only strings matching a plausible 9-digit-root pattern are treated as BNs; everything else falls through to name matching.</p>
+</li>
+<li>
+<p><strong>Exact BN match.</strong> Any record with a normalized BN matching a T3010 charity's root BN is linked immediately — no ambiguity.</p>
+</li>
+<li>
+<p><strong>Fuzzy name match</strong>, only attempted for records that look like they could be nonprofits/charities (grants.csv recipient types <code>N</code>/<code>A</code>/<code>S</code> restricted to Canadian recipients; Canada Council type <code>Organization</code>; all T3010 donee records, since those are org-to-org by definition). Candidates are blocked by <code>(province, first 4 normalized-name characters)</code> to keep comparisons tractable, then scored with <code>rapidfuzz.token_sort_ratio</code> against T3010 charity names in that block:
+   - <strong>≥ 90</strong> → accepted, <em>but only if it also passes the digit-token gate below</em>
+   - <strong>&lt; 90</strong> → treated as unmatched (no "needs review" queue in this pass — see limitations)</p>
+</li>
+</ol>
+<p><strong>Digit-token gate.</strong> A confirmed false positive (<code>ALBERTA CIRCUIT 5A OF JEHOVAH'S WITNESSES</code> matching <code>Alberta Circuit 7A of Jehovah's Witnesses</code> at 97.4 — see Results below) showed that <code>token_sort_ratio</code> barely penalizes a differing branch/circuit/chapter/district number in an otherwise-long, otherwise-identical name. <code>Resolver.resolve()</code> now requires a candidate's digit-bearing tokens (<code>digit_tokens()</code>) to match the incoming record's before a fuzzy match is scored at all — <code>5A</code> and <code>7A</code> never even reach the <code>token_sort_ratio</code> comparison. Two refinements on top of the base gate, both confirmed necessary against real false-reject patterns:
+   - <strong>Digit-letter fusion</strong> (<code>_fuse_digit_letter_tokens</code>): joins a standalone single-letter token onto an immediately-preceding digit token (<code>"1-B"</code> / <code>"1 B"</code> → <code>"1B"</code>), so the same branch number written differently across sources (hyphenated vs. fused) isn't wrongly split apart. Deliberately whitespace-based, not a <code>\d+</code> regex — a regex would collapse <code>"5A"</code> to <code>"5"</code> and fail to distinguish it from <code>"5B"</code>/<code>"7A"</code>, reintroducing the original bug.
+   - <strong>Year tolerance</strong> (<code>digit_tokens_match</code>): a 4-digit token in the 1800–2099 range is treated as an incidental incorporation/founding year (e.g. <code>"Soup Kitchen Association 2013"</code>) and ignored when only one side of the comparison has one — but kept as a differentiator when <em>both</em> sides carry a differing year, so two same-named orgs distinguished only by year aren't merged.</p>
+<ol start="4">
+<li><strong>Residual entities.</strong> Anything still unmatched becomes its own entity, deduplicated within the unmatched pool by <code>(normalized name, province)</code> so at least identical misspellings collapse into one entity across sources.</li>
+</ol>
+<p>Every resolution decision is recorded in <code>entity_links</code> (<code>entity_id</code>, <code>source_dataset</code>, <code>raw_name</code>, <code>raw_bn</code>, <code>match_method</code>, <code>match_score</code>) so any match can be audited or re-scored later without rerunning the whole pipeline.</p>
+<h2>Schema produced</h2>
+<ul>
+<li><strong><code>entities</code></strong> — one row per resolved organization: T3010 charities, federal departments (from <code>ref_number</code> prefixes), Canada Council, and any org found only in grants/CC data. <code>entity_kind</code> ∈ <code>charity</code> / <code>federal_dept</code> / <code>funder_org</code> / <code>other_org</code>.</li>
+<li><strong><code>entity_links</code></strong> — audit trail of every match decision (see above).</li>
+<li><strong><code>grants_unified</code></strong> — one row per grant/gift from any source, with <code>funder_entity_id</code> and <code>recipient_entity_id</code> both pointing into <code>entities</code>.</li>
+<li><strong><code>entity_role_summary</code></strong> — per entity: <code>total_given</code>, <code>total_received</code>, <code>given_share</code>, and <code>role</code>:</li>
+<li><code>given_share ≥ 0.9</code> → <code>primarily_funder</code></li>
+<li><code>given_share ≤ 0.1</code> → <code>primarily_recipient</code></li>
+<li>otherwise → <code>dual_role</code></li>
+</ul>
+<p>The 90/10 split is what operationalizes "95% of the time an org is mainly one or the other" — it's a threshold, not a law, and can be tightened or loosened per analysis.
+- <strong><code>entity_financials</code></strong> — one row per entity: T3010 line-code data for its latest filed fiscal year, joined to <code>entities</code> by BN root: total revenue (line 4700), total expenditures (4950/5100), total gifts to qualified donees (5050), revenue from federal/any Canadian government (4540/4570) — sourced from CRA's official <a href="https://www.canadiancharitylaw.ca/wp-content/uploads/2025/02/CRA-open-data-data-dictionary-for-T3010.pdf">T3010 Open Data Dictionary</a>, not guessed from field names. <code>raw_t3010_fin</code> spans 2013-2024 (up to 12 filings per entity); only the latest <code>source_year</code> per <code>bn_root</code> is kept before joining.</p>
+<h2>Results from the latest run (12-year T3010, digit-token gate + amendment dedup + BN-residual registration in place)</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entities resolved</td>
+<td>545,853 (97,072 charities, 120 federal departments, 1 Canada Council, 448,660 <code>other_org</code> residuals)</td>
+</tr>
+<tr>
+<td>Grant/gift records linked</td>
+<td>4,925,046</td>
+</tr>
+<tr>
+<td>Match method (all sources combined)</td>
+<td>exact BN 3,734,400 · fuzzy accept 108,548 · unmatched/residual 1,082,098</td>
+</tr>
+<tr>
+<td>Digit-token gate rejects</td>
+<td>908 candidates scored ≥90 pre-gate but were split apart by differing digit tokens</td>
+</tr>
+<tr>
+<td><code>t3010_qualified_donee</code> exact-BN rate</td>
+<td>89.5% (3,350,555 / 3,744,650) — expected to be high since donees are by definition qualified donees</td>
+</tr>
+<tr>
+<td><code>federal_gc</code> exact+fuzzy rate</td>
+<td>33.8% of records processed (only N/A/S Canadian recipients get a fuzzy attempt at all, by design)</td>
+</tr>
+<tr>
+<td>Entities classified <code>primarily_recipient</code> / <code>primarily_funder</code> / <code>dual_role</code></td>
+<td>487,785 / 18,730 / 20,343 (18,995 <code>no_flows</code>)</td>
+</tr>
+<tr>
+<td>Total dollar value linked</td>
+<td>federal_gc <strong>$831.2B</strong> · t3010_qualified_donee $129.2B · canada_council $2.5B · t3010_non_qualified_donee $2.3B · otf $2.94B</td>
+</tr>
+<tr>
+<td><code>otf</code> recipient match rate</td>
+<td>exact BN 52.1% (17,099/32,842) · fuzzy accept 6.3% (2,072) · unmatched/residual 41.6% (13,671) — checked directly against <code>nonprofit_network.duckdb</code> post-rebuild, not asserted in a test</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>federal_gc</code>'s total dropped from a previously-reported $952.2B to $831.2B</strong> — this is a <em>correction</em>, not a data change. The earlier figure was inflated by roughly 1.7x from an amendment-dedup bug (see the new subsection below); $831.2B is the verified, correct total. <code>why-this-matters.md</code> previously cited a $972B headline figure derived the same unfixed way as the old <code>grants_unified</code> total — that document has since been rewritten (2026-07-27) to point to the live, verified figures in <code>data-quality-rankings.html</code>/<code>data-publishing-problems.md</code> instead of restating a dollar total of its own, so this staleness risk no longer applies there. The 139,545-record "no department-code prefix" exclusion described in the first-pass write-up is superseded too: after amendment dedup, the comparable figure is 88,853 of 1,174,938 deduped rows (7.6%) lacking a <code>-</code> in <code>ref_number</code> — see limitations below.</p>
+<p>The top <code>dual_role</code> entities by total flow are exactly the kind of organization this was meant to surface: the Salvation Army, United Jewish Appeal of Greater Toronto, UHN Foundation, United Way of Greater Toronto, The Hospital for Sick Children Foundation, The Princess Margaret Cancer Foundation, Jewish Community Foundation of Montreal, the Canadian Red Cross Society, Community Foundations of Canada — all known regranting intermediaries that receive government/donor funding and redistribute it to member agencies or smaller nonprofits.</p>
+<h3>The numeric-suffix false positive — found, fixed, and refined</h3>
+<p>Manual review of fuzzy matches in the first pass turned up mostly correct near-misses (abbreviations, punctuation, accents, minor word-order/legal-suffix differences — e.g. <code>THE UNIVERSITY OF NEW BRUNSWICK (UNB)</code> → <code>UNIVERSITY OF NEW BRUNSWICK</code>, <code>Halifax Gay Mens Chorus</code> → <code>HALIFAX GAY MEN'S CHORUS SOCIETY</code>) but also <strong>one confirmed false positive</strong>: <code>ALBERTA CIRCUIT 5A OF JEHOVAH'S WITNESSES</code> matched <code>Alberta Circuit 7A of Jehovah's Witnesses</code> at a 97.4 score — the branch number differs, so these are almost certainly different organizations, but <code>token_sort_ratio</code> barely penalizes a one-character/one-digit difference in an otherwise-long, otherwise-identical string.</p>
+<p>This was fixed with the digit-token gate described above. A 20-row QA sample of this run's 1,164 gate rejects (<code>_fuzzy_gate_rejects</code>, sampled in <code>print_report</code>) confirmed the gate is doing its job in the large majority of cases — correctly splitting differing Royal Canadian Legion branch numbers (<code>Branch 103</code> vs <code>Branch 500</code>), differing school divisions (<code>Peace Wapiti School Division No. 76</code> vs the un-numbered <code>The Peace Wapiti School Division</code>), and both English and French Jehovah's Witnesses circuit-number mismatches.</p>
+<p>A follow-up regression scan (recomputing what the pre-fusion, no-year-tolerance gate would have decided for every one of the 1,164 rejects) found the digit-letter fusion refinement introduces its own narrow false-reject risk: <strong>3 of 1,164 pairs (0.6%)</strong> would have matched under the simpler pre-refinement logic but are now rejected. Of those:
+- <strong>1 was a confirmed genuine regression</strong> — now fixed. A new failure mode not anticipated by the original design: a T3010 donee-name field truncated mid-word (<code>"Board Of Education Of The Saskatoon School Division No. 13 T"</code>, cut off before <code>TRUST FUND</code>) had its trailing truncated letter fused onto the preceding digit (<code>"13"</code> + <code>"T"</code> → <code>"13T"</code>), which no longer matched the untruncated registry name's bare <code>"13"</code>. Confirmed recurring, not a one-off: multiple independent donee records for this same school division are truncated at exactly 60 characters (<code>"...No. 13 T"</code>, <code>"...No.13 (Henry Kelsey S"</code>), while other organizations' names run to 100+ characters untruncated — this points to a filer/year/submission-pathway-specific truncation, not a global field limit, so it could plausibly recur for other long organization names too. Fixed by <code>_fuse_digit_letter_tokens()</code> taking the raw (pre-normalization) name length and dropping — rather than fusing — a trailing single letter when that length lands exactly on 60 characters (<code>RAW_NAME_TRUNCATION_LEN</code>, chosen because 34,395 distinct qualified-donee raw names hit exactly that length in the current build, a real cliff rather than a coincidence). A dropped letter can't produce a wrong digit token; <code>"13 T"</code> degrades to bare <code>"13"</code> and matches the untruncated name again. On the next full rebuild (this fix plus the BN-residual/canonical_name fixes below, combined): gate rejects dropped from 1,164 to <strong>932</strong> (not a clean like-for-like delta, since entity ordering/counts shift between builds, but consistent with the fix removing false splits), and the 20-row QA sample from that run contains no truncation-shaped reject. Regression tests: <code>tests/test_digit_token_gate.py</code> (3 new cases, including one confirming a genuine short-name branch/circuit suffix still fuses normally — 60-char raw length is the only trigger for dropping the letter).
+- <strong>2 are genuinely ambiguous</strong>, not confirmed regressions: <code>"Nova Scotia Circuit 1-B of Jehovah's Witnesses"</code> vs <code>"Nova Scotia Circuit 1 of Jehovah's Witnesses"</code>, and the French-language equivalent for Quebec circuit <code>2-A</code>/<code>2</code>. Given this same dataset shows JW circuits genuinely subdividing into distinct lettered sub-circuits elsewhere (<code>5A</code>/<code>7A</code>, <code>11B</code>/<code>1B</code> are confirmed-different organizations), whether a bare circuit number and its lettered variant are the same congregation or a parent/sub-circuit pair isn't something this pipeline can determine with confidence either way.</p>
+<h3>Amendment double-counting and BN-residual entity splitting — two confirmed bugs, both fixed</h3>
+<p><strong>Amendment double-counting.</strong> <code>grants_unified</code> was built from every row in <code>grants.csv</code> with no amendment dedup. <code>agreement_value</code> restates an agreement's current value on each amendment rather than adding to it, so summing every row for the same agreement inflated <code>federal_gc</code>'s total by roughly 1.7x ($952.2B reported vs. the corrected $831.2B). Fixed by deduping to the latest amendment before anything reads grants values. The dedup key is <strong><code>(owner_org, ref_number)</code>, not <code>ref_number</code> alone</strong> — <code>ref_number</code> collides across departments (confirmed: 24,851 refs, e.g. <code>GC-2016-Q4-00001</code> is six different grants from six different departments, all at amendment 0); an earlier attempt at ref-only dedup was caught before landing because it would have collapsed 61,075 rows of genuinely distinct agreements ($41.3B) into one arbitrary row each. <code>raw_grants</code> itself is untouched — the deduped view is a separate table (<code>raw_grants_latest</code>), so amendment history stays fully queryable.</p>
+<p><strong>BN-residual entity splitting.</strong> <code>Resolver.resolve()</code>'s residual branch stored a record's <code>bn_root</code> on the newly-created entity but never registered it in <code>bn_to_entity</code>, so a BN seen only on unmatched/residual records could never exact-match itself later — splitting one real organization into many entities purely from name-spelling variance across sources. Confirmed impact: 18,139 BN roots mapped to multiple entities (e.g. Prince Rupert Port Authority existed as 6 entities sharing one BN), affecting 47,186 entities. Fixed: the residual branch now registers/backfills a found BN into <code>bn_to_entity</code>, while explicitly refusing to merge two different BNs that happen to share a normalized name + province (a genuine collision creates its own BN-specific entity instead). Verified: duplicate-BN entity count dropped from 18,139 to <strong>0</strong>. Related: <code>grants.csv</code> recipient names are often bilingual pipe-formatted (<code>"English Name|Nom français"</code>); <code>normalize_name()</code> now splits on <code>|</code> and keeps only the English half so both language variants collapse to one entity.</p>
+<p><strong>Residual limitation exposed by verification, not fixed by either bug above:</strong> re-checking Prince Rupert Port Authority specifically after the fix still shows <strong>2</strong> entities, not 1. Investigated: one entity correctly absorbed 6+ name/formatting variants sharing the real BN. The second exists because 3 of its ~20 raw records carry <strong>neither a valid business number nor a filled-in province field</strong> — since the residual dedup key is <code>(normalized name, province)</code>, and these rows have no BN to exact-match against either, they can't be reconciled with the BN-carrying, BC-province cluster by either mechanism above. This is a narrower, pre-existing limitation of blocking residual dedup by province, not something either fix was scoped to address — noted here rather than chased further tonight.</p>
+<p><strong><code>canonical_name</code> storing the raw pipe string — fixed.</strong> Both Prince Rupert entities' <code>canonical_name</code> used to store the raw bilingual string verbatim (e.g. <code>"Prince Rupert Port Authority|Administration portuaire de Prince Rupert"</code>) even though <code>normalize_name()</code> strips the pipe for matching — normalization was applied to the match key, not to the display value. Fixed with a <code>display_name()</code> helper (pipe-split only, no uppercasing or legal-suffix-stripping, since <code>canonical_name</code> is a display value rather than a match key) applied at every point an <code>EntityRow</code> is constructed. Verified post-rebuild: <code>SELECT count(*) FROM entities WHERE canonical_name LIKE '%|%'</code> is <strong>0</strong>; Prince Rupert Port Authority's two entities (still 2 — the residual gap above is separate and unfixed) both now show the clean English name. Regression tests: <code>tests/test_bn_residual_and_amendment_dedup.py</code> (5 new cases).</p>
+<p><strong>Separate, unfixed, and flagged rather than expanded into this change:</strong> the pipeline attributes a grant's funder department via <code>split_part(ref_number, '-', 1)</code> (the ref's prefix) — but the same 24,851 colliding-ref groups above share that prefix while <code>owner_org</code> genuinely differs between them, so those records likely get attributed to whichever department's row happened to win an arbitrary tiebreak. <code>owner_org</code> is probably the more reliable funder key than the ref-number prefix. Not investigated. See <code>AGENTS.md</code> open issues.</p>
+<h3>Province-blank fuzzy blocking and bilingual "/"-name scoring — two confirmed bugs, both fixed</h3>
+<p>Found while investigating why POP Montreal International Music Festival (a real registered charity, BN <code>853671972</code>) showed up as 5 separate entities instead of 1.</p>
+<p><strong>Province-blank blocking gap.</strong> <code>Resolver.resolve()</code> blocks fuzzy candidates by <code>(province, first-4-normalized-name-characters)</code> via <code>block_key()</code>, with no fallback when a record's province is blank. T3010 donee-name fields routinely lack one: <code>t3010_non_qualified_donee</code> has no province/city column in the CRA source at all, and <code>t3010_qualified_donee</code>'s is frequently empty even with a donee name present — confirmed: 3 of 4 real POP Montreal donee rows had <code>Province = NULL</code>. A blank-province record's block key (<code>"|POP "</code>) landed in a different bucket than the charity's own key (<code>"QC|POP "</code>, seeded from its registered province) — the matcher never even considered the correct candidate, regardless of name similarity. Fixed with a second index, <code>fuzzy_index_by_prefix</code> (name-prefix only, spanning all provinces), consulted only when the incoming record's province is blank; records that do carry a province keep the original <code>(province, prefix)</code> blocking unchanged, so match quality for every other source (which mostly do carry province) is untouched.</p>
+<p><strong>Bilingual "/"-name scoring gap.</strong> <code>normalize_name()</code> already splits grants.csv's <code>"English|French"</code> pipe format (see "BN-residual entity splitting" above), but the CRA T3010 registry uses a different bilingual convention, <code>"English Name/Nom français"</code> — POP Montreal's own legal name is <code>"POP MONTREAL INTERNATIONAL MUSIC FESTIVAL/FESTIVAL INTERNATIONAL DE MUSIQUE POP MONTREAL"</code> — which that split left untouched. A short, single-language donee name scored only 25–65 <code>token_sort_ratio</code> against the full concatenated bilingual string, nowhere near the 90-point <code>FUZZY_ACCEPT</code> threshold, regardless of blocking. Fixed with a <code>name_variants()</code> helper (mirrors <code>discovery/match.py</code>'s own, separately-discovered <code>_name_variants()</code>, which needed the identical fix for its matcher — see that module's docstring): <code>add_charity()</code> now indexes the full legal name plus each half of a bilingual "/"-name as its own fuzzy candidate, all resolving to the same <code>entity_id</code>. Low blast radius: for the large majority of charities with no "/" in their legal name, <code>name_variants()</code> returns the name unchanged, so this doesn't loosen matching for non-bilingual names at all.</p>
+<p>Both fixed together and verified against a full rebuild: <strong>fuzzy_accept rose from 108,548 to 172,930</strong> (+64,382) across all sources combined, <strong>unmatched_new fell from 1,082,098 to 1,036,773</strong> (−45,325), and total entities fell from 545,853 to 536,353 (−9,500) — the province-blocking gap in particular is not POP-Montreal-specific; it affects any donee-name record with a blank province, which per the source data is common. POP Montreal itself: 5 entities (1 charity + 4 unmatched duplicates spanning canada_council/federal_gc/both T3010 donee schedules) down to 2 — the charity entity, now absorbing every name variant via <code>exact_bn</code> or <code>fuzzy_accept</code> at score 100, plus one remaining residual (<code>"POP Montreal "</code> alone) that's too short/generic to safely fuzzy-match at high confidence — an intentional, unfixed gap rather than a regression, consistent with this pipeline's existing precedent of trading recall for not asserting a shaky match (see "No needs-review tier" below). Regression tests: <code>tests/test_province_blank_fuzzy_fallback.py</code> (5 cases, CI-enforced), including one confirming the digit-token gate still applies on the province-blank fallback path.</p>
+<p><strong>Not investigated:</strong> whether the same blank-province gap affects the <em>residual</em> dedup path described above (the Prince Rupert/Salvation Army gap) — that's a different blocking mechanism in <code>resolve()</code> (the <code>residual_to_entity</code> dedup key vs. the <code>fuzzy_index</code>/<code>fuzzy_index_by_prefix</code> lookup fixed here) and was out of scope for this fix.</p>
+<h2>Known limitations</h2>
+<ul>
+<li><strong>No "needs review" tier.</strong> Matches scoring 80–89 are currently discarded as unmatched rather than queued for manual review, per the plan's original design — this trades recall for not silently asserting a shaky match. Revisit if match rate turns out too low.</li>
+<li><strong>Blocking can miss reordered names.</strong> Blocking by first-4-characters-of-normalized-name will miss a genuine match where word order differs (e.g. "Toronto Humane Society" vs "Humane Society of Toronto") if the first token differs after suffix-stripping.</li>
+<li><strong>Canada Council's Business Number field is unreliable</strong>, as noted above — real BNs are mixed with internal IDs, and there's no field-level way to tell them apart except by shape.</li>
+<li><strong>Fuzzy matching is restricted to Canadian, nonprofit-shaped records.</strong> For-profits, government recipients, and international recipients never get a fuzzy pass against the charity registry, by design — matching them would produce false positives with no real basis.</li>
+<li><strong><code>t3010_non_qualified_donee</code> records never have a BN</strong>, only a name — these grantees are frequently unregistered community groups or foreign organizations, so a meaningfully higher share stay in <code>other_org</code> residual entities than for the other sources.</li>
+<li><strong>88,853 of 1,174,938 deduped <code>grants.csv</code> records (7.6%) are silently excluded from <code>grants_unified</code></strong> because their <code>ref_number</code> has no <code>-</code> separator, so no department code (and therefore no funder entity) can be derived, mirroring the same defensive check <code>profile_grants.py</code> already applies to its department breakdown. Superseded figure — see "Amendment double-counting" above for why the previous 139,545/$952.2B figures were wrong, and why the relationship to the $972B headline elsewhere in the docs needs independent revisiting rather than assuming a clean gap.</li>
+<li><strong>Numeric-suffix false positives — fixed, including the truncation-fusion regression.</strong> See "The numeric-suffix false positive" above for the full history. The digit-token gate and its fusion/year-tolerance/truncation refinements now fix all three identified false-reject patterns found across two full runs.</li>
+<li><strong>~20k <code>financials_2013</code>-<code>2017</code> and ~1,444 <code>qualified_donees_2014/2017/2018</code> rows are dropped</strong> by <code>ignore_errors=true</code> during CSV load and not yet recovered — investigated in depth (two unrelated root causes: genuine Latin-1 encoding for the financials files, a CSV quote-dialect issue for the rest), but no fix was found safe enough to ship without risking silent column misalignment. See <code>AGENTS.md</code> open issue #1 for the full investigation and why the obvious fixes (forcing quote/escape, <code>strict_mode=false</code>) were rejected.</li>
+<li><strong>Residual entity dedup is blocked by province</strong>, so a record with neither a valid BN nor a filled-in province can't be reconciled with an otherwise-identical record that has both. See "Amendment double-counting and BN-residual entity splitting" above (Prince Rupert Port Authority case) for the confirmed example.</li>
+<li><strong>Funder attribution for colliding <code>ref_number</code>s is unverified.</strong> The pipeline derives a grant's funder department from the ref-number prefix, but 24,851 ref groups share that prefix across genuinely different <code>owner_org</code> values (see above) — those records may be attributed to the wrong department. Not investigated.</li>
+</ul>
+<h2>Verification performed</h2>
+<ul>
+<li>Row counts checked against each source file's line count after load.</li>
+<li>Match-method breakdown (exact/fuzzy/unmatched) reported per source dataset.</li>
+<li>20 random <code>fuzzy_accept</code> matches printed with their scores for manual eyeballing.</li>
+<li>Top dual-role entities by total flow inspected to confirm the classification surfaces real regranting organizations rather than data noise.</li>
+<li>20 random digit-token-gate rejects sampled per run (<code>_fuzzy_gate_rejects</code>) and manually reviewed — not just counted — to distinguish the gate correctly splitting true branch/circuit-number mismatches from it wrongly splitting genuine near-duplicates.</li>
+<li>A dedicated regression test suite (<code>tests/test_digit_token_gate.py</code>, 19 cases, CI-enforced) covers the original bug case, the fusion and year-tolerance refinements, and every documented legit near-miss.</li>
+<li>A full-dataset regression scan after the fusion/year refinements landed: recomputed pre-refinement digit-token equality against every one of the run's actual gate rejects to find cases where the refinement newly rejects something the simpler logic would have matched — surfaced 3 of 1,164 (0.6%), manually reviewed rather than just counted (see "The numeric-suffix false positive" above).</li>
+<li>A dedicated regression test suite (<code>tests/test_bn_residual_and_amendment_dedup.py</code>, 11 cases, CI-enforced) covers BN registration/backfill/collision handling, bilingual pipe-name normalization, and the amendment dedup SQL (including the exact ref-number-collision scenario that caught the ref-only dedup bug before it landed).</li>
+<li>Amendment dedup was verified against real <code>grants.csv</code> numbers computed independently outside this pipeline (not just internal self-consistency): expected deduped row count, expected total dollar value, and the expected ref-collision count all matched exactly before the fix was accepted.</li>
+<li>Post-rebuild, checked directly against the database rather than assumed: <code>federal_gc</code> total matches the independently-computed target exactly; duplicate-BN entity count dropped from 18,139 to 0; <code>federal_gc</code> row count in <code>grants_unified</code> matches the count of distinct <code>(owner_org, ref_number)</code> pairs with a department prefix exactly (0 gap); a specific known-affected case (Prince Rupert Port Authority) was traced record-by-record to confirm <em>why</em> it still shows 2 entities rather than assuming the fix was incomplete.</li>
+<li><code>otf</code> post-rebuild checks: <code>grants_unified</code> row count for <code>source_dataset='otf'</code> is exactly 32,842; net amount sum is $2,942,476,676, matching the independently-computed ≈$2,942.5M target; the funder (BN <code>108091091</code>) resolves to exactly one entity via <code>exact_bn</code>, confirmed by querying <code>entities</code> for that <code>bn_root</code> (the specific entity ID this landed on wasn't pinned down ahead of the rebuild — entity IDs aren't stable across builds — only that it's a single entity, which holds); no <code>bn_root</code> maps to more than one entity, including OTF's own. Three recipients spot-checked by hand via <code>analysis/org_page.py</code>, one per match method: <code>docs/orgs/ymca-of-greater-toronto.html</code> (exact-BN, with one 100-score fuzzy variant and one unmatched no-BN sub-record correctly landing on the same and different entities respectively), <code>docs/orgs/the-corporation-of-the-town-of-espanola.html</code> (unmatched municipality, correctly an <code>other_org</code> residual with no BN). A dedicated fuzzy-only recipient wasn't isolated separately since YMCA already exercises that path.</li>
+</ul>
+<footer><p>DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p></footer>
+</div>
+</body></html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] Questions & Possible Insights — Canadian Nonprofit Data</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding-top:40px;margin:0}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.wrap{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.back{color:var(--mut);text-decoration:none;font-size:.85rem}
+.back:hover{color:var(--red)}
+h1{font-size:2rem;letter-spacing:-.02em;margin:18px 0 8px}
+h2{font-size:1.3rem;margin:40px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--red)}
+h3{font-size:1.05rem;margin:26px 0 8px}
+p{margin:10px 0}
+a{color:var(--red)}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.88rem;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th,td{padding:7px 10px;border-top:1px solid var(--line);text-align:left}
+th{background:#f1ede7;font-weight:700}
+code{background:#f1ede7;border-radius:4px;padding:1px 5px;font-size:.88em}
+blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--red);background:var(--card);color:var(--mut)}
+hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+strong{color:var(--ink)}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="wrap">
+<a class="back" href="index.html">&larr; Canadian Nonprofit Data</a>
+<h1>Questions &amp; Possible Insights</h1>
+<p><strong>Project:</strong> Canadian Nonprofit Data<br />
+<strong>Status:</strong> Working list — to be refined as analysis progresses  </p>
+<hr />
+<h2>Compliance &amp; Accountability</h2>
+<ul>
+<li>Which departments have the highest rates of missing descriptions? Is there a pattern (size, mandate, type)?</li>
+<li>Which departments have the lowest completion rates on the post-Dec 2025 mandatory fields (riding number, business number)? Does this correlate with total spending volume?</li>
+<li>Has description quality improved or worsened over time? Is the Dec 2025 policy update making a measurable difference?</li>
+<li>Which departments are using non-standard agreement type values (full words instead of codes)? Are these mostly older records or recent?</li>
+<li>Are there departments that have never filed a "Nothing to Report" but also have an unusually low record count? Could indicate underreporting.</li>
+<li>What share of records per department are amendments vs. originals? High amendment rates could signal poor planning, contract churn, or scope creep.</li>
+<li>Are there departments with a disproportionate share of very short descriptions? Which departments rely most heavily on boilerplate text?</li>
+<li>Do negative-value records correspond to proper amendment chains, or are they standalone (suggesting misuse of the value field)?</li>
+</ul>
+<hr />
+<h2>Spending Patterns</h2>
+<ul>
+<li>Which departments account for the most total disclosed value? What share of the $972B does the top 5 control?</li>
+<li>Department <code>141</code> has 293,922 records — nearly 23% of the dataset. Almost certainly ESDC. What programs drive this volume?</li>
+<li>How did COVID (2020-21, 2021-22) change the volume and composition of grants vs. contributions? Which departments saw the biggest spikes?</li>
+<li>What is the distribution of award sizes by recipient type? Do Indigenous recipients get smaller awards on average? Do for-profits get larger ones?</li>
+<li>What share of total value goes to multi-year awards? Which departments commit the most money in multi-year agreements?</li>
+<li>Are there programs that consistently appear across many fiscal years with similar values — essentially permanent funding streams dressed as grants?</li>
+<li>What does the amendment tail look like — some records have 14+ amendments. What are those agreements, and how much has the value changed?</li>
+</ul>
+<hr />
+<h2>Recipient Analysis</h2>
+<ul>
+<li>Who are the top 20 recipients by total disclosed value across all years? Is this dominated by a few large organizations?</li>
+<li>How many unique recipient names are there? How many are likely duplicates of the same organization under different name variants?</li>
+<li>What share of NFP/charity recipients have a business number that can be matched to the CRA charity registry?</li>
+<li>Are there organizations receiving funding from multiple departments simultaneously? How common is joint funding, and is it disclosed properly?</li>
+<li>How much goes to Indigenous recipients (type A) by department and by year? Has this share increased?</li>
+<li>Which organizations have received the most amendments to their agreements? What does that suggest about program management?</li>
+<li>Are there recipients with very high total values but very short/boilerplate descriptions — i.e. large amounts with minimal public accountability?</li>
+</ul>
+<hr />
+<h2>Geographic Analysis</h2>
+<ul>
+<li>Provincial distribution of funding — does it roughly match population, or are some provinces over/under-represented?</li>
+<li>With riding numbers available for ~20% of records, can we identify the top-funded ridings? Is there a relationship to political representation?</li>
+<li>How much funding goes to international recipients (non-CA country codes)? Which departments are most internationally focused? Which countries receive the most?</li>
+<li>For the post-Dec 2025 cohort where postal codes are more complete, can we do finer-grained geographic analysis?</li>
+</ul>
+<hr />
+<h2>Nonprofit / Charity Sector Specific</h2>
+<ul>
+<li>How many of the NFP/charity recipients (234,766 records) have business numbers that match the CRA charity registry?</li>
+<li>Of matched charities, how does federal G&amp;C funding compare to their reported revenues in T3010 filings? For some orgs, is federal funding the majority of their revenue?</li>
+<li>Are there charities receiving large federal contributions that are not registered with CRA (i.e. non-charitable nonprofits)?</li>
+<li>Which charitable sub-sectors (health, social services, arts, environment, religion, international) receive the most federal funding?</li>
+<li>Are there charities that have been de-registered by CRA but continue to appear as recipients in recent records?</li>
+<li>For academic recipients (type S, 23,873 records) — which universities dominate? How does SSHRC/NSERC/CIHR funding show up here vs. through the granting councils directly?</li>
+</ul>
+<hr />
+<h2>Data Infrastructure / Meta Questions</h2>
+<ul>
+<li>What would a "clean" version of this dataset look like? What transformations are needed?</li>
+<li>Which fields have enough completeness to be reliable for analysis vs. which should be treated as unreliable?</li>
+<li>Can recipient name clustering (fuzzy matching) meaningfully reduce the duplicate entity problem?</li>
+<li>What other federal datasets could be joined to this one — contracts, travel &amp; hospitality, T3010 charity returns, Statistics Canada nonprofit satellite account?</li>
+<li>Is the Open Canada search portal actually surfacing all records, or are there discrepancies between the CSV and the search index?</li>
+<li>How does this dataset compare to equivalent disclosure datasets in other countries (UK, US, Australia)?</li>
+</ul>
+<hr />
+<h2>Potential Analyses</h2>
+<ul>
+<li>Quantify how much federal grant money carries inadequate public description</li>
+<li>Department-by-department compliance comparison</li>
+<li>Riding-level federal funding map (for the ~20% of records with riding data)</li>
+<li>Tracking a single large nonprofit's federal funding across all departments and years</li>
+<li>COVID funding spike: which organizations received emergency contributions and are they still receiving funding?</li>
+<li>Amendment volume: agreements that have been modified 10+ times</li>
+</ul>
+<hr />
+<p><em>Working document — Canadian Nonprofit Data project, June 2026</em></p>
+<footer><p>DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p></footer>
+</div>
+</body></html>

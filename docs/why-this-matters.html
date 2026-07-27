@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] Policy Context: Grants & Contributions Data and Canada's Open Government Commitments — Canadian Nonprofit Data</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding-top:40px;margin:0}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.wrap{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.back{color:var(--mut);text-decoration:none;font-size:.85rem}
+.back:hover{color:var(--red)}
+h1{font-size:2rem;letter-spacing:-.02em;margin:18px 0 8px}
+h2{font-size:1.3rem;margin:40px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--red)}
+h3{font-size:1.05rem;margin:26px 0 8px}
+p{margin:10px 0}
+a{color:var(--red)}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.88rem;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th,td{padding:7px 10px;border-top:1px solid var(--line);text-align:left}
+th{background:#f1ede7;font-weight:700}
+code{background:#f1ede7;border-radius:4px;padding:1px 5px;font-size:.88em}
+blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--red);background:var(--card);color:var(--mut)}
+hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+strong{color:var(--ink)}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="wrap">
+<a class="back" href="index.html">&larr; Canadian Nonprofit Data</a>
+<h1>Policy Context: Grants &amp; Contributions Data and Canada's Open Government Commitments</h1>
+<p><strong>Project:</strong> Canadian Nonprofit Data
+<strong>Date:</strong> June 2026
+<strong>Contact:</strong> github.com/mlenczner/CanadianNonprofitData</p>
+<hr />
+<h2>Summary</h2>
+<p>Federal grants and contributions (G&amp;C) data is published under the <em>Policy on Transfer Payments</em> and is one of the largest disclosure datasets the Government of Canada produces. It is also the main mechanism by which federal funding to the nonprofit and charity sector can be observed and analyzed. Current data-quality findings on this dataset are documented in <a href="data-publishing-problems.html">data-publishing-problems.md</a> and <a href="data-quality-rankings.html">data-quality-rankings.html</a>; this document instead summarizes the policy and open-government history behind why the schema and mandatory fields exist in their current form.</p>
+<hr />
+<h2>Background</h2>
+<p>Under the <em>Policy on Transfer Payments</em>, every federal department and agency publishes quarterly reports on the grants and contributions it awards. This data is consolidated and published at <a href="https://search.open.canada.ca/grants/">search.open.canada.ca/grants</a> and available as a bulk download from the Open Government Portal.</p>
+<p>Grants and contributions are a primary mechanism by which the federal government funds the nonprofit and charity sector — community development, health services, social programs, arts and culture, Indigenous self-determination, international development, scientific research, and other areas. For a meaningful share of nonprofits, federal G&amp;C funding is a material part of revenue.</p>
+<hr />
+<h2>History of Related Recommendations</h2>
+<p><strong>2006 — Independent Blue Ribbon Panel on Federal Grant and Contribution Programs.</strong> Commissioned by Treasury Board, the panel recommended that TBS "ensure that relevant information about federal investments in grants and contributions is easily available across government," and specifically recommended sharing recipients' grant and contribution funding history through business numbers.</p>
+<p><strong>2016 — Open government ideas platform proposal.</strong> A proposal calling for a formal open data standard for grants and contributions data was submitted to the Government of Canada's open government ideas platform by a civil society representative. It received 140 votes — the most of any idea in that consultation — and was formally reviewed by Treasury Board. The proposal argued:</p>
+<blockquote>
+<p><em>"The only way that these benefits are achieved is if this data is published in a robust data standard designed specifically for these use cases. Publishing basic machine-readable data along the lines of what is currently available will not provide these results."</em></p>
+</blockquote>
+<p>Full proposal: https://open.canada.ca/en/idea/develop-open-data-standard-grants-contributions-data-developper-une-norme-pour-les-donnees</p>
+<p>That proposal is associated with subsequent changes: TBS developed a centralized publishing system, standardized the schema, and expanded mandatory fields, most recently in December 2025.</p>
+<hr />
+<h2>Canada's Open Government Commitments</h2>
+<p><strong>The Open Government Partnership (OGP).</strong> Canada has been a member of the international Open Government Partnership since 2012, one of the founding members. OGP membership requires a public-co-created action plan every two years describing commitments toward greater transparency, accountability, and public participation. Canada has completed five National Action Plans and is developing its sixth (2025–2029).</p>
+<p><strong>Grants and contributions transparency as an OGP commitment.</strong> Improving grants and contributions transparency has appeared explicitly in multiple Canadian OGP action plans. In the 2016–2018 plan, Commitment 11 aimed to centralize access via a common portal, expand the information available on grants and contributions funding, and have the Department of Canadian Heritage pilot an advanced open-data program. The OGP's Independent Reporting Mechanism assessed this as a "starred commitment" — one of its strongest ratings — and recommended carrying it forward.</p>
+<p><strong>The Directive on Open Government.</strong> The <em>Directive on Open Government</em> (Treasury Board, 2014, updated) requires departments to maximize the release of open data and open information. Proactive disclosure of grants and contributions is a specific, mandatory application of this directive.</p>
+<p><strong>The International Open Data Charter.</strong> Canada is a signatory to the International Open Data Charter, which commits governments to publishing data that is open by default, timely, accessible, comparable, and usable.</p>
+<hr />
+<h2>Relevance to the Nonprofit Sector</h2>
+<p>The nonprofit and charity sector is a primary non-governmental recipient category in this dataset (alongside individuals, for-profit recipients, and other governments/institutions). Consistent, well-populated recipient identifiers — in particular the CRA business number — are what would allow federal G&amp;C data to be linked to the CRA charity registry (T3010) and to other sector datasets, enabling analysis of total federal funding to a given organization across departments and years. Current business-number completeness is documented in <a href="data-publishing-problems.html">data-publishing-problems.md</a>.</p>
+<hr />
+<h2>About This Project</h2>
+<p>The Canadian Nonprofit Data project is an open-source project analyzing federal grants and contributions data with a focus on the nonprofit and charity sector. Analysis scripts, data documentation, and findings are published at:</p>
+<p><strong>https://github.com/mlenczner/CanadianNonprofitData</strong></p>
+<hr />
+<p><em>Prepared by the Canadian Nonprofit Data project, June 2026. Full technical documentation available at the GitHub repository above.</em></p>
+<footer><p>DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p></footer>
+</div>
+</body></html>

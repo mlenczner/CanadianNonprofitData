@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] GC Grants — Per-Department Compliance Report — Canadian Nonprofit Data</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding-top:40px;margin:0}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.wrap{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.back{color:var(--mut);text-decoration:none;font-size:.85rem}
+.back:hover{color:var(--red)}
+h1{font-size:2rem;letter-spacing:-.02em;margin:18px 0 8px}
+h2{font-size:1.3rem;margin:40px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--red)}
+h3{font-size:1.05rem;margin:26px 0 8px}
+p{margin:10px 0}
+a{color:var(--red)}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.88rem;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th,td{padding:7px 10px;border-top:1px solid var(--line);text-align:left}
+th{background:#f1ede7;font-weight:700}
+code{background:#f1ede7;border-radius:4px;padding:1px 5px;font-size:.88em}
+blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--red);background:var(--card);color:var(--mut)}
+hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+strong{color:var(--ink)}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="wrap">
+<a class="back" href="index.html">&larr; Canadian Nonprofit Data</a>
+<h1>GC Grants — Per-Department Compliance Report</h1>
+<p>Generated: 2026-07-12 15:08  |  Total records: 1,303,939  |  Departments: 51</p>
+<h2>1. Overall Compliance Summary (all departments)</h2>
+<table>
+<thead>
+<tr>
+<th>Dept Code</th>
+<th>Department</th>
+<th>Records</th>
+<th>Total Value (CAD)</th>
+<th>Missing desc_en</th>
+<th>Missing desc_fr</th>
+<th>Dirty type</th>
+<th>Short desc</th>
+<th>Zero/Neg value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>esdc-edsc</td>
+<td>Employment and Social Development Canada</td>
+<td>Emploi et Dévelop</td>
+<td>352,726</td>
+<td>$45,681,002,835</td>
+<td>2,599 (1%)</td>
+<td>2,599 (1%)</td>
+<td>17,922</td>
+<td>40,928 (12%)</td>
+</tr>
+<tr>
+<td>isc-sac</td>
+<td>Indigenous Services Canada</td>
+<td>Services aux Autochtones Canada</td>
+<td>156,896</td>
+<td>$144,887,891,363</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>155,837 (99%)</td>
+</tr>
+<tr>
+<td>nserc-crsng</td>
+<td>Natural Sciences and Engineering Research Council of Canada</td>
+<td>151,552</td>
+<td>$18,145,796,333</td>
+<td>12,577 (8%)</td>
+<td>12,577 (8%)</td>
+<td>✓</td>
+<td>9 (0%)</td>
+<td>86</td>
+</tr>
+<tr>
+<td>pch</td>
+<td>Canadian Heritage</td>
+<td>Patrimoine canadien</td>
+<td>134,212</td>
+<td>$29,349,087,577</td>
+<td>45,309 (34%)</td>
+<td>45,309 (34%)</td>
+<td>✓</td>
+<td>59,362 (44%)</td>
+</tr>
+<tr>
+<td>nrc-cnrc</td>
+<td>National Research Council Canada</td>
+<td>Conseil national de reche</td>
+<td>77,946</td>
+<td>$13,662,284,082</td>
+<td>20,440 (26%)</td>
+<td>20,440 (26%)</td>
+<td>✓</td>
+<td>947 (1%)</td>
+</tr>
+<tr>
+<td>sshrc-crsh</td>
+<td>Social Sciences and Humanities Research Council of Canada</td>
+<td></td>
+<td>65,839</td>
+<td>$13,746,619,555</td>
+<td>3,417 (5%)</td>
+<td>3,417 (5%)</td>
+<td>499</td>
+<td>6 (0%)</td>
+</tr>
+<tr>
+<td>tc</td>
+<td>Transport Canada</td>
+<td>Transports Canada</td>
+<td>46,598</td>
+<td>$26,790,144,647</td>
+<td>1,736 (4%)</td>
+<td>1,736 (4%)</td>
+<td>777</td>
+<td>162 (0%)</td>
+</tr>
+<tr>
+<td>cihr-irsc</td>
+<td>Canadian Institutes of Health Research</td>
+<td>Instituts de recher</td>
+<td>44,051</td>
+<td>$17,144,448,920</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>1,845 (4%)</td>
+</tr>
+<tr>
+<td>ic</td>
+<td>Innovation, Science and Economic Development Canada</td>
+<td>Innova</td>
+<td>41,673</td>
+<td>$141,730,201,197</td>
+<td>✓</td>
+<td>4,038 (10%)</td>
+<td>✓</td>
+<td>34,093 (82%)</td>
+</tr>
+<tr>
+<td>acoa-apeca</td>
+<td>Atlantic Canada Opportunities Agency</td>
+<td>Agence de promotion é</td>
+<td>30,350</td>
+<td>$8,224,641,624</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>12,733 (42%)</td>
+</tr>
+<tr>
+<td>aandc-aadnc</td>
+<td>Crown-Indigenous Relations and Northern Affairs Canada</td>
+<td>Rel</td>
+<td>21,444</td>
+<td>$49,055,374,964</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>21,319 (99%)</td>
+</tr>
+<tr>
+<td>dfo-mpo</td>
+<td>Fisheries and Oceans Canada</td>
+<td>Pêches et Océans Canada</td>
+<td>18,504</td>
+<td>$7,823,215,023</td>
+<td>4,871 (26%)</td>
+<td>4,871 (26%)</td>
+<td>✓</td>
+<td>71 (0%)</td>
+</tr>
+<tr>
+<td>cic</td>
+<td>Immigration, Refugees and Citizenship Canada</td>
+<td>Immigration,</td>
+<td>18,393</td>
+<td>$78,225,773,188</td>
+<td>3,153 (17%)</td>
+<td>3,153 (17%)</td>
+<td>✓</td>
+<td>4,547 (25%)</td>
+</tr>
+<tr>
+<td>aafc-aac</td>
+<td>Agriculture and Agri-Food Canada</td>
+<td>Agriculture et Agroalimen</td>
+<td>17,993</td>
+<td>$11,534,717,819</td>
+<td>568 (3%)</td>
+<td>568 (3%)</td>
+<td>✓</td>
+<td>9 (0%)</td>
+</tr>
+<tr>
+<td>ced-dec</td>
+<td>Canada Economic Development for Quebec Regions</td>
+<td>Développeme</td>
+<td>16,461</td>
+<td>$9,443,816,568</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>2,435 (15%)</td>
+</tr>
+<tr>
+<td>dfatd-maecd</td>
+<td>Global Affairs Canada</td>
+<td>Affaires mondiales Canada</td>
+<td>16,001</td>
+<td>$63,532,998,893</td>
+<td>4,589 (29%)</td>
+<td>4,590 (29%)</td>
+<td>✓</td>
+<td>247 (2%)</td>
+</tr>
+<tr>
+<td>wd-deo</td>
+<td>Western Economic Diversification Canada</td>
+<td>Diversification de</td>
+<td>14,556</td>
+<td>$5,228,535,185</td>
+<td>4,240 (29%)</td>
+<td>4,240 (29%)</td>
+<td>✓</td>
+<td>105 (1%)</td>
+</tr>
+<tr>
+<td>nrcan-rncan</td>
+<td>Natural Resources Canada</td>
+<td>Ressources naturelles Canada</td>
+<td>11,631</td>
+<td>$24,572,154,792</td>
+<td>1,754 (15%)</td>
+<td>1,754 (15%)</td>
+<td>✓</td>
+<td>21 (0%)</td>
+</tr>
+<tr>
+<td>ec</td>
+<td>Environment and Climate Change Canada</td>
+<td>Environnement et Cha</td>
+<td>8,582</td>
+<td>$7,059,987,727</td>
+<td>2,577 (30%)</td>
+<td>2,577 (30%)</td>
+<td>✓</td>
+<td>1,120 (13%)</td>
+</tr>
+<tr>
+<td>cra-arc</td>
+<td>Canada Revenue Agency</td>
+<td>Agence du revenu du Canada</td>
+<td>7,188</td>
+<td>$33,874,983</td>
+<td>34 (0%)</td>
+<td>34 (0%)</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>phac-aspc</td>
+<td>Public Health Agency of Canada</td>
+<td>Agence de la santé publique</td>
+<td>5,288</td>
+<td>$3,898,171,435</td>
+<td>125 (2%)</td>
+<td>125 (2%)</td>
+<td>✓</td>
+<td>4,738 (90%)</td>
+</tr>
+<tr>
+<td>jus</td>
+<td>Department of Justice Canada</td>
+<td>Ministère de la Justice Canad</td>
+<td>5,082</td>
+<td>$9,645,233,391</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>9 (0%)</td>
+</tr>
+<tr>
+<td>feddevontario</td>
+<td>Federal Economic Development Agency for Southern Ontario</td>
+<td>A</td>
+<td>5,019</td>
+<td>$5,060,654,468</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>45 (1%)</td>
+</tr>
+<tr>
+<td>iaac-aeic</td>
+<td>Impact Assessment Agency of Canada</td>
+<td>Agence d'évaluation d'i</td>
+<td>4,319</td>
+<td>$202,099,258</td>
+<td>599 (14%)</td>
+<td>599 (14%)</td>
+<td>✓</td>
+<td>17 (0%)</td>
+</tr>
+<tr>
+<td>ps-sp</td>
+<td>Public Safety Canada</td>
+<td>Sécurité publique Canada</td>
+<td>3,476</td>
+<td>$13,351,817,185</td>
+<td>307 (9%)</td>
+<td>307 (9%)</td>
+<td>✓</td>
+<td>50 (1%)</td>
+</tr>
+<tr>
+<td>prairiescan</td>
+<td>Prairies Economic Development Canada</td>
+<td>Développement économi</td>
+<td>3,396</td>
+<td>$3,422,534,469</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>75 (2%)</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>Parks Canada</td>
+<td>Parcs Canada</td>
+<td>3,023</td>
+<td>$990,207,998</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>wage</td>
+<td>Women and Gender Equality Canada</td>
+<td>Femmes et Égalité des gen</td>
+<td>2,578</td>
+<td>$2,569,313,663</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>hc-sc</td>
+<td>Health Canada</td>
+<td>Santé Canada</td>
+<td>2,252</td>
+<td>$103,245,607,560</td>
+<td>12 (1%)</td>
+<td>12 (1%)</td>
+<td>✓</td>
+<td>978 (43%)</td>
+</tr>
+<tr>
+<td>infc</td>
+<td>Department of Housing, Infrastructure and Communities</td>
+<td>Mini</td>
+<td>2,211</td>
+<td>$72,388,179,561</td>
+<td>112 (5%)</td>
+<td>112 (5%)</td>
+<td>✓</td>
+<td>7 (0%)</td>
+</tr>
+<tr>
+<td>vac-acc</td>
+<td>Veterans Affairs Canada</td>
+<td>Anciens Combattants Canada</td>
+<td>2,163</td>
+<td>$30,809,942,769</td>
+<td>168 (8%)</td>
+<td>168 (8%)</td>
+<td>✓</td>
+<td>1,334 (62%)</td>
+</tr>
+<tr>
+<td>cannor</td>
+<td>Canadian Northern Economic Development Agency</td>
+<td>Agence canad</td>
+<td>2,018</td>
+<td>$568,862,042</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>149 (7%)</td>
+</tr>
+<tr>
+<td>csa-asc</td>
+<td>Canadian Space Agency</td>
+<td>Agence spatiale canadienne</td>
+<td>1,933</td>
+<td>$1,940,486,458</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>pacifican</td>
+<td>Pacific Economic Development Canada</td>
+<td>Développement économiq</td>
+<td>1,482</td>
+<td>$1,165,516,342</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>55 (4%)</td>
+</tr>
+<tr>
+<td>fednor</td>
+<td>Federal Economic Development Agency for Northern Ontario</td>
+<td>A</td>
+<td>1,481</td>
+<td>$754,825,265</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>264 (18%)</td>
+</tr>
+<tr>
+<td>dnd-mdn</td>
+<td>National Defence</td>
+<td>Défense nationale</td>
+<td>1,140</td>
+<td>$2,656,989,951</td>
+<td>5 (0%)</td>
+<td>5 (0%)</td>
+<td>✓</td>
+<td>1 (0%)</td>
+</tr>
+<tr>
+<td>cnsc-ccsn</td>
+<td>Canadian Nuclear Safety Commission</td>
+<td>Commission canadienne d</td>
+<td>1,090</td>
+<td>$47,593,322</td>
+<td>127 (12%)</td>
+<td>127 (12%)</td>
+<td>✓</td>
+<td>36 (3%)</td>
+</tr>
+<tr>
+<td>cer-rec</td>
+<td>Canada Energy Regulator</td>
+<td>La Régie de l’énergie du Canada</td>
+<td>746</td>
+<td>$34,205,689</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>polar-polaire</td>
+<td>Polar Knowledge Canada</td>
+<td>Savoir polaire Canada</td>
+<td>436</td>
+<td>$63,713,770</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>lac-bac</td>
+<td>Library and Archives Canada</td>
+<td>Bibliothèque et Archives Canad</td>
+<td>405</td>
+<td>$16,616,261</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>rcmp-grc</td>
+<td>Royal Canadian Mounted Police</td>
+<td>Gendarmerie royale du Canada</td>
+<td>396</td>
+<td>$2,447,227,350</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>40 (10%)</td>
+</tr>
+<tr>
+<td>csc-scc</td>
+<td>Correctional Service of Canada</td>
+<td>Service correctionnel du Ca</td>
+<td>329</td>
+<td>$62,133,088</td>
+<td>5 (2%)</td>
+<td>5 (2%)</td>
+<td>✓</td>
+<td>36 (11%)</td>
+</tr>
+<tr>
+<td>cwa-aec</td>
+<td>Canada Water Agency</td>
+<td>Agence de l’eau du Canada</td>
+<td>232</td>
+<td>$65,266,969</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>56 (24%)</td>
+</tr>
+<tr>
+<td>fin</td>
+<td>Department of Finance Canada</td>
+<td>Ministère des Finances Canada</td>
+<td>209</td>
+<td>$259,481,875</td>
+<td>3 (1%)</td>
+<td>3 (1%)</td>
+<td>✓</td>
+<td>1 (0%)</td>
+</tr>
+<tr>
+<td>pco-bcp</td>
+<td>Privy Council Office</td>
+<td>Bureau du Conseil privé</td>
+<td>157</td>
+<td>$43,204,588</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>swc-cfc</td>
+<td>Status of Women Canada</td>
+<td>Condition féminine Canada</td>
+<td>143</td>
+<td>$34,541,926</td>
+<td>44 (31%)</td>
+<td>44 (31%)</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>casdo-ocena</td>
+<td>Accessibility Standards Canada</td>
+<td>Normes d’accessibilité Cana</td>
+<td>135</td>
+<td>$68,964,164</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>opc-cpvp</td>
+<td>Office of the Privacy Commissioner of Canada</td>
+<td>Commissariat</td>
+<td>92</td>
+<td>$4,376,411</td>
+<td>11 (12%)</td>
+<td>11 (12%)</td>
+<td>✓</td>
+<td>5 (5%)</td>
+</tr>
+<tr>
+<td>cfia-acia</td>
+<td>Canadian Food Inspection Agency</td>
+<td>Agence canadienne d'inspec</td>
+<td>54</td>
+<td>$14,701,904</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>tbs-sct</td>
+<td>Treasury Board of Canada Secretariat</td>
+<td>Secrétariat du Consei</td>
+<td>54</td>
+<td>$8,018,455</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>1 (2%)</td>
+</tr>
+<tr>
+<td>statcan</td>
+<td>Statistics Canada</td>
+<td>Statistique Canada</td>
+<td>4</td>
+<td>$263,800</td>
+<td>1 (25%)</td>
+<td>1 (25%)</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<h2>2. Post-December 2025 Compliance (new mandatory fields)</h2>
+<p>Only departments with at least 1 record with agreement_start_date &gt;= 2025-12-01 are shown.</p>
+<table>
+<thead>
+<tr>
+<th>Dept</th>
+<th>Department</th>
+<th>Post-Dec Records</th>
+<th>recip_type</th>
+<th>biz_num</th>
+<th>postal</th>
+<th>riding_num</th>
+<th>prog_name</th>
+<th>end_date</th>
+<th>exp_results</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pch</td>
+<td>Canadian Heritage</td>
+<td>Patrimoine canadien</td>
+<td>3,040</td>
+<td>99%</td>
+<td>0%</td>
+<td>100%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>esdc-edsc</td>
+<td>Employment and Social Development Canada</td>
+<td>Emploi</td>
+<td>2,955</td>
+<td>✓</td>
+<td>100%</td>
+<td>100%</td>
+<td>100%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>nrc-cnrc</td>
+<td>National Research Council Canada</td>
+<td>Conseil nationa</td>
+<td>1,326</td>
+<td>✓</td>
+<td>98%</td>
+<td>99%</td>
+<td>99%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>sshrc-crsh</td>
+<td>Social Sciences and Humanities Research Council of</td>
+<td>1,149</td>
+<td>✓</td>
+<td>20%</td>
+<td>99%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>nserc-crsng</td>
+<td>Natural Sciences and Engineering Research Council</td>
+<td>672</td>
+<td>✓</td>
+<td>9%</td>
+<td>96%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>nrcan-rncan</td>
+<td>Natural Resources Canada</td>
+<td>Ressources naturelles C</td>
+<td>542</td>
+<td>✓</td>
+<td>71%</td>
+<td>95%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>aafc-aac</td>
+<td>Agriculture and Agri-Food Canada</td>
+<td>Agriculture et</td>
+<td>468</td>
+<td>✓</td>
+<td>94%</td>
+<td>99%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>tc</td>
+<td>Transport Canada</td>
+<td>Transports Canada</td>
+<td>410</td>
+<td>✓</td>
+<td>71%</td>
+<td>100%</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>ced-dec</td>
+<td>Canada Economic Development for Quebec Regions</td>
+<td>D</td>
+<td>397</td>
+<td>✓</td>
+<td>95%</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>acoa-apeca</td>
+<td>Atlantic Canada Opportunities Agency</td>
+<td>Agence de p</td>
+<td>346</td>
+<td>✓</td>
+<td>99%</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>jus</td>
+<td>Department of Justice Canada</td>
+<td>Ministère de la Jus</td>
+<td>292</td>
+<td>100%</td>
+<td>70%</td>
+<td>100%</td>
+<td>100%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>cihr-irsc</td>
+<td>Canadian Institutes of Health Research</td>
+<td>Instituts</td>
+<td>283</td>
+<td>✓</td>
+<td>2%</td>
+<td>98%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>dfatd-maecd</td>
+<td>Global Affairs Canada</td>
+<td>Affaires mondiales Canada</td>
+<td>280</td>
+<td>✓</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>dfo-mpo</td>
+<td>Fisheries and Oceans Canada</td>
+<td>Pêches et Océans Can</td>
+<td>255</td>
+<td>✓</td>
+<td>0%</td>
+<td>97%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>iaac-aeic</td>
+<td>Impact Assessment Agency of Canada</td>
+<td>Agence d'éval</td>
+<td>237</td>
+<td>✓</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>Parks Canada</td>
+<td>Parcs Canada</td>
+<td>219</td>
+<td>✓</td>
+<td>31%</td>
+<td>100%</td>
+<td>100%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>ec</td>
+<td>Environment and Climate Change Canada</td>
+<td>Environnem</td>
+<td>199</td>
+<td>✓</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>ps-sp</td>
+<td>Public Safety Canada</td>
+<td>Sécurité publique Canada</td>
+<td>193</td>
+<td>✓</td>
+<td>7%</td>
+<td>98%</td>
+<td>91%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>prairiescan</td>
+<td>Prairies Economic Development Canada</td>
+<td>Développeme</td>
+<td>176</td>
+<td>✓</td>
+<td>99%</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>dnd-mdn</td>
+<td>National Defence</td>
+<td>Défense nationale</td>
+<td>153</td>
+<td>✓</td>
+<td>87%</td>
+<td>97%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>infc</td>
+<td>Department of Housing, Infrastructure and Communit</td>
+<td>97</td>
+<td>✓</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>ic</td>
+<td>Innovation, Science and Economic Development Canad</td>
+<td>95</td>
+<td>✓</td>
+<td>✓</td>
+<td>97%</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>pacifican</td>
+<td>Pacific Economic Development Canada</td>
+<td>Développemen</td>
+<td>93</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>csa-asc</td>
+<td>Canadian Space Agency</td>
+<td>Agence spatiale canadienne</td>
+<td>74</td>
+<td>✓</td>
+<td>0%</td>
+<td>99%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>cwa-aec</td>
+<td>Canada Water Agency</td>
+<td>Agence de l’eau du Canada</td>
+<td>69</td>
+<td>✓</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>hc-sc</td>
+<td>Health Canada</td>
+<td>Santé Canada</td>
+<td>66</td>
+<td>✓</td>
+<td>91%</td>
+<td>98%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>isc-sac</td>
+<td>Indigenous Services Canada</td>
+<td>Services aux Autochto</td>
+<td>64</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>fednor</td>
+<td>Federal Economic Development Agency for Northern O</td>
+<td>59</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>98%</td>
+</tr>
+<tr>
+<td>cnsc-ccsn</td>
+<td>Canadian Nuclear Safety Commission</td>
+<td>Commission ca</td>
+<td>57</td>
+<td>✓</td>
+<td>0%</td>
+<td>98%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>vac-acc</td>
+<td>Veterans Affairs Canada</td>
+<td>Anciens Combattants Cana</td>
+<td>37</td>
+<td>✓</td>
+<td>32%</td>
+<td>43%</td>
+<td>43%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>aandc-aadnc</td>
+<td>Crown-Indigenous Relations and Northern Affairs Ca</td>
+<td>31</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>cer-rec</td>
+<td>Canada Energy Regulator</td>
+<td>La Régie de l’énergie du</td>
+<td>29</td>
+<td>✓</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>phac-aspc</td>
+<td>Public Health Agency of Canada</td>
+<td>Agence de la sant</td>
+<td>29</td>
+<td>✓</td>
+<td>7%</td>
+<td>66%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>cannor</td>
+<td>Canadian Northern Economic Development Agency</td>
+<td>Ag</td>
+<td>14</td>
+<td>✓</td>
+<td>79%</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>feddevontario</td>
+<td>Federal Economic Development Agency for Southern O</td>
+<td>14</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>polar-polaire</td>
+<td>Polar Knowledge Canada</td>
+<td>Savoir polaire Canada</td>
+<td>11</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>wage</td>
+<td>Women and Gender Equality Canada</td>
+<td>Femmes et Égali</td>
+<td>8</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>csc-scc</td>
+<td>Correctional Service of Canada</td>
+<td>Service correctio</td>
+<td>7</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>tbs-sct</td>
+<td>Treasury Board of Canada Secretariat</td>
+<td>Secrétariat</td>
+<td>7</td>
+<td>✓</td>
+<td>0%</td>
+<td>29%</td>
+<td>29%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>cic</td>
+<td>Immigration, Refugees and Citizenship Canada</td>
+<td>Imm</td>
+<td>6</td>
+<td>✓</td>
+<td>67%</td>
+<td>67%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>rcmp-grc</td>
+<td>Royal Canadian Mounted Police</td>
+<td>Gendarmerie royale</td>
+<td>5</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>20%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>casdo-ocena</td>
+<td>Accessibility Standards Canada</td>
+<td>Normes d’accessib</td>
+<td>4</td>
+<td>✓</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>fin</td>
+<td>Department of Finance Canada</td>
+<td>Ministère des Finan</td>
+<td>1</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>0%</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<h2>3. Departments with the Lowest Compliance</h2>
+<h3>Missing description_en (mandatory field, all records)</h3>
+<table>
+<thead>
+<tr>
+<th>Dept</th>
+<th>Department</th>
+<th>Records</th>
+<th>Missing</th>
+<th>% Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pch</td>
+<td>Canadian Heritage</td>
+<td>Patrimoine canadien</td>
+<td>134,212</td>
+<td>45,309</td>
+</tr>
+<tr>
+<td>nrc-cnrc</td>
+<td>National Research Council Canada</td>
+<td>Conseil national de reche</td>
+<td>77,946</td>
+<td>20,440</td>
+</tr>
+<tr>
+<td>nserc-crsng</td>
+<td>Natural Sciences and Engineering Research Council of Canada</td>
+<td>151,552</td>
+<td>12,577</td>
+<td>8.3%</td>
+</tr>
+<tr>
+<td>dfo-mpo</td>
+<td>Fisheries and Oceans Canada</td>
+<td>Pêches et Océans Canada</td>
+<td>18,504</td>
+<td>4,871</td>
+</tr>
+<tr>
+<td>dfatd-maecd</td>
+<td>Global Affairs Canada</td>
+<td>Affaires mondiales Canada</td>
+<td>16,001</td>
+<td>4,589</td>
+</tr>
+<tr>
+<td>wd-deo</td>
+<td>Western Economic Diversification Canada</td>
+<td>Diversification de</td>
+<td>14,556</td>
+<td>4,240</td>
+</tr>
+<tr>
+<td>sshrc-crsh</td>
+<td>Social Sciences and Humanities Research Council of Canada</td>
+<td></td>
+<td>65,839</td>
+<td>3,417</td>
+</tr>
+<tr>
+<td>cic</td>
+<td>Immigration, Refugees and Citizenship Canada</td>
+<td>Immigration,</td>
+<td>18,393</td>
+<td>3,153</td>
+</tr>
+<tr>
+<td>esdc-edsc</td>
+<td>Employment and Social Development Canada</td>
+<td>Emploi et Dévelop</td>
+<td>352,726</td>
+<td>2,599</td>
+</tr>
+<tr>
+<td>ec</td>
+<td>Environment and Climate Change Canada</td>
+<td>Environnement et Cha</td>
+<td>8,582</td>
+<td>2,577</td>
+</tr>
+<tr>
+<td>nrcan-rncan</td>
+<td>Natural Resources Canada</td>
+<td>Ressources naturelles Canada</td>
+<td>11,631</td>
+<td>1,754</td>
+</tr>
+<tr>
+<td>tc</td>
+<td>Transport Canada</td>
+<td>Transports Canada</td>
+<td>46,598</td>
+<td>1,736</td>
+</tr>
+<tr>
+<td>iaac-aeic</td>
+<td>Impact Assessment Agency of Canada</td>
+<td>Agence d'évaluation d'i</td>
+<td>4,319</td>
+<td>599</td>
+</tr>
+<tr>
+<td>aafc-aac</td>
+<td>Agriculture and Agri-Food Canada</td>
+<td>Agriculture et Agroalimen</td>
+<td>17,993</td>
+<td>568</td>
+</tr>
+<tr>
+<td>ps-sp</td>
+<td>Public Safety Canada</td>
+<td>Sécurité publique Canada</td>
+<td>3,476</td>
+<td>307</td>
+</tr>
+<tr>
+<td>vac-acc</td>
+<td>Veterans Affairs Canada</td>
+<td>Anciens Combattants Canada</td>
+<td>2,163</td>
+<td>168</td>
+</tr>
+<tr>
+<td>cnsc-ccsn</td>
+<td>Canadian Nuclear Safety Commission</td>
+<td>Commission canadienne d</td>
+<td>1,090</td>
+<td>127</td>
+</tr>
+<tr>
+<td>phac-aspc</td>
+<td>Public Health Agency of Canada</td>
+<td>Agence de la santé publique</td>
+<td>5,288</td>
+<td>125</td>
+</tr>
+<tr>
+<td>infc</td>
+<td>Department of Housing, Infrastructure and Communities</td>
+<td>Mini</td>
+<td>2,211</td>
+<td>112</td>
+</tr>
+<tr>
+<td>swc-cfc</td>
+<td>Status of Women Canada</td>
+<td>Condition féminine Canada</td>
+<td>143</td>
+<td>44</td>
+</tr>
+</tbody>
+</table>
+<h3>Short descriptions under 50 chars (description_en)</h3>
+<table>
+<thead>
+<tr>
+<th>Dept</th>
+<th>Department</th>
+<th>Records</th>
+<th>Short desc</th>
+<th>% Short</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isc-sac</td>
+<td>Indigenous Services Canada</td>
+<td>Services aux Autochtones Canada</td>
+<td>156,896</td>
+<td>155,837</td>
+</tr>
+<tr>
+<td>pch</td>
+<td>Canadian Heritage</td>
+<td>Patrimoine canadien</td>
+<td>134,212</td>
+<td>59,362</td>
+</tr>
+<tr>
+<td>esdc-edsc</td>
+<td>Employment and Social Development Canada</td>
+<td>Emploi et Dévelop</td>
+<td>352,726</td>
+<td>40,928</td>
+</tr>
+<tr>
+<td>ic</td>
+<td>Innovation, Science and Economic Development Canada</td>
+<td>Innova</td>
+<td>41,673</td>
+<td>34,093</td>
+</tr>
+<tr>
+<td>aandc-aadnc</td>
+<td>Crown-Indigenous Relations and Northern Affairs Canada</td>
+<td>Rel</td>
+<td>21,444</td>
+<td>21,319</td>
+</tr>
+<tr>
+<td>acoa-apeca</td>
+<td>Atlantic Canada Opportunities Agency</td>
+<td>Agence de promotion é</td>
+<td>30,350</td>
+<td>12,733</td>
+</tr>
+<tr>
+<td>phac-aspc</td>
+<td>Public Health Agency of Canada</td>
+<td>Agence de la santé publique</td>
+<td>5,288</td>
+<td>4,738</td>
+</tr>
+<tr>
+<td>cic</td>
+<td>Immigration, Refugees and Citizenship Canada</td>
+<td>Immigration,</td>
+<td>18,393</td>
+<td>4,547</td>
+</tr>
+<tr>
+<td>ced-dec</td>
+<td>Canada Economic Development for Quebec Regions</td>
+<td>Développeme</td>
+<td>16,461</td>
+<td>2,435</td>
+</tr>
+<tr>
+<td>cihr-irsc</td>
+<td>Canadian Institutes of Health Research</td>
+<td>Instituts de recher</td>
+<td>44,051</td>
+<td>1,845</td>
+</tr>
+<tr>
+<td>vac-acc</td>
+<td>Veterans Affairs Canada</td>
+<td>Anciens Combattants Canada</td>
+<td>2,163</td>
+<td>1,334</td>
+</tr>
+<tr>
+<td>ec</td>
+<td>Environment and Climate Change Canada</td>
+<td>Environnement et Cha</td>
+<td>8,582</td>
+<td>1,120</td>
+</tr>
+<tr>
+<td>hc-sc</td>
+<td>Health Canada</td>
+<td>Santé Canada</td>
+<td>2,252</td>
+<td>978</td>
+</tr>
+<tr>
+<td>nrc-cnrc</td>
+<td>National Research Council Canada</td>
+<td>Conseil national de reche</td>
+<td>77,946</td>
+<td>947</td>
+</tr>
+<tr>
+<td>fednor</td>
+<td>Federal Economic Development Agency for Northern Ontario</td>
+<td>A</td>
+<td>1,481</td>
+<td>264</td>
+</tr>
+<tr>
+<td>dfatd-maecd</td>
+<td>Global Affairs Canada</td>
+<td>Affaires mondiales Canada</td>
+<td>16,001</td>
+<td>247</td>
+</tr>
+<tr>
+<td>tc</td>
+<td>Transport Canada</td>
+<td>Transports Canada</td>
+<td>46,598</td>
+<td>162</td>
+</tr>
+<tr>
+<td>cannor</td>
+<td>Canadian Northern Economic Development Agency</td>
+<td>Agence canad</td>
+<td>2,018</td>
+<td>149</td>
+</tr>
+<tr>
+<td>wd-deo</td>
+<td>Western Economic Diversification Canada</td>
+<td>Diversification de</td>
+<td>14,556</td>
+<td>105</td>
+</tr>
+<tr>
+<td>prairiescan</td>
+<td>Prairies Economic Development Canada</td>
+<td>Développement économi</td>
+<td>3,396</td>
+<td>75</td>
+</tr>
+</tbody>
+</table>
+<h3>Dirty agreement_type values (non-standard codes)</h3>
+<table>
+<thead>
+<tr>
+<th>Dept</th>
+<th>Department</th>
+<th>Records</th>
+<th>Dirty type count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>esdc-edsc</td>
+<td>Employment and Social Development Canada</td>
+<td>Emploi et Dévelop</td>
+<td>352,726</td>
+</tr>
+<tr>
+<td>tc</td>
+<td>Transport Canada</td>
+<td>Transports Canada</td>
+<td>46,598</td>
+</tr>
+<tr>
+<td>sshrc-crsh</td>
+<td>Social Sciences and Humanities Research Council of Canada</td>
+<td></td>
+<td>65,839</td>
+</tr>
+</tbody>
+</table>
+<h3>Missing federal_riding_number (post-Dec 2025, mandatory)</h3>
+<table>
+<thead>
+<tr>
+<th>Dept</th>
+<th>Department</th>
+<th>Post-Dec Records</th>
+<th>Missing riding</th>
+<th>% Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pch</td>
+<td>Canadian Heritage</td>
+<td>Patrimoine canadien</td>
+<td>3,040</td>
+<td>3,040</td>
+</tr>
+<tr>
+<td>sshrc-crsh</td>
+<td>Social Sciences and Humanities Research Council of Canada</td>
+<td></td>
+<td>1,149</td>
+<td>1,149</td>
+</tr>
+<tr>
+<td>nserc-crsng</td>
+<td>Natural Sciences and Engineering Research Council of Canada</td>
+<td>672</td>
+<td>672</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>nrcan-rncan</td>
+<td>Natural Resources Canada</td>
+<td>Ressources naturelles Canada</td>
+<td>542</td>
+<td>542</td>
+</tr>
+<tr>
+<td>aafc-aac</td>
+<td>Agriculture and Agri-Food Canada</td>
+<td>Agriculture et Agroalimen</td>
+<td>468</td>
+<td>468</td>
+</tr>
+<tr>
+<td>ced-dec</td>
+<td>Canada Economic Development for Quebec Regions</td>
+<td>Développeme</td>
+<td>397</td>
+<td>397</td>
+</tr>
+<tr>
+<td>acoa-apeca</td>
+<td>Atlantic Canada Opportunities Agency</td>
+<td>Agence de promotion é</td>
+<td>346</td>
+<td>346</td>
+</tr>
+<tr>
+<td>cihr-irsc</td>
+<td>Canadian Institutes of Health Research</td>
+<td>Instituts de recher</td>
+<td>283</td>
+<td>283</td>
+</tr>
+<tr>
+<td>dfatd-maecd</td>
+<td>Global Affairs Canada</td>
+<td>Affaires mondiales Canada</td>
+<td>280</td>
+<td>280</td>
+</tr>
+<tr>
+<td>dfo-mpo</td>
+<td>Fisheries and Oceans Canada</td>
+<td>Pêches et Océans Canada</td>
+<td>255</td>
+<td>255</td>
+</tr>
+<tr>
+<td>iaac-aeic</td>
+<td>Impact Assessment Agency of Canada</td>
+<td>Agence d'évaluation d'i</td>
+<td>237</td>
+<td>237</td>
+</tr>
+<tr>
+<td>ec</td>
+<td>Environment and Climate Change Canada</td>
+<td>Environnement et Cha</td>
+<td>199</td>
+<td>199</td>
+</tr>
+<tr>
+<td>dnd-mdn</td>
+<td>National Defence</td>
+<td>Défense nationale</td>
+<td>153</td>
+<td>153</td>
+</tr>
+<tr>
+<td>infc</td>
+<td>Department of Housing, Infrastructure and Communities</td>
+<td>Mini</td>
+<td>97</td>
+<td>97</td>
+</tr>
+<tr>
+<td>csa-asc</td>
+<td>Canadian Space Agency</td>
+<td>Agence spatiale canadienne</td>
+<td>74</td>
+<td>74</td>
+</tr>
+<tr>
+<td>cwa-aec</td>
+<td>Canada Water Agency</td>
+<td>Agence de l’eau du Canada</td>
+<td>69</td>
+<td>69</td>
+</tr>
+<tr>
+<td>hc-sc</td>
+<td>Health Canada</td>
+<td>Santé Canada</td>
+<td>66</td>
+<td>66</td>
+</tr>
+<tr>
+<td>isc-sac</td>
+<td>Indigenous Services Canada</td>
+<td>Services aux Autochtones Canada</td>
+<td>64</td>
+<td>64</td>
+</tr>
+<tr>
+<td>cnsc-ccsn</td>
+<td>Canadian Nuclear Safety Commission</td>
+<td>Commission canadienne d</td>
+<td>57</td>
+<td>57</td>
+</tr>
+<tr>
+<td>aandc-aadnc</td>
+<td>Crown-Indigenous Relations and Northern Affairs Canada</td>
+<td>Rel</td>
+<td>31</td>
+<td>31</td>
+</tr>
+</tbody>
+</table>
+<h3>Missing recipient_business_number (post-Dec 2025, mandatory)</h3>
+<table>
+<thead>
+<tr>
+<th>Dept</th>
+<th>Department</th>
+<th>Post-Dec Records</th>
+<th>Missing biz#</th>
+<th>% Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pch</td>
+<td>Canadian Heritage</td>
+<td>Patrimoine canadien</td>
+<td>3,040</td>
+<td>3,040</td>
+</tr>
+<tr>
+<td>sshrc-crsh</td>
+<td>Social Sciences and Humanities Research Council of Canada</td>
+<td></td>
+<td>1,149</td>
+<td>914</td>
+</tr>
+<tr>
+<td>nserc-crsng</td>
+<td>Natural Sciences and Engineering Research Council of Canada</td>
+<td>672</td>
+<td>612</td>
+<td>91.1%</td>
+</tr>
+<tr>
+<td>dfatd-maecd</td>
+<td>Global Affairs Canada</td>
+<td>Affaires mondiales Canada</td>
+<td>280</td>
+<td>280</td>
+</tr>
+<tr>
+<td>cihr-irsc</td>
+<td>Canadian Institutes of Health Research</td>
+<td>Instituts de recher</td>
+<td>283</td>
+<td>278</td>
+</tr>
+<tr>
+<td>dfo-mpo</td>
+<td>Fisheries and Oceans Canada</td>
+<td>Pêches et Océans Canada</td>
+<td>255</td>
+<td>255</td>
+</tr>
+<tr>
+<td>iaac-aeic</td>
+<td>Impact Assessment Agency of Canada</td>
+<td>Agence d'évaluation d'i</td>
+<td>237</td>
+<td>237</td>
+</tr>
+<tr>
+<td>ec</td>
+<td>Environment and Climate Change Canada</td>
+<td>Environnement et Cha</td>
+<td>199</td>
+<td>199</td>
+</tr>
+<tr>
+<td>ps-sp</td>
+<td>Public Safety Canada</td>
+<td>Sécurité publique Canada</td>
+<td>193</td>
+<td>180</td>
+</tr>
+<tr>
+<td>nrcan-rncan</td>
+<td>Natural Resources Canada</td>
+<td>Ressources naturelles Canada</td>
+<td>542</td>
+<td>157</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>Parks Canada</td>
+<td>Parcs Canada</td>
+<td>219</td>
+<td>151</td>
+</tr>
+<tr>
+<td>tc</td>
+<td>Transport Canada</td>
+<td>Transports Canada</td>
+<td>410</td>
+<td>117</td>
+</tr>
+<tr>
+<td>infc</td>
+<td>Department of Housing, Infrastructure and Communities</td>
+<td>Mini</td>
+<td>97</td>
+<td>97</td>
+</tr>
+<tr>
+<td>jus</td>
+<td>Department of Justice Canada</td>
+<td>Ministère de la Justice Canad</td>
+<td>292</td>
+<td>87</td>
+</tr>
+<tr>
+<td>csa-asc</td>
+<td>Canadian Space Agency</td>
+<td>Agence spatiale canadienne</td>
+<td>74</td>
+<td>74</td>
+</tr>
+<tr>
+<td>cwa-aec</td>
+<td>Canada Water Agency</td>
+<td>Agence de l’eau du Canada</td>
+<td>69</td>
+<td>69</td>
+</tr>
+<tr>
+<td>isc-sac</td>
+<td>Indigenous Services Canada</td>
+<td>Services aux Autochtones Canada</td>
+<td>64</td>
+<td>64</td>
+</tr>
+<tr>
+<td>cnsc-ccsn</td>
+<td>Canadian Nuclear Safety Commission</td>
+<td>Commission canadienne d</td>
+<td>57</td>
+<td>57</td>
+</tr>
+<tr>
+<td>aandc-aadnc</td>
+<td>Crown-Indigenous Relations and Northern Affairs Canada</td>
+<td>Rel</td>
+<td>31</td>
+<td>31</td>
+</tr>
+<tr>
+<td>aafc-aac</td>
+<td>Agriculture and Agri-Food Canada</td>
+<td>Agriculture et Agroalimen</td>
+<td>468</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Exemplary Departments (100% on all checked fields)</h2>
+<p>Departments with 50+ records, no missing descriptions, no dirty type values, no short descriptions.</p>
+<table>
+<thead>
+<tr>
+<th>Dept</th>
+<th>Department</th>
+<th>Records</th>
+<th>Total Value (CAD)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pc</td>
+<td>Parks Canada</td>
+<td>Parcs Canada</td>
+<td>3,023</td>
+</tr>
+<tr>
+<td>wage</td>
+<td>Women and Gender Equality Canada</td>
+<td>Femmes et Égalité des gen</td>
+<td>2,578</td>
+</tr>
+<tr>
+<td>csa-asc</td>
+<td>Canadian Space Agency</td>
+<td>Agence spatiale canadienne</td>
+<td>1,933</td>
+</tr>
+<tr>
+<td>cer-rec</td>
+<td>Canada Energy Regulator</td>
+<td>La Régie de l’énergie du Canada</td>
+<td>746</td>
+</tr>
+<tr>
+<td>polar-polaire</td>
+<td>Polar Knowledge Canada</td>
+<td>Savoir polaire Canada</td>
+<td>436</td>
+</tr>
+<tr>
+<td>lac-bac</td>
+<td>Library and Archives Canada</td>
+<td>Bibliothèque et Archives Canad</td>
+<td>405</td>
+</tr>
+<tr>
+<td>pco-bcp</td>
+<td>Privy Council Office</td>
+<td>Bureau du Conseil privé</td>
+<td>157</td>
+</tr>
+<tr>
+<td>casdo-ocena</td>
+<td>Accessibility Standards Canada</td>
+<td>Normes d’accessibilité Cana</td>
+<td>135</td>
+</tr>
+<tr>
+<td>cfia-acia</td>
+<td>Canadian Food Inspection Agency</td>
+<td>Agence canadienne d'inspec</td>
+<td>54</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Generated by Canadian Nonprofit Data project — github.com/mlenczner/CanadianNonprofitData</em></p>
+<footer><p>DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p></footer>
+</div>
+</body></html>

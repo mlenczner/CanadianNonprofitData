@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] Data Publishing Problems: GC Grants & Contributions Proactive Disclosure — Canadian Nonprofit Data</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding-top:40px;margin:0}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.wrap{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.back{color:var(--mut);text-decoration:none;font-size:.85rem}
+.back:hover{color:var(--red)}
+h1{font-size:2rem;letter-spacing:-.02em;margin:18px 0 8px}
+h2{font-size:1.3rem;margin:40px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--red)}
+h3{font-size:1.05rem;margin:26px 0 8px}
+p{margin:10px 0}
+a{color:var(--red)}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:.88rem;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th,td{padding:7px 10px;border-top:1px solid var(--line);text-align:left}
+th{background:#f1ede7;font-weight:700}
+code{background:#f1ede7;border-radius:4px;padding:1px 5px;font-size:.88em}
+blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--red);background:var(--card);color:var(--mut)}
+hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+strong{color:var(--ink)}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="wrap">
+<a class="back" href="index.html">&larr; Canadian Nonprofit Data</a>
+<h1>Data Publishing Problems: GC Grants &amp; Contributions Proactive Disclosure</h1>
+<p><strong>Project:</strong> Canadian Nonprofit Data<br />
+<strong>Dataset:</strong> Proactive Disclosure — Grants and Contributions<br />
+<strong>Source:</strong> https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013<br />
+<strong>Dataset size:</strong> 1,303,898 records (as of June 2026)<br />
+<strong>Total disclosed value:</strong> ~$972 billion CAD  </p>
+<hr />
+<h2>Background</h2>
+<p>Under the <em>Policy on Transfer Payments</em>, all federal departments and agencies are required to publicly disclose every grant and contribution they award, on a quarterly basis. This data is published through the Government of Canada's Open Government Portal and is searchable at https://search.open.canada.ca/grants/</p>
+<p>Treasury Board Secretariat (TBS) manages the schema and the centralized publishing system. The schema has been updated significantly over the years — most recently with a wave of new mandatory fields that came into effect <strong>December 1, 2025</strong>.</p>
+<p>The problems documented here fall into three categories: <strong>missing mandatory data</strong>, <strong>dirty/inconsistent data</strong>, and <strong>structural limitations</strong> in how the data is published.</p>
+<hr />
+<h2>Problem 1: Missing Descriptions (Mandatory Field)</h2>
+<p><strong>What the policy says:</strong> <code>description_en</code> and <code>description_fr</code> are mandatory fields. Departments are required to explain why the recipient received funding.</p>
+<p><strong>What the data shows:</strong>
+- <code>description_en</code> is empty in <strong>109,383 records</strong> (8.4% of the dataset)
+- <code>description_fr</code> is empty in <strong>113,422 records</strong> (8.7% of the dataset)</p>
+<p><strong>Why it matters:</strong> This is the primary field that explains what public money was used for. Empty descriptions make those records effectively opaque — you can see money went somewhere, but not why.</p>
+<p><strong>When it appears to have started:</strong> Records missing descriptions appear across multiple fiscal years, including recent ones. This is not just a legacy data problem.</p>
+<p><strong>Example:</strong> A record showing $500,000 to a recipient with no description field populated tells the public nothing about the purpose of the award.</p>
+<p><strong>By department</strong> (see <a href="dept-compliance-report.html">dept-compliance-report.md</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Records</th>
+<th>Missing desc_en</th>
+<th>% Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canadian Heritage (pch)</td>
+<td>134,212</td>
+<td>45,309</td>
+<td>33.8%</td>
+</tr>
+<tr>
+<td>Environment and Climate Change Canada (ec)</td>
+<td>8,582</td>
+<td>2,577</td>
+<td>30.0%</td>
+</tr>
+<tr>
+<td>Status of Women Canada (swc-cfc)</td>
+<td>143</td>
+<td>44</td>
+<td>30.8%</td>
+</tr>
+<tr>
+<td>Western Economic Diversification Canada (wd-deo)</td>
+<td>14,556</td>
+<td>4,240</td>
+<td>29.1%</td>
+</tr>
+<tr>
+<td>Global Affairs Canada (dfatd-maecd)</td>
+<td>16,001</td>
+<td>4,589</td>
+<td>28.7%</td>
+</tr>
+<tr>
+<td>Fisheries and Oceans Canada (dfo-mpo)</td>
+<td>18,504</td>
+<td>4,871</td>
+<td>26.3%</td>
+</tr>
+<tr>
+<td>National Research Council Canada (nrc-cnrc)</td>
+<td>77,946</td>
+<td>20,440</td>
+<td>26.2%</td>
+</tr>
+<tr>
+<td>Immigration, Refugees and Citizenship Canada (cic)</td>
+<td>18,393</td>
+<td>3,153</td>
+<td>17.1%</td>
+</tr>
+<tr>
+<td>Natural Resources Canada (nrcan-rncan)</td>
+<td>11,629</td>
+<td>1,754</td>
+<td>15.1%</td>
+</tr>
+<tr>
+<td>Impact Assessment Agency of Canada (iaac-aeic)</td>
+<td>4,319</td>
+<td>599</td>
+<td>13.9%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemplary departments</strong> (50+ records, zero missing descriptions): Parks Canada, Women and Gender Equality Canada, Canadian Space Agency, Canada Energy Regulator, Polar Knowledge Canada, Library and Archives Canada, Privy Council Office, Accessibility Standards Canada, and Canadian Food Inspection Agency.</p>
+<hr />
+<h2>Problem 2: Controlled Field Used Inconsistently (Agreement Type)</h2>
+<p><strong>What the policy says:</strong> <code>agreement_type</code> is a mandatory controlled field with three valid values: <code>C</code> (Contribution), <code>G</code> (Grant), <code>O</code> (Other transfer payment).</p>
+<p><strong>What the data shows:</strong>
+- <code>C</code>: 730,242 records ✓
+- <code>G</code>: 519,077 records ✓
+- <code>O</code>: 35,331 records ✓
+- <code>Contribution</code> (full word): 16,052 records ✗
+- <code>Grant</code> (full word): 1,870 records ✗
+- <code>CONTRIBUTION</code> (uppercase): 727 records ✗
+- <code>GRANT</code> (uppercase): 549 records ✗
+- Empty: 50 records ✗</p>
+<p><strong>Total non-compliant records:</strong> ~19,248 (1.5% of dataset)</p>
+<p><strong>Why it matters:</strong> Non-standard values break automated analysis and filtering. A query for all contributions will miss 16,779 records that used text variants instead of the code <code>C</code>. This suggests some departments are not using the centralized publishing system correctly, or that data was migrated without normalization.</p>
+<p><strong>When it started:</strong> Likely reflects older records submitted before the controlled vocabulary was enforced, or departments bypassing the standard template.</p>
+<p>Three departments account for virtually all non-standard values:</p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Records</th>
+<th>Dirty type count</th>
+<th>% of dept records</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Employment and Social Development Canada (esdc-edsc)</td>
+<td>352,726</td>
+<td>17,922</td>
+<td>5.1%</td>
+</tr>
+<tr>
+<td>Transport Canada (tc)</td>
+<td>46,598</td>
+<td>777</td>
+<td>1.7%</td>
+</tr>
+<tr>
+<td>Social Sciences and Humanities Research Council of Canada (sshrc-crsh)</td>
+<td>65,839</td>
+<td>499</td>
+<td>0.8%</td>
+</tr>
+</tbody>
+</table>
+<p>All other departments use only the standard codes (<code>C</code>, <code>G</code>, <code>O</code>).</p>
+<hr />
+<h2>Problem 3: Post-December 2025 Mandatory Fields Not Being Filled</h2>
+<p><strong>What the policy says:</strong> As of December 1, 2025, several fields became mandatory for any agreement with a start date on or after that date. These include recipient business number, postal code, federal riding number, program name, program purpose, agreement title, agreement end date, and expected results.</p>
+<p><strong>What the data shows</strong> (14,448 records with start date ≥ Dec 1, 2025):</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>% Complete</th>
+<th>Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>federal_riding_number</code></td>
+<td>40.3%</td>
+<td>8,630 records</td>
+</tr>
+<tr>
+<td><code>recipient_business_number</code></td>
+<td>50.6%</td>
+<td>7,137 records</td>
+</tr>
+<tr>
+<td><code>recipient_postal_code</code></td>
+<td>92.6%</td>
+<td>1,075 records</td>
+</tr>
+</tbody>
+</table>
+<p>All other new mandatory fields are at 99.8–100%.</p>
+<p><strong>Why it matters:</strong> The riding number and business number are the two fields with the highest analytical value — riding number enables geographic accountability analysis; business number enables linking to charity and corporate registries. Both are failing at high rates only months after becoming mandatory.</p>
+<p><strong>When it started:</strong> The policy took effect December 1, 2025 — this non-compliance is less than 7 months old and already significant.</p>
+<p><strong>By department — missing <code>federal_riding_number</code></strong> (post-Dec 2025 records only):</p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Post-Dec Records</th>
+<th>Missing riding</th>
+<th>% Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canadian Heritage (pch)</td>
+<td>3,040</td>
+<td>3,040</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>SSHRC (sshrc-crsh)</td>
+<td>1,149</td>
+<td>1,149</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>NSERC (nserc-crsng)</td>
+<td>672</td>
+<td>672</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Natural Resources Canada (nrcan-rncan)</td>
+<td>542</td>
+<td>542</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Agriculture and Agri-Food Canada (aafc-aac)</td>
+<td>468</td>
+<td>468</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Canada Economic Development for Quebec Regions (ced-dec)</td>
+<td>397</td>
+<td>397</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Atlantic Canada Opportunities Agency (acoa-apeca)</td>
+<td>346</td>
+<td>346</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>CIHR (cihr-irsc)</td>
+<td>283</td>
+<td>283</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Global Affairs Canada (dfatd-maecd)</td>
+<td>280</td>
+<td>280</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Fisheries and Oceans Canada (dfo-mpo)</td>
+<td>255</td>
+<td>255</td>
+<td>100.0%</td>
+</tr>
+</tbody>
+</table>
+<p>20 departments have 100% missing riding numbers on their post-Dec 2025 records. Only Employment and Social Development Canada (esdc-edsc, 2,955 post-Dec records) achieves 100% compliance on this field.</p>
+<p><strong>By department — missing <code>recipient_business_number</code></strong> (post-Dec 2025 records only):</p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Post-Dec Records</th>
+<th>Missing biz#</th>
+<th>% Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canadian Heritage (pch)</td>
+<td>3,040</td>
+<td>3,040</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Global Affairs Canada (dfatd-maecd)</td>
+<td>280</td>
+<td>280</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Fisheries and Oceans Canada (dfo-mpo)</td>
+<td>255</td>
+<td>255</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Impact Assessment Agency of Canada (iaac-aeic)</td>
+<td>237</td>
+<td>237</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Environment and Climate Change Canada (ec)</td>
+<td>199</td>
+<td>199</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Housing, Infrastructure and Communities (infc)</td>
+<td>97</td>
+<td>97</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Canadian Space Agency (csa-asc)</td>
+<td>74</td>
+<td>74</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Canada Water Agency (cwa-aec)</td>
+<td>69</td>
+<td>69</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Indigenous Services Canada (isc-sac)</td>
+<td>64</td>
+<td>64</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>NSERC (nserc-crsng)</td>
+<td>672</td>
+<td>612</td>
+<td>91.1%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notable compliance:</strong> ESDC (esdc-edsc) achieves 100% on all post-Dec 2025 mandatory fields across 2,955 records. Prairies Economic Development Canada and Pacific Economic Development Canada also show full compliance.</p>
+<hr />
+<h2>Problem 4: Negative and Zero Agreement Values</h2>
+<p><strong>What the policy says:</strong> <code>agreement_value</code> must be greater than zero.</p>
+<p><strong>What the data shows:</strong>
+- <strong>16,675 records</strong> have a value of zero or less
+- Minimum value in the dataset: <strong>-$214,127,920</strong> (negative $214 million)</p>
+<p><strong>Why it matters:</strong> Some negative values are legitimate — they represent amendments that reduce a previous award. But the schema requires amendments to be tracked via <code>amendment_number</code>, not via negative values. Zero-value records have no clear valid use. Without consistent amendment tracking, it's impossible to calculate the true net value of awards to any recipient.</p>
+<p><strong>When it started:</strong> Appears across multiple years — predates the amendment tracking fields added to the current schema.</p>
+<p><strong>By department:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Records</th>
+<th>Zero/Neg value count</th>
+<th>% of dept records</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Employment and Social Development Canada (esdc-edsc)</td>
+<td>352,726</td>
+<td>10,161</td>
+<td>2.9%</td>
+</tr>
+<tr>
+<td>Indigenous Services Canada (isc-sac)</td>
+<td>156,896</td>
+<td>3,885</td>
+<td>2.5%</td>
+</tr>
+<tr>
+<td>Crown-Indigenous Relations and Northern Affairs Canada (aandc-aadnc)</td>
+<td>21,444</td>
+<td>1,129</td>
+<td>5.3%</td>
+</tr>
+<tr>
+<td>National Research Council Canada (nrc-cnrc)</td>
+<td>77,946</td>
+<td>184</td>
+<td>0.2%</td>
+</tr>
+<tr>
+<td>Natural Resources Canada (nrcan-rncan)</td>
+<td>11,629</td>
+<td>108</td>
+<td>0.9%</td>
+</tr>
+<tr>
+<td>Fisheries and Oceans Canada (dfo-mpo)</td>
+<td>18,504</td>
+<td>97</td>
+<td>0.5%</td>
+</tr>
+<tr>
+<td>Public Health Agency of Canada (phac-aspc)</td>
+<td>5,288</td>
+<td>77</td>
+<td>1.5%</td>
+</tr>
+<tr>
+<td>Canadian Northern Economic Development Agency (cannor)</td>
+<td>2,018</td>
+<td>79</td>
+<td>3.9%</td>
+</tr>
+<tr>
+<td>Public Safety Canada (ps-sp)</td>
+<td>3,476</td>
+<td>57</td>
+<td>1.6%</td>
+</tr>
+<tr>
+<td>CIHR (cihr-irsc)</td>
+<td>44,051</td>
+<td>46</td>
+<td>0.1%</td>
+</tr>
+</tbody>
+</table>
+<p>ESDC alone accounts for 61% of all zero/negative value records in the dataset.</p>
+<hr />
+<h2>Problem 5: Garbage Dates</h2>
+<p><strong>What the data shows:</strong>
+- Earliest agreement start date in the dataset: <strong>1899-12-30</strong>
+- Latest agreement start date: <strong>2027-01-01</strong>
+- <strong>22 records total</strong> with anomalous dates across three categories (see <a href="geo-date-anomaly-report.html">geo-date-anomaly-report.md</a>)</p>
+<p><strong>Why it matters:</strong> 1899-12-30 is a well-known artifact of Microsoft Excel's date handling — it's what Excel produces when a date cell is empty or contains a zero. Its presence indicates some departments are submitting data via spreadsheet without proper validation, and those records are making it into the published dataset uncleaned. Future-dated records (2027) may be legitimate multi-year agreement projections, but without context they're indistinguishable from errors.</p>
+<p><strong>When it started:</strong> Likely reflects data from earlier years when spreadsheet submission was more common.</p>
+<p><strong>By department:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Department</th>
+<th>Count</th>
+<th>Example dates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Excel null date (1899-12-30)</td>
+<td>Innovation, Science and Economic Development Canada (ic)</td>
+<td>1</td>
+<td>1899-12-30</td>
+</tr>
+<tr>
+<td>Pre-1990 dates (excl. Excel null)</td>
+<td>Innovation, Science and Economic Development Canada (ic)</td>
+<td>19</td>
+<td>1899-12-31, 1900-01-01</td>
+</tr>
+<tr>
+<td>Pre-1990 dates (excl. Excel null)</td>
+<td>Global Affairs Canada (dfatd-maecd)</td>
+<td>1</td>
+<td>1989-02-21</td>
+</tr>
+<tr>
+<td>Future dates (after 2026)</td>
+<td>National Research Council Canada (nrc-cnrc)</td>
+<td>1</td>
+<td>2027-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>Innovation, Science and Economic Development Canada (ic) accounts for <strong>20 of 22</strong> anomalous date records — almost all are Excel-era artifacts (1899–1900). The single future-dated record belongs to NRC; the single pre-1990 non-Excel record belongs to Global Affairs.</p>
+<hr />
+<h2>Problem 6: Country and Province Field Contamination</h2>
+<p><strong>What the policy says:</strong> <code>recipient_country</code> uses ISO 3166 country codes (controlled list). <code>recipient_province</code> uses Canadian province/territory codes and is only required when the country is Canada.</p>
+<p><strong>What the data shows:</strong></p>
+<p><em>Country field — 242 records with invalid values:</em>
+- <code>ca</code> (lowercase): 156 records — should be <code>CA</code>
+- <code>Canada</code> (full name): 67 records
+- <code>None</code>: 10 records
+- Other free-text values: 9 records (e.g. "United States", "Toronto, Ontario")</p>
+<p><em>Province field — 1,979 records with non-Canadian values:</em>
+- <code>OC</code>: 412 records (not a valid Canadian province code)
+- <code>CA</code>: 239 records (country code in province field)
+- <code>NY</code>: 208 records (New York state)
+- <code>MA</code>: 164 records (Massachusetts)
+- <code>NA</code>: 97 records
+- <code>US</code>: 65 records</p>
+<p><strong>Why it matters:</strong> Foreign addresses are being entered into Canada-only fields, indicating departments are not following the schema correctly for international recipients. This corrupts geographic analysis.</p>
+<p><strong>When it started:</strong> Unknown — requires per-record date analysis.</p>
+<p><strong>By department — lowercase/invalid country codes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Count</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Veterans Affairs Canada (vac-acc)</td>
+<td>156</td>
+<td>All are lowercase <code>ca</code></td>
+</tr>
+<tr>
+<td>SSHRC (sshrc-crsh)</td>
+<td>67</td>
+<td>Full word <code>Canada</code> instead of <code>CA</code></td>
+</tr>
+<tr>
+<td>Impact Assessment Agency of Canada (iaac-aeic)</td>
+<td>10</td>
+<td><code>None</code> values</td>
+</tr>
+<tr>
+<td>Correctional Service of Canada (csc-scc)</td>
+<td>4</td>
+<td>Free-text country names</td>
+</tr>
+<tr>
+<td>Immigration, Refugees and Citizenship Canada (cic)</td>
+<td>4</td>
+<td>Free-text country names</td>
+</tr>
+<tr>
+<td>Fisheries and Oceans Canada (dfo-mpo)</td>
+<td>1</td>
+<td>Free-text value</td>
+</tr>
+</tbody>
+</table>
+<p><strong>By department — foreign/invalid codes in <code>recipient_province</code>:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Count</th>
+<th>Top values seen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SSHRC (sshrc-crsh)</td>
+<td>888</td>
+<td>NY:179, CA:160, MA:88, IL:56, PA:48</td>
+</tr>
+<tr>
+<td>Natural Resources Canada (nrcan-rncan)</td>
+<td>412</td>
+<td>OC:412 (all records)</td>
+</tr>
+<tr>
+<td>NSERC (nserc-crsng)</td>
+<td>316</td>
+<td>CA:74, MA:59, NA:50, MI:20, NY:18</td>
+</tr>
+<tr>
+<td>Environment and Climate Change Canada (ec)</td>
+<td>85</td>
+<td>ZZ:32, NY:11, CO:8</td>
+</tr>
+<tr>
+<td>Canadian Heritage (pch)</td>
+<td>68</td>
+<td>US:56, GB:7</td>
+</tr>
+<tr>
+<td>Employment and Social Development Canada (esdc-edsc)</td>
+<td>63</td>
+<td>NA:47, MA:10, CH:5</td>
+</tr>
+<tr>
+<td>Agriculture and Agri-Food Canada (aafc-aac)</td>
+<td>56</td>
+<td>IT:20, FR:9, CH:6, US:5, GB:5</td>
+</tr>
+<tr>
+<td>Atlantic Canada Opportunities Agency (acoa-apeca)</td>
+<td>38</td>
+<td>DC:14, CO:7, CA:4</td>
+</tr>
+<tr>
+<td>Public Health Agency of Canada (phac-aspc)</td>
+<td>34</td>
+<td>CH:18, FR:9, US:4</td>
+</tr>
+</tbody>
+</table>
+<p>SSHRC and NSERC together account for <strong>1,204 of 1,979</strong> (61%) contaminated province records — consistent with international research grant recipients being given US state codes instead of proper country/province handling. Natural Resources Canada's 412 <code>OC</code> values appear to be a systematic data entry error.</p>
+<p>Full breakdown: <a href="geo-date-anomaly-report.html">geo-date-anomaly-report.md</a></p>
+<hr />
+<h2>Problem 7: Description Quality — Boilerplate Text</h2>
+<p><strong>What the data shows:</strong>
+- Of 1,194,515 records that have a description, <strong>343,693 (28.8%)</strong> have descriptions under 50 characters
+- Median description length: 199 characters
+- Mean description length: 215 characters</p>
+<p><strong>Why it matters:</strong> A 50-character description for a grant of any significant size is almost certainly not meaningful. Examples of the kind of text this captures: "Support for community project", "Funding for operations", "Research grant." These technically satisfy the non-empty requirement but provide no real accountability value.</p>
+<p><strong>When it started:</strong> Likely a persistent pattern across all years — this is a cultural/compliance problem as much as a technical one.</p>
+<p><strong>By department</strong> (descriptions under 50 characters):</p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Records</th>
+<th>Short desc</th>
+<th>% Short</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Crown-Indigenous Relations and Northern Affairs Canada (aandc-aadnc)</td>
+<td>21,444</td>
+<td>21,319</td>
+<td>99.4%</td>
+</tr>
+<tr>
+<td>Indigenous Services Canada (isc-sac)</td>
+<td>156,896</td>
+<td>155,837</td>
+<td>99.3%</td>
+</tr>
+<tr>
+<td>Public Health Agency of Canada (phac-aspc)</td>
+<td>5,288</td>
+<td>4,738</td>
+<td>89.6%</td>
+</tr>
+<tr>
+<td>Innovation, Science and Economic Development Canada (ic)</td>
+<td>41,673</td>
+<td>34,093</td>
+<td>81.8%</td>
+</tr>
+<tr>
+<td>Veterans Affairs Canada (vac-acc)</td>
+<td>2,163</td>
+<td>1,334</td>
+<td>61.7%</td>
+</tr>
+<tr>
+<td>Canadian Heritage (pch)</td>
+<td>134,212</td>
+<td>59,362</td>
+<td>44.2%</td>
+</tr>
+<tr>
+<td>Health Canada (hc-sc)</td>
+<td>2,252</td>
+<td>978</td>
+<td>43.4%</td>
+</tr>
+<tr>
+<td>Atlantic Canada Opportunities Agency (acoa-apeca)</td>
+<td>30,350</td>
+<td>12,733</td>
+<td>42.0%</td>
+</tr>
+<tr>
+<td>Employment and Social Development Canada (esdc-edsc)</td>
+<td>352,726</td>
+<td>40,928</td>
+<td>11.6%</td>
+</tr>
+<tr>
+<td>Immigration, Refugees and Citizenship Canada (cic)</td>
+<td>18,393</td>
+<td>4,547</td>
+<td>24.7%</td>
+</tr>
+</tbody>
+</table>
+<p>Indigenous Services Canada and Crown-Indigenous Relations and Northern Affairs Canada together account for 177,156 short-description records — over half of all short descriptions in the dataset.</p>
+<hr />
+<h2>Problem 8: Recipient Business Number Sparseness</h2>
+<p><strong>What the policy says:</strong> Business number is optional for older records, mandatory (9-digit) for agreements starting December 1, 2025 or later.</p>
+<p><strong>What the data shows:</strong>
+- Overall completeness: <strong>44.7%</strong> (721,577 missing out of 1.3M records)
+- For post-Dec 2025 records: <strong>50.6%</strong> complete — meaning nearly half of new mandatory records are still missing it</p>
+<p><strong>Why it matters:</strong> The business number (CRA-issued 9-digit identifier) is the key to linking this dataset to the CRA charity registry, the corporations registry, and other government datasets. Without it, you cannot reliably track total funding to a single organization across departments or years — the same org may appear under dozens of name variants. This is the single biggest obstacle to meaningful recipient-level analysis.</p>
+<p><strong>When it started:</strong> The field has been optional for most of the dataset's history. The Dec 2025 mandate was meant to fix this going forward, but early compliance is poor.</p>
+<p><strong>By department — post-Dec 2025 records</strong> (where business number is now mandatory):</p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Post-Dec Records</th>
+<th>Missing biz#</th>
+<th>% Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canadian Heritage (pch)</td>
+<td>3,040</td>
+<td>3,040</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Global Affairs Canada (dfatd-maecd)</td>
+<td>280</td>
+<td>280</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Fisheries and Oceans Canada (dfo-mpo)</td>
+<td>255</td>
+<td>255</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Impact Assessment Agency of Canada (iaac-aeic)</td>
+<td>237</td>
+<td>237</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Environment and Climate Change Canada (ec)</td>
+<td>199</td>
+<td>199</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Public Safety Canada (ps-sp)</td>
+<td>193</td>
+<td>180</td>
+<td>93.3%</td>
+</tr>
+<tr>
+<td>NSERC (nserc-crsng)</td>
+<td>672</td>
+<td>612</td>
+<td>91.1%</td>
+</tr>
+<tr>
+<td>CIHR (cihr-irsc)</td>
+<td>283</td>
+<td>278</td>
+<td>98.2%</td>
+</tr>
+<tr>
+<td>SSHRC (sshrc-crsh)</td>
+<td>1,149</td>
+<td>914</td>
+<td>79.5%</td>
+</tr>
+<tr>
+<td>Parks Canada (pc)</td>
+<td>218</td>
+<td>150</td>
+<td>68.8%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Problem 9: Federal Riding Number Sparseness</h2>
+<p><strong>What the data shows:</strong>
+- Overall completeness: <strong>19.7%</strong> (1,047,369 missing)
+- For post-Dec 2025 records (where it's now mandatory): <strong>40.3%</strong> complete</p>
+<p><strong>Why it matters:</strong> The federal riding number is what enables constituency-level accountability analysis — understanding which ridings are receiving how much federal funding. With 80% of records missing this field, that analysis is impossible for the bulk of the dataset. Even for the new mandatory cohort, 60% of records are missing it.</p>
+<p><strong>By department — post-Dec 2025 records</strong> (where riding number is now mandatory):</p>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Post-Dec Records</th>
+<th>Missing riding</th>
+<th>% Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canadian Heritage (pch)</td>
+<td>3,040</td>
+<td>3,040</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>SSHRC (sshrc-crsh)</td>
+<td>1,149</td>
+<td>1,149</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>NSERC (nserc-crsng)</td>
+<td>672</td>
+<td>672</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Natural Resources Canada (nrcan-rncan)</td>
+<td>542</td>
+<td>542</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Agriculture and Agri-Food Canada (aafc-aac)</td>
+<td>468</td>
+<td>468</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Canada Economic Development for Quebec Regions (ced-dec)</td>
+<td>397</td>
+<td>397</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Atlantic Canada Opportunities Agency (acoa-apeca)</td>
+<td>346</td>
+<td>346</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>CIHR (cihr-irsc)</td>
+<td>283</td>
+<td>283</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Global Affairs Canada (dfatd-maecd)</td>
+<td>280</td>
+<td>280</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>Fisheries and Oceans Canada (dfo-mpo)</td>
+<td>255</td>
+<td>255</td>
+<td>100.0%</td>
+</tr>
+</tbody>
+</table>
+<p>20 of 43 departments with post-Dec 2025 records have 100% missing riding numbers. ESDC (esdc-edsc) is the only large department with full compliance (2,955 records, 100% complete).</p>
+<hr />
+<h2>Summary Table</h2>
+<table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Records Affected</th>
+<th>Highest-Affected Department(s)</th>
+<th>Severity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Missing descriptions (mandatory)</td>
+<td>109,383</td>
+<td>Canadian Heritage (33.8%)</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Agreement type non-standard values</td>
+<td>19,248</td>
+<td>ESDC (17,922 records)</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Post-Dec 2025 riding number missing</td>
+<td>8,630 of 14,448</td>
+<td>20 depts at 100% missing</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Post-Dec 2025 business number missing</td>
+<td>7,137 of 14,448</td>
+<td>Canadian Heritage (100%)</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Zero or negative values</td>
+<td>16,675</td>
+<td>ESDC (10,161 records)</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Garbage dates (1899, future)</td>
+<td>22</td>
+<td>ISED (20 records)</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Province/country field contamination</td>
+<td>2,221</td>
+<td>SSHRC (888 prov), NRCan (412 OC)</td>
+<td>Low-Medium</td>
+</tr>
+<tr>
+<td>Short/boilerplate descriptions</td>
+<td>343,693</td>
+<td>ISC (99.3%), CIRNAC (99.4%)</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Business number missing (overall)</td>
+<td>721,577</td>
+<td>Canadian Heritage (100% post-Dec)</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Riding number missing (overall)</td>
+<td>1,047,369</td>
+<td>20 depts at 100% post-Dec</td>
+<td>High</td>
+</tr>
+</tbody>
+</table>
+<p>Full per-department breakdown: <a href="dept-compliance-report.html">dept-compliance-report.md</a> · <a href="geo-date-anomaly-report.html">geo-date-anomaly-report.md</a></p>
+<hr />
+<h2>What We Don't Know Yet</h2>
+<p>Per-department breakdowns are now available for all nine problems (see <a href="dept-compliance-report.html">dept-compliance-report.md</a> and <a href="geo-date-anomaly-report.html">geo-date-anomaly-report.md</a>). Remaining gaps:</p>
+<ul>
+<li><strong>Temporal trends</strong> — are problems improving or worsening over time?</li>
+<li><strong>Amendment tracking</strong> — are negative values properly linked to amendment chains?</li>
+</ul>
+<hr />
+<h2>Notable Records</h2>
+<p>Individual records that illustrate systemic data quality problems documented above.</p>
+<h3>Kee Tas Kee Now Tribal Council — extreme amendment volume</h3>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Department</th>
+<th>Value</th>
+<th>Amendments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1910-2025-2026-Qrt1-0008764</code></td>
+<td>Indigenous Services Canada</td>
+<td>$4,788,877</td>
+<td>557</td>
+</tr>
+<tr>
+<td><code>1910-2025-2026-Qrt1-0008756</code></td>
+<td>Indigenous Services Canada</td>
+<td>$13,473,814</td>
+<td>554</td>
+</tr>
+<tr>
+<td><code>1910-2025-2026-Qrt4-0018093</code></td>
+<td>Indigenous Services Canada</td>
+<td>$468,353,646</td>
+<td>0 (original)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why it's notable:</strong> Kee Tas Kee Now Tribal Council appears repeatedly among the most-amended agreements in the dataset, with individual records carrying 528–557 amendments — far more than any other recipient. Indigenous Services Canada appears to publish every budget adjustment as a separate amendment row rather than updating the original record in place. This inflates record counts, makes it impossible to calculate net funding from a single ref number, and is the clearest example of amendment-field misuse described in Problem 4.</p>
+<h3>Veterans Affairs Canada — batch reporting</h3>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Department</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>021-2025-2026-Q4-0129</code></td>
+<td>Veterans Affairs Canada</td>
+<td>$2,543,478,321</td>
+<td>Pain and Suffering Compensation</td>
+</tr>
+<tr>
+<td><code>021-2022-2023-Q4-0112</code></td>
+<td>Veterans Affairs Canada</td>
+<td>$1,550,234,952</td>
+<td>Disability Pensions</td>
+</tr>
+<tr>
+<td><code>189-2018-2019-Q4-00082</code></td>
+<td>Veterans Affairs Canada</td>
+<td>$1,323,653,614</td>
+<td>Disability Awards</td>
+</tr>
+<tr>
+<td><code>021-2025-2026-Q4-0112</code></td>
+<td>Veterans Affairs Canada</td>
+<td>$1,053,733,398</td>
+<td>Disability Pensions</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why it's notable:</strong> These records use the recipient name <strong>"batch report│rapport en lots"</strong> and aggregate billions of dollars in individual veteran benefit payments into single line items. This is a structural publishing choice — not an error per se — but it makes the dataset unusable for recipient-level analysis of veterans' spending. It also explains why Veterans Affairs dominates the high-value, short-description category: descriptions like "Disability Pensions" technically satisfy the mandatory field while describing thousands of separate payments.</p>
+<h3>Impact Assessment Agency — placeholder end dates (9999-12-31)</h3>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Department</th>
+<th>Value</th>
+<th>Dates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GC-2020-Q1-00073</code></td>
+<td>Impact Assessment Agency of Canada</td>
+<td>$8,096</td>
+<td>2019-06-10 → 9999-12-31</td>
+</tr>
+<tr>
+<td><code>GC-2020-Q1-00080</code></td>
+<td>Impact Assessment Agency of Canada</td>
+<td>$11,644</td>
+<td>2019-06-12 → 9999-12-31</td>
+</tr>
+<tr>
+<td><code>071-2024-2025-Q2-00001</code></td>
+<td>Impact Assessment Agency of Canada</td>
+<td>$7,897</td>
+<td>2024-07-08 → 9999-12-31</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why it's notable:</strong> The Impact Assessment Agency uses <strong>9999-12-31</strong> as an agreement end date across dozens of Policy Dialogue Program contributions. This is a common database placeholder meaning "no fixed end date," but it produces agreement durations of nearly 8,000 years in the published data and makes temporal analysis meaningless. It is distinct from the Excel null-date problem (Problem 5) — this is an intentional sentinel value that was never cleaned before publication.</p>
+<h3>ESDC same-day batch publishing</h3>
+<table>
+<thead>
+<tr>
+<th>Department</th>
+<th>Date</th>
+<th>Records published</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Employment and Social Development Canada</td>
+<td>2021-04-26</td>
+<td>40,373</td>
+</tr>
+<tr>
+<td>Employment and Social Development Canada</td>
+<td>2022-04-25</td>
+<td>34,713</td>
+</tr>
+<tr>
+<td>Employment and Social Development Canada</td>
+<td>2024-04-22</td>
+<td>26,356</td>
+</tr>
+<tr>
+<td>Employment and Social Development Canada</td>
+<td>2025-04-21</td>
+<td>25,512</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why it's notable:</strong> ESDC publishes tens of thousands of grant records on a single date each fiscal year — 40,373 records on April 26, 2021 alone, more than any other department-date combination in the dataset. This pattern suggests bulk import from an internal system rather than quarterly proactive disclosure as the policy requires. It also correlates with ESDC's high count of non-standard agreement type values (17,922 records using full words like "Contribution" instead of <code>C</code>).</p>
+<h3>NextStar Energy — largest single award</h3>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Department</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>033-2023-2024-Q2-515482</code></td>
+<td>Innovation, Science and Economic Development Canada</td>
+<td><strong>$14,556,000,000</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why it's notable:</strong> This is the largest single original award in the entire dataset — a contribution to NextStar Energy Inc. under the Electric Vehicle Battery Manufacturers program (2024-01-01 to 2032-12-31). It alone accounts for 1.5% of the ~$972 billion total disclosed value across 1.3 million records.</p>
+<h3>ESDC $1 placeholder-value awards</h3>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Department</th>
+<th>Value</th>
+<th>Recipient</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>141-2020-2021-Q1-00195</code></td>
+<td>Employment and Social Development Canada</td>
+<td><strong>$1</strong></td>
+<td>United Way of Canada — Centraide Canada</td>
+</tr>
+<tr>
+<td><code>141-2020-2021-Q1-00196</code></td>
+<td>Employment and Social Development Canada</td>
+<td><strong>$1</strong></td>
+<td>Canadian Red Cross Society</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why it's notable:</strong> Two consecutive $1 contributions to major national charities under the SDPP-Children and Families program, published one day apart (October 14 and 15, 2020). Both carry full program descriptions but a nominal value of $1. These are almost certainly placeholder or administrative setup records — possibly used to establish a funding relationship before actual awards were issued — but they appear in the public dataset as real contributions, contributing to the 16,675 zero/near-zero value records in Problem 4.</p>
+<h3>Canada Economic Development for Quebec Regions — semicolon descriptions</h3>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Department</th>
+<th>Value</th>
+<th>Recipient</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>093-2006-2007-Q4-00258</code></td>
+<td>Canada Economic Development for Quebec Regions</td>
+<td><strong>$2,400,000</strong></td>
+<td>Administration portuaire de Sept-Îles</td>
+</tr>
+<tr>
+<td><code>093-2012-2013-Q3-00088</code></td>
+<td>Canada Economic Development for Quebec Regions</td>
+<td>$50,000</td>
+<td>Institut canadien de recherche en politiques et administration publique</td>
+</tr>
+<tr>
+<td><code>093-2010-2011-Q2-00035</code></td>
+<td>Canada Economic Development for Quebec Regions</td>
+<td>$15,000</td>
+<td>FaunENord</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why it's notable:</strong> At least <strong>27 records</strong> from Canada Economic Development for Quebec Regions have a description consisting of a single semicolon (<code>;</code>). These span 2006–2012 and include awards up to $2.4 million. The semicolon appears to be a legacy placeholder from an older publishing system — it technically satisfies the non-empty description requirement (Problem 7) while providing zero accountability value. This pattern is unique to CED among all 51 departments in the dataset.</p>
+<hr />
+<p><em>Document prepared by the Canadian Nonprofit Data project. Data profiled June 23, 2026. Department breakdowns added from compliance and geo/date anomaly reports generated same date.</em></p>
+<footer><p>DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p></footer>
+</div>
+</body></html>

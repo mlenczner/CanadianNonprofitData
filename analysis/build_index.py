@@ -74,14 +74,18 @@ REPORTS = [
 ]
 
 DOC_LINKS = [
-    ("data-publishing-problems.md", "Data Publishing Problems",
+    ("data-publishing-problems.html", "Data Publishing Problems",
      "Full technical findings behind the disclosure-quality report."),
-    ("entity-resolution-methodology.md", "Entity Resolution Methodology",
+    ("entity-resolution-methodology.html", "Entity Resolution Methodology",
      "How organizations are matched and de-duplicated across sources."),
-    ("questions-and-insights.md", "Questions & Possible Insights",
+    ("questions-and-insights.html", "Questions & Possible Insights",
      "Working list of open research questions."),
-    ("why-this-matters.md", "Policy Context",
+    ("why-this-matters.html", "Policy Context",
      "Background on Canada's open-government commitments relevant to this data."),
+    ("dept-compliance-report.html", "Department Compliance Report",
+     "Per-department breakdown behind the disclosure-quality findings."),
+    ("geo-date-anomaly-report.html", "Date & Geography Anomaly Report",
+     "Records with implausible dates or invalid geography codes."),
 ]
 
 CSS = """
