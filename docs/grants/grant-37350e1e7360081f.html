@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] Canada Housing Infrastructure Fund — Canadian Nonprofit Data</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
+*{box-sizing:border-box;margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-top:40px}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.draft-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:9rem;font-weight:800;color:#000;opacity:.03;pointer-events:none;z-index:0;white-space:nowrap;user-select:none}
+.draft-footer-notice{background:#fff3cd;color:#8a6d00;border:1px solid #8a6d00;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:.8rem}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
+header{padding:40px 0 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+h1{font-size:2.1rem;letter-spacing:-.02em}
+.badge{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:.78rem;color:var(--mut);margin-left:10px;vertical-align:middle}
+.meta-line{color:var(--mut);margin:8px 0 0;font-size:.92rem}
+h2{font-size:1.05rem;margin:40px 0 14px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);border-bottom:2px solid var(--red);display:inline-block;padding-bottom:4px}
+h3{font-size:.82rem;margin:22px 0 10px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);font-weight:700}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;flex:1 1 160px}
+.stats>.drawer.open{flex-basis:100%;width:100%}
+.stat b{display:block;font-size:1.5rem;letter-spacing:-.02em}
+.stat span{color:var(--mut);font-size:.8rem}
+.bars{display:flex;gap:5px;height:160px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 18px 30px;position:relative}
+.barcol{flex:1;height:100%;display:flex;flex-direction:column-reverse;gap:1px;position:relative}
+.bar-recv{background:var(--red);opacity:.85;min-height:1px}
+.bar-given{background:var(--ink);opacity:.55;min-height:1px}
+.barcol i{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.6rem;color:var(--mut);white-space:nowrap}
+.barcol u{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:.68rem;padding:3px 8px;border-radius:5px;white-space:nowrap;z-index:3}
+.barcol:hover u{display:block}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+table{min-width:100%;border-collapse:collapse;background:var(--card);font-size:.85rem}
+th{background:#f1ede7;text-align:left;padding:8px 10px;white-space:nowrap}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.src{display:inline-block;font-size:.68rem;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px;white-space:nowrap}
+.orglink{color:var(--red);text-decoration:none;font-weight:700}
+.orglink:hover{text-decoration:underline}
+.year-group{background:#f1ede7 !important;font-weight:600}
+.claim{border-bottom:1px dotted #b8ad9c;cursor:pointer}
+body.show-work .claim{border-bottom-color:var(--red)}
+.claim:hover{background:#fdf3d7;border-bottom-color:var(--red)}
+.drawer{display:none;background:#fffdf7;border:1px solid #f0dfa0;border-radius:8px;padding:12px 14px;margin:6px 0 14px;font-size:.82rem;color:#4a4a4a}
+.drawer.open{display:block}
+.drawer .chain{margin:6px 0;padding-left:18px}
+.drawer .not-found{color:#a35200;font-style:italic}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--mut);white-space:nowrap}
+.switch{position:relative;width:38px;height:22px;background:var(--line);border-radius:11px;cursor:pointer;transition:background .15s}
+.switch.on{background:var(--red)}
+.switch i{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}
+.switch.on i{left:18px}
+.rollup-note{color:var(--mut);font-size:.82rem;margin:8px 0 16px}
+.more-rows{display:none}
+.more-rows.shown{display:table-row-group}
+.show-more{display:inline-block;color:var(--red);font-weight:700;font-size:.82rem;cursor:pointer;padding:4px 0}
+.show-more:hover{text-decoration:underline}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+@media(max-width:640px){.barcol i{display:none}}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="draft-watermark">DRAFT</div>
+<div class="wrap">
+<header>
+<div>
+<h1>Canada Housing Infrastructure Fund <span class="badge">Federal G&amp;C</span></h1>
+<p class="meta-line">The Government of Canada announced $6 billion over 10 years in Budget 2024 for the new Canada Housing Infrastructure Fund to accelerate the construction and upgrading of housing-enabling drinking water, wastewater, stormwater, and solid waste infrastructure, directly supporting the creation of new homes and increasing densification.</p>
+</div>
+</header>
+<div class='stats'><div class='stat'><b>$1.2B</b><span>total awarded</span></div><div class='stat'><b>9</b><span>grants</span></div><div class='stat'><b>1</b><span>funder</span></div><div class='stat'><b>9</b><span>recipients</span></div><div class='stat'><b>2024–2024</b><span>years active</span></div></div>
+<h2>Grants sharing this text</h2>
+<div class='table-scroll'><table><thead><tr><th>Funder</th><th>Recipient</th><th class='num'>Amount</th><th>Fiscal year</th></tr></thead><tbody><tr><td>Department of Housing, Infrastructure and Communities  <a class='orglink' href='../orgs/department-of-housing-infrastructure-and-communities.html' title='View organization page'>&#8599;</a></td><td>Province of Manitoba  <a class='orglink' href='../orgs/province-of-manitoba.html' title='View organization page'>&#8599;</a></td><td class='num'>$209,803,056</td><td>FY 2024</td></tr><tr><td>Department of Housing, Infrastructure and Communities  <a class='orglink' href='../orgs/department-of-housing-infrastructure-and-communities.html' title='View organization page'>&#8599;</a></td><td>Saskbuilds Corporation <a class='orglink' href='../orgs/saskbuilds-corporation.html' title='View organization page'>&#8599;</a></td><td class='num'>$187,850,510</td><td>FY 2024</td></tr><tr><td>Department of Housing, Infrastructure and Communities  <a class='orglink' href='../orgs/department-of-housing-infrastructure-and-communities.html' title='View organization page'>&#8599;</a></td><td>GOVERNMENT OF NOVA SCOTIA <a class='orglink' href='../orgs/government-of-nova-scotia.html' title='View organization page'>&#8599;</a></td><td class='num'>$170,904,685</td><td>FY 2024</td></tr><tr><td>Department of Housing, Infrastructure and Communities  <a class='orglink' href='../orgs/department-of-housing-infrastructure-and-communities.html' title='View organization page'>&#8599;</a></td><td>New Brunswick Regional Development Corporation  <a class='orglink' href='../orgs/new-brunswick-regional-development-corporation.html' title='View organization page'>&#8599;</a></td><td class='num'>$150,492,668</td><td>FY 2024</td></tr><tr><td>Department of Housing, Infrastructure and Communities  <a class='orglink' href='../orgs/department-of-housing-infrastructure-and-communities.html' title='View organization page'>&#8599;</a></td><td>GOVERNMENT OF NEWFOUNDLAND AND LABRADOR <a class='orglink' href='../orgs/government-of-newfoundland-and-labrador.html' title='View organization page'>&#8599;</a></td><td class='num'>$123,148,269</td><td>FY 2024</td></tr><tr><td>Department of Housing, Infrastructure and Communities  <a class='orglink' href='../orgs/department-of-housing-infrastructure-and-communities.html' title='View organization page'>&#8599;</a></td><td>Government of Prince Edward Island <a class='orglink' href='../orgs/government-of-prince-edward-island.html' title='View organization page'>&#8599;</a></td><td class='num'>$86,175,560</td><td>FY 2024</td></tr><tr><td>Department of Housing, Infrastructure and Communities  <a class='orglink' href='../orgs/department-of-housing-infrastructure-and-communities.html' title='View organization page'>&#8599;</a></td><td>Government of the Northwest Territories <a class='orglink' href='../orgs/government-of-the-northwest-territories.html' title='View organization page'>&#8599;</a></td><td class='num'>$74,236,456</td><td>FY 2024</td></tr><tr><td>Department of Housing, Infrastructure and Communities  <a class='orglink' href='../orgs/department-of-housing-infrastructure-and-communities.html' title='View organization page'>&#8599;</a></td><td>Government Of Yukon <a class='orglink' href='../orgs/government-of-yukon.html' title='View organization page'>&#8599;</a></td><td class='num'>$74,236,456</td><td>FY 2024</td></tr><tr><td>Department of Housing, Infrastructure and Communities  <a class='orglink' href='../orgs/department-of-housing-infrastructure-and-communities.html' title='View organization page'>&#8599;</a></td><td>GOVERNMENT OF NUNAVUT <a class='orglink' href='../orgs/government-of-nunavut.html' title='View organization page'>&#8599;</a></td><td class='num'>$73,851,324</td><td>FY 2024</td></tr></tbody></table></div>
+<footer><p class="draft-footer-notice">DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p>
+Generated 2026-07-15 10:18 from the Canadian Nonprofit Data entity graph.
+&middot; <a href="index.html">&larr; Search grant text</a>
+&middot; <a href="../orgs/index.html">Search organizations</a></footer>
+</div>
+<script>
+function toggleShowWork(){
+  document.body.classList.toggle('show-work');
+  document.getElementById('sw').classList.toggle('on');
+}
+function toggleMoreRows(el){
+  const tbody = document.getElementById(el.dataset.target);
+  if (!tbody) return;
+  const showing = tbody.classList.toggle('shown');
+  el.textContent = showing ? (el.dataset.hide + ' \u25b2') : (el.dataset.show + ' \u25bc');
+}
+function toggleDrawer(el){
+  const d = document.getElementById(el.dataset.drawer);
+  if (!d) return;
+  if (d.classList.contains('open')) { d.classList.remove('open'); return; }
+  // Relocate the drawer next to the clicked claim so it opens inline, not at
+  // the bottom of the document. A table row can only contain <td>/<th>, so a
+  // claim inside one gets a sibling <tr><td colspan> row instead of a bare
+  // insertAdjacentElement (which a table would silently mangle into an
+  // anonymous cell).
+  const row = el.closest('tr');
+  if (row) {
+    let holder = row.nextElementSibling;
+    if (!holder || !holder.classList.contains('drawer-row')) {
+      holder = document.createElement('tr');
+      holder.className = 'drawer-row';
+      const td = document.createElement('td');
+      td.colSpan = row.children.length;
+      holder.appendChild(td);
+      row.insertAdjacentElement('afterend', holder);
+    }
+    holder.firstElementChild.appendChild(d);
+  } else {
+    const container = el.closest('div, h1');
+    if (container) container.insertAdjacentElement('afterend', d);
+  }
+  d.classList.add('open');
+}
+</script>
+</body></html>

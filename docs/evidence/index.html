@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] Evidence Encyclopedia — Demo</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
+*{box-sizing:border-box;margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-top:40px}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.draft-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:9rem;font-weight:800;color:#000;opacity:.03;pointer-events:none;z-index:0;white-space:nowrap;user-select:none}
+.draft-footer-notice{background:#fff3cd;color:#8a6d00;border:1px solid #8a6d00;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:.8rem}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
+header{padding:40px 0 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+h1{font-size:2.1rem;letter-spacing:-.02em}
+.badge{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:.78rem;color:var(--mut);margin-left:10px;vertical-align:middle}
+.meta-line{color:var(--mut);margin:8px 0 0;font-size:.92rem}
+h2{font-size:1.05rem;margin:40px 0 14px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);border-bottom:2px solid var(--red);display:inline-block;padding-bottom:4px}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;flex:1 1 160px}
+.stats>.drawer.open{flex-basis:100%;width:100%}
+.stat b{display:block;font-size:1.5rem;letter-spacing:-.02em}
+.stat span{color:var(--mut);font-size:.8rem}
+.bars{display:flex;gap:5px;height:160px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 18px 30px;position:relative}
+.barcol{flex:1;height:100%;display:flex;flex-direction:column-reverse;gap:1px;position:relative}
+.bar-recv{background:var(--red);opacity:.85;min-height:1px}
+.bar-given{background:var(--ink);opacity:.55;min-height:1px}
+.barcol i{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.6rem;color:var(--mut);white-space:nowrap}
+.barcol u{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:.68rem;padding:3px 8px;border-radius:5px;white-space:nowrap;z-index:3}
+.barcol:hover u{display:block}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+table{min-width:100%;border-collapse:collapse;background:var(--card);font-size:.85rem}
+th{background:#f1ede7;text-align:left;padding:8px 10px;white-space:nowrap}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.src{display:inline-block;font-size:.68rem;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px;white-space:nowrap}
+.year-group{background:#f1ede7 !important;font-weight:600}
+.claim{border-bottom:1px dotted #b8ad9c;cursor:pointer}
+body.show-work .claim{border-bottom-color:var(--red)}
+.claim:hover{background:#fdf3d7;border-bottom-color:var(--red)}
+.drawer{display:none;background:#fffdf7;border:1px solid #f0dfa0;border-radius:8px;padding:12px 14px;margin:6px 0 14px;font-size:.82rem;color:#4a4a4a}
+.drawer.open{display:block}
+.drawer .chain{margin:6px 0;padding-left:18px}
+.drawer .not-found{color:#a35200;font-style:italic}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--mut);white-space:nowrap}
+.switch{position:relative;width:38px;height:22px;background:var(--line);border-radius:11px;cursor:pointer;transition:background .15s}
+.switch.on{background:var(--red)}
+.switch i{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}
+.switch.on i{left:18px}
+.rollup-note{color:var(--mut);font-size:.82rem;margin:8px 0 16px}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+@media(max-width:640px){.barcol i{display:none}}
+
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:2px 10px;font-size:.76rem;color:var(--mut);margin:2px 4px 2px 0}
+.aliases{margin-top:8px}
+.evidence-grid{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px}
+.ev-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;flex:1 1 260px}
+.ev-card.muted{opacity:.8}
+.ev-card.editorial{background:#fdf3d7;border-color:#e8d68a;flex-basis:100%}
+.ev-card h3{font-size:.92rem;margin-bottom:6px}
+.ev-card p{font-size:.88rem;margin:6px 0 0}
+.badge-verified{display:inline-block;background:#e2f2e4;color:#1b7a2d;border-radius:6px;padding:2px 8px;font-size:.74rem;font-weight:600}
+.badge-unverified{display:inline-block;background:#fde4cf;color:#a35200;border-radius:6px;padding:2px 8px;font-size:.74rem;font-weight:600}
+.editorial-note{font-style:italic;color:var(--ink)}
+.ev-note{color:var(--mut);font-size:.8rem;margin-top:6px}
+.caveat-box{background:#fdf3d7;border:1px solid #e8d68a;border-radius:10px;padding:14px 18px;margin:16px 0;font-size:.9rem}
+.progress-list{list-style:none;margin-top:12px}
+.progress-list li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:8px}
+.progress-list .why{color:var(--mut);font-size:.85rem;margin-top:4px}
+.index-cards{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px}
+.index-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;flex:1 1 240px;text-decoration:none;color:inherit;display:block}
+.index-card h3{font-size:1.05rem;margin-bottom:6px;color:var(--ink)}
+.index-card p{color:var(--mut);font-size:.85rem;margin-bottom:8px}
+.framing{max-width:680px;color:var(--ink)}
+.org-note{color:var(--mut);font-size:.9rem;margin-top:12px}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="draft-watermark">DRAFT</div>
+<div class="wrap">
+
+<header><h1>Evidence Encyclopedia &mdash; Demo</h1></header>
+<p class="framing">Funders often conflate two different questions: does this intervention work, anywhere, under any conditions -- and will it work here, delivered by this organization, for this population, under Canadian funding and service conditions. This site keeps them separate. Each intervention page shows how the major evidence registries rate it, cited as facts with links out, never averaged into a single score; when registries disagree, they sit side by side rather than being smoothed into a composite. Where Canadian organizations have been identified as delivering the intervention from federal grant records, they&#x27;re listed with receipts -- the funder&#x27;s own description, the grant reference number, and how the match was made. This is a small, honest demo, not a finished encyclopedia: some interventions have real Canadian evaluations that simply haven&#x27;t been read and checked yet, and that gap is shown, not hidden, below.</p>
+<h2>Interventions</h2>
+<div class="index-cards"><a class='index-card' href='housing_first.html'><h3>Housing First</h3><p>Immediate permanent housing without sobriety/treatment preconditions, plus wraparound supports; housing as the foundation for stability rather than the reward for it.</p><span class='chip'>2 registries</span> <span class='chip'>6 Canadian orgs identified</span></a><a class='index-card' href='nurse_family_partnership.html'><h3>Nurse-Family Partnership</h3><p>Registered nurses conduct structured home visits with low-income first-time mothers from pregnancy to child age 2; targets prenatal health, child development, maternal life course.</p><span class='chip'>4 registries</span> <span class='chip'>0 Canadian orgs identified</span></a><a class='index-card' href='multisystemic_therapy.html'><h3>Multisystemic Therapy</h3><p>Intensive family- and community-based treatment for serious juvenile offenders, working across home/school/peer systems; caseloads and supervision tightly specified.</p><span class='chip'>3 registries</span> <span class='chip'>0 Canadian orgs identified</span></a><a class='index-card' href='roots_of_empathy.html'><h3>Roots of Empathy</h3><p>Universal school-based SEL program; a parent and infant visit a classroom across the school year as the anchor for empathy instruction.</p><span class='chip'>3 registries</span> <span class='chip'>0 Canadian orgs identified</span></a><a class='index-card' href='emergency_shelter.html'><h3>Emergency shelter (category, not a branded model)</h3><p>Immediate temporary accommodation; the default/comparison condition in most Housing First trials.</p><span class='chip'>1 registries</span> <span class='chip'>205 Canadian orgs identified</span></a></div>
+<h2>In progress, not yet shown</h2>
+<ul class="progress-list"><li><b>Breaking the Cycle</b><div class='why'>All evidence entries are unverified &mdash; not yet checked against source.</div></li></ul>
+<footer><p class="draft-footer-notice">DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p>
+Generated 2026-07-12 18:15 from evidence/evidence-spine-seed.yaml and
+evidence/seed-classifications-housing-canada.csv (federal Grants &amp;
+Contributions text classification). See
+<a href="../evidence-site-spec.md">evidence-site-spec.md</a> for methodology.</footer>
+</div>
+<script>
+function toggleShowWork(){
+  document.body.classList.toggle('show-work');
+  document.getElementById('sw').classList.toggle('on');
+}
+function toggleDrawer(el){
+  const d = document.getElementById(el.dataset.drawer);
+  if (!d) return;
+  if (d.classList.contains('open')) { d.classList.remove('open'); return; }
+  // Relocate the drawer next to the clicked claim so it opens inline, not at
+  // the bottom of the document. A table row can only contain <td>/<th>, so a
+  // claim inside one gets a sibling <tr><td colspan> row instead of a bare
+  // insertAdjacentElement (which a table would silently mangle into an
+  // anonymous cell).
+  const row = el.closest('tr');
+  if (row) {
+    let holder = row.nextElementSibling;
+    if (!holder || !holder.classList.contains('drawer-row')) {
+      holder = document.createElement('tr');
+      holder.className = 'drawer-row';
+      const td = document.createElement('td');
+      td.colSpan = row.children.length;
+      holder.appendChild(td);
+      row.insertAdjacentElement('afterend', holder);
+    }
+    holder.firstElementChild.appendChild(d);
+  } else {
+    const container = el.closest('div, h1');
+    if (container) container.insertAdjacentElement('afterend', d);
+  }
+  d.classList.add('open');
+}
+</script>
+</body></html>

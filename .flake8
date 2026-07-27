@@ -1,0 +1,7 @@
+[flake8]
+# Scoped deliberately narrow: this codebase's own style (dense docstrings,
+# long comment-heavy lines, comma-packed dict/tuple literals) doesn't follow
+# strict pycodestyle spacing, and reformatting it wholesale isn't the goal
+# here. Only pyflakes' correctness checks (unused imports, undefined names,
+# etc.) plus real syntax errors (E9) run in CI -- see .github/workflows/tests.yml.
+select = F401,F402,F404,F406,F407,F811,F821,F822,F823,F841,E9

@@ -1,0 +1,284 @@
+{
+  "n_records": 1174938,
+  "total_value": 842228596141.8262,
+  "n_depts_ge100": 47,
+  "nodesc_en": 108421,
+  "nodesc_fr": 112244,
+  "dirty_total": 19169,
+  "zeroneg_total": 16133,
+  "baddate_total": 14,
+  "badgeo_total": 1705,
+  "nobn_total": 655651,
+  "short_total": 338762,
+  "min_val": -214127920.0,
+  "postdec_n": 14417,
+  "postdec_missing_riding": 8604,
+  "postdec_missing_bn": 7121,
+  "postdec_missing_postal": 1061,
+  "postdec_by_dept": [
+    {
+      "name": "Canadian Heritage",
+      "code": "pch",
+      "n": 3040,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 0.1
+    },
+    {
+      "name": "Employment and Social Development Canada",
+      "code": "esdc-edsc",
+      "n": 2944,
+      "pct_riding": 0.1,
+      "pct_bn": 0.0,
+      "pct_postal": 0.1
+    },
+    {
+      "name": "National Research Council Canada",
+      "code": "nrc-cnrc",
+      "n": 1314,
+      "pct_riding": 1.1,
+      "pct_bn": 2.1,
+      "pct_postal": 1.1
+    },
+    {
+      "name": "Social Sciences and Humanities Research Council of Canada",
+      "code": "sshrc-crsh",
+      "n": 1149,
+      "pct_riding": 100.0,
+      "pct_bn": 79.5,
+      "pct_postal": 0.6
+    },
+    {
+      "name": "Natural Sciences and Engineering Research Council of Canada",
+      "code": "nserc-crsng",
+      "n": 671,
+      "pct_riding": 100.0,
+      "pct_bn": 91.1,
+      "pct_postal": 4.2
+    },
+    {
+      "name": "Natural Resources Canada",
+      "code": "nrcan-rncan",
+      "n": 542,
+      "pct_riding": 100.0,
+      "pct_bn": 29.0,
+      "pct_postal": 5.4
+    },
+    {
+      "name": "Agriculture and Agri-Food Canada",
+      "code": "aafc-aac",
+      "n": 468,
+      "pct_riding": 100.0,
+      "pct_bn": 6.4,
+      "pct_postal": 1.3
+    },
+    {
+      "name": "Transport Canada",
+      "code": "tc",
+      "n": 410,
+      "pct_riding": 0.0,
+      "pct_bn": 28.5,
+      "pct_postal": 0.2
+    },
+    {
+      "name": "Canada Economic Development for Quebec Regions",
+      "code": "ced-dec",
+      "n": 397,
+      "pct_riding": 100.0,
+      "pct_bn": 5.0,
+      "pct_postal": 0.0
+    },
+    {
+      "name": "Atlantic Canada Opportunities Agency",
+      "code": "acoa-apeca",
+      "n": 338,
+      "pct_riding": 100.0,
+      "pct_bn": 1.2,
+      "pct_postal": 0.0
+    },
+    {
+      "name": "Department of Justice Canada",
+      "code": "jus",
+      "n": 292,
+      "pct_riding": 0.3,
+      "pct_bn": 29.8,
+      "pct_postal": 0.3
+    },
+    {
+      "name": "Canadian Institutes of Health Research",
+      "code": "cihr-irsc",
+      "n": 283,
+      "pct_riding": 100.0,
+      "pct_bn": 98.2,
+      "pct_postal": 2.5
+    },
+    {
+      "name": "Global Affairs Canada",
+      "code": "dfatd-maecd",
+      "n": 275,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 100.0
+    },
+    {
+      "name": "Fisheries and Oceans Canada",
+      "code": "dfo-mpo",
+      "n": 254,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 3.1
+    },
+    {
+      "name": "Impact Assessment Agency of Canada",
+      "code": "iaac-aeic",
+      "n": 237,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 100.0
+    },
+    {
+      "name": "Parks Canada",
+      "code": "pc",
+      "n": 216,
+      "pct_riding": 0.5,
+      "pct_bn": 69.9,
+      "pct_postal": 0.5
+    },
+    {
+      "name": "Environment and Climate Change Canada",
+      "code": "ec",
+      "n": 199,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 100.0
+    },
+    {
+      "name": "Public Safety Canada",
+      "code": "ps-sp",
+      "n": 193,
+      "pct_riding": 9.3,
+      "pct_bn": 93.3,
+      "pct_postal": 2.1
+    },
+    {
+      "name": "Prairies Economic Development Canada",
+      "code": "prairiescan",
+      "n": 176,
+      "pct_riding": 0.0,
+      "pct_bn": 1.1,
+      "pct_postal": 0.0
+    },
+    {
+      "name": "National Defence",
+      "code": "dnd-mdn",
+      "n": 152,
+      "pct_riding": 100.0,
+      "pct_bn": 13.2,
+      "pct_postal": 2.6
+    },
+    {
+      "name": "Innovation, Science and Economic Development Canada",
+      "code": "ic",
+      "n": 95,
+      "pct_riding": 0.0,
+      "pct_bn": 0.0,
+      "pct_postal": 3.2
+    },
+    {
+      "name": "Pacific Economic Development Canada",
+      "code": "pacifican",
+      "n": 93,
+      "pct_riding": 0.0,
+      "pct_bn": 0.0,
+      "pct_postal": 0.0
+    },
+    {
+      "name": "Department of Housing, Infrastructure and Communities",
+      "code": "infc",
+      "n": 92,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 100.0
+    },
+    {
+      "name": "Canadian Space Agency",
+      "code": "csa-asc",
+      "n": 74,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 1.4
+    },
+    {
+      "name": "Canada Water Agency",
+      "code": "cwa-aec",
+      "n": 69,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 100.0
+    },
+    {
+      "name": "Health Canada",
+      "code": "hc-sc",
+      "n": 66,
+      "pct_riding": 100.0,
+      "pct_bn": 9.1,
+      "pct_postal": 1.5
+    },
+    {
+      "name": "Indigenous Services Canada",
+      "code": "isc-sac",
+      "n": 64,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 0.0
+    },
+    {
+      "name": "Federal Economic Development Agency for Northern Ontario",
+      "code": "fednor",
+      "n": 59,
+      "pct_riding": 0.0,
+      "pct_bn": 0.0,
+      "pct_postal": 0.0
+    },
+    {
+      "name": "Canadian Nuclear Safety Commission",
+      "code": "cnsc-ccsn",
+      "n": 57,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 1.8
+    },
+    {
+      "name": "Veterans Affairs Canada",
+      "code": "vac-acc",
+      "n": 33,
+      "pct_riding": 51.5,
+      "pct_bn": 63.6,
+      "pct_postal": 51.5
+    },
+    {
+      "name": "Crown-Indigenous Relations and Northern Affairs Canada",
+      "code": "aandc-aadnc",
+      "n": 31,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 0.0
+    },
+    {
+      "name": "Public Health Agency of Canada",
+      "code": "phac-aspc",
+      "n": 29,
+      "pct_riding": 100.0,
+      "pct_bn": 93.1,
+      "pct_postal": 34.5
+    },
+    {
+      "name": "Canada Energy Regulator",
+      "code": "cer-rec",
+      "n": 29,
+      "pct_riding": 100.0,
+      "pct_bn": 100.0,
+      "pct_postal": 100.0
+    }
+  ]
+}

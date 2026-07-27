@@ -1,0 +1,19 @@
+grants.csv
+data/*
+*.duckdb
+*.duckdb.wal
+*.duckdb.bak
+.venv/
+__pycache__/
+
+# l2_classifications.duckdb is a small, intentionally-committed pilot-result
+# artifact (see docs/l2-classification-spec.md), not a large derived DB like
+# nonprofit_network.duckdb -- exempted from the blanket *.duckdb rule above.
+!evidence/l2_classifications.duckdb
+
+# bn_merge_overrides.csv is a small, hand-maintained, human-reviewed list of
+# confirmed entity merges (see analysis/build_entity_graph.py's
+# apply_bn_merge_overrides()), not a large fetched dataset -- exempted from
+# the blanket data/ rule above, same precedent as l2_classifications.duckdb.
+!data/bn_merge_overrides.csv
+

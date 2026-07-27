@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/bin/python -m pytest *)",
+      "Bash(.venv/bin/python -m flake8 *)",
+      "Bash(.venv/bin/python analysis/dbquery.py \"SELECT*)",
+      "Bash(.venv/bin/python analysis/dbquery.py \"WITH*)",
+      "Bash(curl -s \"http://localhost:*)",
+      "Bash(curl -s \"http://127.0.0.1:*)",
+      "Bash(git check-ignore *)",
+      "Bash(until ! kill -0 *)",
+      "Bash(until ! ps -p *)"
+    ],
+    "deny": [
+      "Read(grants.csv)",
+      "Read(**/*.duckdb*)",
+      "Bash(cat *grants.csv*)",
+      "Bash(head *grants.csv*)",
+      "Bash(tail *grants.csv*)",
+      "Bash(less *grants.csv*)",
+      "Bash(more *grants.csv*)",
+      "Bash(sed *grants.csv*)",
+      "Bash(awk *grants.csv*)",
+      "Bash(strings *grants.csv*)",
+      "Bash(xxd *grants.csv*)",
+      "Bash(od *grants.csv*)",
+      "Bash(cat *.duckdb*)",
+      "Bash(head *.duckdb*)",
+      "Bash(tail *.duckdb*)",
+      "Bash(less *.duckdb*)",
+      "Bash(more *.duckdb*)",
+      "Bash(sed *.duckdb*)",
+      "Bash(awk *.duckdb*)",
+      "Bash(strings *.duckdb*)",
+      "Bash(xxd *.duckdb*)",
+      "Bash(od *.duckdb*)"
+    ]
+  }
+}

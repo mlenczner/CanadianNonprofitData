@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] TYS THEATRE YES SOCIETY — Canadian Nonprofit Data</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de;--gold:#b8860b}
+*{box-sizing:border-box;margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-top:40px}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.draft-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:9rem;font-weight:800;color:#000;opacity:.03;pointer-events:none;z-index:0;white-space:nowrap;user-select:none}
+.draft-footer-notice{background:#fff3cd;color:#8a6d00;border:1px solid #8a6d00;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:.8rem}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
+header{padding:40px 0 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+h1{font-size:2.1rem;letter-spacing:-.02em}
+.badge{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:.78rem;color:var(--mut);margin-left:10px;vertical-align:middle}
+.meta-line{color:var(--mut);margin:8px 0 0;font-size:.92rem}
+h2{font-size:1.05rem;margin:40px 0 14px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);border-bottom:2px solid var(--red);display:inline-block;padding-bottom:4px}
+h3{font-size:.82rem;margin:22px 0 10px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);font-weight:700}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;flex:1 1 160px}
+.stats>.drawer.open{flex-basis:100%;width:100%}
+.stat b{display:block;font-size:1.5rem;letter-spacing:-.02em}
+.stat span{color:var(--mut);font-size:.8rem}
+.bars{display:flex;gap:5px;height:160px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 18px 30px;position:relative}
+.chart-legend{display:flex;gap:16px;margin-bottom:8px;font-size:.78rem;color:var(--mut)}
+.chart-legend span{display:inline-flex;align-items:center;gap:5px}
+.chart-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;font-style:normal}
+.legend-recv{background:var(--red);opacity:.85}
+.legend-given{background:var(--ink);opacity:.55}
+.legend-gov-declared{background:var(--red);opacity:.35}
+.legend-gov-identified{background:var(--red);opacity:.85}
+.legend-fdn-declared{background:var(--gold);opacity:.35}
+.legend-fdn-identified{background:var(--gold);opacity:.85}
+.barcol{flex:1;height:100%;display:flex;flex-direction:column-reverse;gap:1px;position:relative}
+.bar-recv{background:var(--red);opacity:.85;min-height:1px}
+.bar-given{background:var(--ink);opacity:.55;min-height:1px}
+.recv-group{flex:1;height:100%;display:flex;align-items:flex-end;gap:2px}
+.bar-gov-declared,.bar-gov-identified,.bar-fdn-declared,.bar-fdn-identified{flex:1;min-height:1px}
+.bar-gov-declared{background:var(--red);opacity:.35}
+.bar-gov-identified{background:var(--red);opacity:.85}
+.bar-fdn-declared{background:var(--gold);opacity:.35}
+.bar-fdn-identified{background:var(--gold);opacity:.85}
+.barcol i{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.6rem;color:var(--mut);white-space:nowrap}
+.barcol u{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:.68rem;padding:3px 8px;border-radius:5px;white-space:nowrap;z-index:3}
+.barcol:first-child u{left:0;transform:none}
+.barcol:last-child u{left:auto;right:0;transform:none}
+.barcol:hover u{display:block}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+table{min-width:100%;border-collapse:collapse;background:var(--card);font-size:.85rem}
+th{background:#f1ede7;text-align:left;padding:8px 10px;white-space:nowrap}
+th:last-child,td:last-child{padding-right:16px}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.src{display:inline-block;font-size:.68rem;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px;white-space:nowrap}
+.orglink{color:var(--red);text-decoration:none;font-weight:700}
+.orglink:hover{text-decoration:underline}
+.year-group{background:#f1ede7 !important;font-weight:600}
+.claim{border-bottom:1px dotted #b8ad9c;cursor:pointer}
+body.show-work .claim{border-bottom-color:var(--red);background:#fdf3d7;border-radius:3px}
+.claim:hover{background:#fdf3d7;border-bottom-color:var(--red)}
+.drawer{display:none;background:#fffdf7;border:1px solid #f0dfa0;border-radius:8px;padding:12px 14px;margin:6px 0 14px;font-size:.82rem;color:#4a4a4a}
+.drawer.open{display:block}
+.drawer .chain{margin:6px 0;padding-left:18px}
+.drawer .not-found{color:#a35200;font-style:italic}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--mut);white-space:nowrap}
+.sw-hint{display:none;color:var(--mut);font-size:.78rem;font-weight:400}
+body.show-work .sw-hint{display:inline}
+.switch{position:relative;width:38px;height:22px;background:var(--line);border-radius:11px;cursor:pointer;transition:background .15s}
+.switch.on{background:var(--red)}
+.switch i{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}
+.switch.on i{left:18px}
+.rollup-note{color:var(--mut);font-size:.82rem;margin:8px 0 16px}
+.more-rows{display:none}
+.more-rows.shown{display:table-row-group}
+.show-more{display:inline-block;color:var(--red);font-weight:700;font-size:.82rem;cursor:pointer;padding:4px 0}
+.show-more:hover{text-decoration:underline}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+@media(max-width:640px){.barcol i{display:none}}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="draft-watermark">DRAFT</div>
+<div class="wrap">
+<header>
+<div>
+<h1><span class="claim" data-drawer="drawer-identity" onclick="toggleDrawer(this)">TYS THEATRE YES SOCIETY</span>
+<span class="badge">Registered charity</span></h1>
+<p class="meta-line">EDMONTON, AB &middot; BN 889261012</p>
+</div>
+<div class="toggle" onclick="toggleShowWork()">
+<div class="switch" id="sw"><i></i></div>
+Show your work
+<span class="sw-hint">&mdash; highlighted text is clickable; click any claim to see its source</span>
+</div>
+</header>
+<div class='stats'><div class='stat'><b class='claim' data-drawer='drawer-stat-recv-total' onclick='toggleDrawer(this)'>$16,110</b><span>total received</span></div><div class='stat'><b>1</b><span>grant received</span></div><div class='stat'><b class='claim' data-drawer='drawer-stat-revenue' onclick='toggleDrawer(this)'>$17,985</b><span>latest reported revenue (2024-09-30)</span></div><div class='stat'><b>2024–2024</b><span>years active</span></div></div><h2>Funding timeline</h2><div class='chart-legend'><span><i class='legend-gov-declared'></i>Gov't declared</span><span><i class='legend-gov-identified'></i>Gov't identified</span></div><div class='bars'><div class='barcol'><div class='recv-group'><div class='bar-gov-declared' style='height:72.68777157045314%'></div><div class='bar-gov-identified' style='height:100.0%'></div></div><u>FY2024: government declared $11,710 &middot; identified $16,110 (138%)</u><i>2024</i></div></div><h2>Grants received</h2><h3>From government (1)</h3><div class='table-scroll'><table><thead><tr><th>Organization</th><th>Program</th><th class='num'>Amount</th><th>Role</th></tr></thead><tbody><tr class='year-group'><td colspan='4'>FY 2024</td></tr><tr><td><span class='claim' data-drawer='drawer-2' onclick='toggleDrawer(this)'>Canada Council for the Arts</span><span class='src'>Canada Council</span></td><td>Explore and Create</td><td class='num'>$16,110</td><td>Funder</td></tr></tbody></table></div>
+<div id="drawers"><div class='drawer' id='drawer-identity'><p>This organization appears under 1 name variant across 1 source:</p><ul><li><b>Theatre Yes</b> — Canada Council <span class='src'>exact BN</span> · BN 889261012</li></ul></div><div class='drawer' id='drawer-stat-recv-total'><p>Computed as the sum of 1 row in <code>grants_unified</code> ($16,110 total).</p><p>Caveats: federal amounts are latest-amendment-per-agreement (superseded amendment rows are excluded, not summed). T3010 qualified-donee gifts are filer-reported by the giving charity, not independently verified.</p></div><div class='drawer' id='drawer-stat-revenue'><p>From <code>entity_financials</code>: BN 889261012RR0001, fiscal period end 2024-09-30. T3010 line 4700 (total revenue). Only the latest filed fiscal year is kept per organization.</p></div><div class='drawer' id='drawer-2'><p><b>Source:</b> Canada Council</p><p><b>Program:</b> Explore and Create</p></div></div>
+<footer><p class="draft-footer-notice">DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p>
+Generated 2026-07-16 03:42 from the Canadian Nonprofit Data entity graph
+(federal Grants &amp; Contributions, CRA T3010, Canada Council for the Arts).
+Matching methodology &amp; limitations: see
+<a href="../entity-resolution-methodology.md">entity-resolution-methodology.md</a>.
+&middot; <a href="index.html">&larr; Search all organizations</a></footer>
+</div>
+<script>
+function toggleShowWork(){
+  document.body.classList.toggle('show-work');
+  document.getElementById('sw').classList.toggle('on');
+}
+function toggleMoreRows(el){
+  const tbody = document.getElementById(el.dataset.target);
+  if (!tbody) return;
+  const showing = tbody.classList.toggle('shown');
+  el.textContent = showing ? (el.dataset.hide + ' \u25b2') : (el.dataset.show + ' \u25bc');
+}
+function placeDrawer(el, d){
+  // Relocate the drawer next to the clicked claim so it opens inline, not at
+  // the bottom of the document. A table row can only contain <td>/<th>, so a
+  // claim inside one gets a sibling <tr><td colspan> row instead of a bare
+  // insertAdjacentElement (which a table would silently mangle into an
+  // anonymous cell).
+  const row = el.closest('tr');
+  if (row) {
+    let holder = row.nextElementSibling;
+    if (!holder || !holder.classList.contains('drawer-row')) {
+      holder = document.createElement('tr');
+      holder.className = 'drawer-row';
+      const td = document.createElement('td');
+      td.colSpan = row.children.length;
+      holder.appendChild(td);
+      row.insertAdjacentElement('afterend', holder);
+    }
+    holder.firstElementChild.appendChild(d);
+  } else {
+    const container = el.closest('div, h1');
+    if (container) container.insertAdjacentElement('afterend', d);
+  }
+}
+function toggleDrawer(el){
+  if (el.dataset.lazy) { toggleLazyDrawer(el); return; }
+  const d = document.getElementById(el.dataset.drawer);
+  if (!d) return;
+  if (d.classList.contains('open')) { d.classList.remove('open'); return; }
+  placeDrawer(el, d);
+  d.classList.add('open');
+}
+async function toggleLazyDrawer(el){
+  // Live-app-only path (webapp.py): the claim's receipt was never computed
+  // at page-render time (see render_grants_table's lazy_receipts branch), so
+  // there's no pre-rendered <div class="drawer"> to toggle -- fetch it from
+  // this page's own /receipt/<grant_id> route on first click, then behave
+  // like a normal drawer on every click after that (no re-fetching).
+  let d = document.getElementById(el.dataset.drawer);
+  if (d) {
+    d.classList.toggle('open');
+    return;
+  }
+  d = document.createElement('div');
+  d.className = 'drawer';
+  d.id = el.dataset.drawer;
+  d.innerHTML = "<p><em>Loading\u2026</em></p>";
+  placeDrawer(el, d);
+  d.classList.add('open');
+  try {
+    const url = window.location.pathname + '/receipt/' + el.dataset.grantId +
+                '?direction=' + el.dataset.direction;
+    const res = await fetch(url);
+    d.innerHTML = res.ok ? await res.text() : "<div class='not-found'>Receipt not found.</div>";
+  } catch (e) {
+    d.innerHTML = "<div class='not-found'>Failed to load receipt.</div>";
+  }
+}
+</script>
+</body></html>

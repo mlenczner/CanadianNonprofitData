@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] Interim Housing Assistance Program — Canadian Nonprofit Data</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
+*{box-sizing:border-box;margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-top:40px}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.draft-watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:9rem;font-weight:800;color:#000;opacity:.03;pointer-events:none;z-index:0;white-space:nowrap;user-select:none}
+.draft-footer-notice{background:#fff3cd;color:#8a6d00;border:1px solid #8a6d00;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:.8rem}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
+header{padding:40px 0 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+h1{font-size:2.1rem;letter-spacing:-.02em}
+.badge{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:.78rem;color:var(--mut);margin-left:10px;vertical-align:middle}
+.meta-line{color:var(--mut);margin:8px 0 0;font-size:.92rem}
+h2{font-size:1.05rem;margin:40px 0 14px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);border-bottom:2px solid var(--red);display:inline-block;padding-bottom:4px}
+h3{font-size:.82rem;margin:22px 0 10px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);font-weight:700}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;flex:1 1 160px}
+.stats>.drawer.open{flex-basis:100%;width:100%}
+.stat b{display:block;font-size:1.5rem;letter-spacing:-.02em}
+.stat span{color:var(--mut);font-size:.8rem}
+.bars{display:flex;gap:5px;height:160px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 18px 30px;position:relative}
+.barcol{flex:1;height:100%;display:flex;flex-direction:column-reverse;gap:1px;position:relative}
+.bar-recv{background:var(--red);opacity:.85;min-height:1px}
+.bar-given{background:var(--ink);opacity:.55;min-height:1px}
+.barcol i{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-style:normal;font-size:.6rem;color:var(--mut);white-space:nowrap}
+.barcol u{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:.68rem;padding:3px 8px;border-radius:5px;white-space:nowrap;z-index:3}
+.barcol:hover u{display:block}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+table{min-width:100%;border-collapse:collapse;background:var(--card);font-size:.85rem}
+th{background:#f1ede7;text-align:left;padding:8px 10px;white-space:nowrap}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.src{display:inline-block;font-size:.68rem;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px;white-space:nowrap}
+.orglink{color:var(--red);text-decoration:none;font-weight:700}
+.orglink:hover{text-decoration:underline}
+.year-group{background:#f1ede7 !important;font-weight:600}
+.claim{border-bottom:1px dotted #b8ad9c;cursor:pointer}
+body.show-work .claim{border-bottom-color:var(--red)}
+.claim:hover{background:#fdf3d7;border-bottom-color:var(--red)}
+.drawer{display:none;background:#fffdf7;border:1px solid #f0dfa0;border-radius:8px;padding:12px 14px;margin:6px 0 14px;font-size:.82rem;color:#4a4a4a}
+.drawer.open{display:block}
+.drawer .chain{margin:6px 0;padding-left:18px}
+.drawer .not-found{color:#a35200;font-style:italic}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--mut);white-space:nowrap}
+.switch{position:relative;width:38px;height:22px;background:var(--line);border-radius:11px;cursor:pointer;transition:background .15s}
+.switch.on{background:var(--red)}
+.switch i{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}
+.switch.on i{left:18px}
+.rollup-note{color:var(--mut);font-size:.82rem;margin:8px 0 16px}
+.more-rows{display:none}
+.more-rows.shown{display:table-row-group}
+.show-more{display:inline-block;color:var(--red);font-weight:700;font-size:.82rem;cursor:pointer;padding:4px 0}
+.show-more:hover{text-decoration:underline}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+@media(max-width:640px){.barcol i{display:none}}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="draft-watermark">DRAFT</div>
+<div class="wrap">
+<header>
+<div>
+<h1>Interim Housing Assistance Program <span class="badge">Federal G&amp;C</span></h1>
+<p class="meta-line">Financial grant towards managing temporary housing provided to asylum claimants, including irregular migration, in recognition of extraordinary or incremental costs incurred.</p>
+</div>
+</header>
+<div class='stats'><div class='stat'><b>$988.5M</b><span>total awarded</span></div><div class='stat'><b>37</b><span>grants</span></div><div class='stat'><b>1</b><span>funder</span></div><div class='stat'><b>17</b><span>recipients</span></div><div class='stat'><b>2020–2024</b><span>years active</span></div></div>
+<h2>Grants sharing this text</h2>
+<div class='table-scroll'><table><thead><tr><th>Funder</th><th>Recipient</th><th class='num'>Amount</th><th>Fiscal year</th></tr></thead><tbody><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>CITY OF TORONTO <a class='orglink' href='../orgs/city-of-toronto.html' title='View organization page'>&#8599;</a></td><td class='num'>$261,866,137</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>MINISTRE DES FINANCES - QUEBEC <a class='orglink' href='../orgs/ministre-des-finances-quebec.html' title='View organization page'>&#8599;</a></td><td class='num'>$101,800,000</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>The Region of Peel <a class='orglink' href='../orgs/the-region-of-peel.html' title='View organization page'>&#8599;</a></td><td class='num'>$73,216,328</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Ottawa <a class='orglink' href='../orgs/city-of-ottawa.html' title='View organization page'>&#8599;</a></td><td class='num'>$51,930,000</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>Municipality of Durham <a class='orglink' href='../orgs/municipality-of-durham.html' title='View organization page'>&#8599;</a></td><td class='num'>$13,040,753</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>Province of British Colombia <a class='orglink' href='../orgs/province-of-british-colombia.html' title='View organization page'>&#8599;</a></td><td class='num'>$8,386,655</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>The regional municipality of York <a class='orglink' href='../orgs/the-regional-municipality-of-york.html' title='View organization page'>&#8599;</a></td><td class='num'>$5,049,041</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>Province of Manitoba  <a class='orglink' href='../orgs/province-of-manitoba.html' title='View organization page'>&#8599;</a></td><td class='num'>$4,551,540</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Hamilton <a class='orglink' href='../orgs/city-of-hamilton.html' title='View organization page'>&#8599;</a></td><td class='num'>$3,075,287</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>The Corporation of the City of London <a class='orglink' href='../orgs/the-corporation-of-the-city-of-london.html' title='View organization page'>&#8599;</a></td><td class='num'>$1,806,573</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>Municipality of Waterloo <a class='orglink' href='../orgs/municipality-of-waterloo.html' title='View organization page'>&#8599;</a></td><td class='num'>$944,300</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Niagara <a class='orglink' href='../orgs/city-of-niagara.html' title='View organization page'>&#8599;</a></td><td class='num'>$282,346</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Windsor <a class='orglink' href='../orgs/city-of-windsor.html' title='View organization page'>&#8599;</a></td><td class='num'>$175,181</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Halton <a class='orglink' href='../orgs/city-of-halton.html' title='View organization page'>&#8599;</a></td><td class='num'>$102,092</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>CORPORATION OF THE COUNTY OF SIMCOE <a class='orglink' href='../orgs/corporation-of-the-county-of-simcoe.html' title='View organization page'>&#8599;</a></td><td class='num'>$46,940</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Moncton <a class='orglink' href='../orgs/city-of-moncton.html' title='View organization page'>&#8599;</a></td><td class='num'>$4,200</td><td>FY 2024</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>CITY OF TORONTO <a class='orglink' href='../orgs/city-of-toronto.html' title='View organization page'>&#8599;</a></td><td class='num'>$192,400,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Ottawa <a class='orglink' href='../orgs/city-of-ottawa.html' title='View organization page'>&#8599;</a></td><td class='num'>$27,700,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>The Region of Peel <a class='orglink' href='../orgs/the-region-of-peel.html' title='View organization page'>&#8599;</a></td><td class='num'>$22,400,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>The Region of Peel <a class='orglink' href='../orgs/the-region-of-peel.html' title='View organization page'>&#8599;</a></td><td class='num'>$10,000,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Hamilton <a class='orglink' href='../orgs/city-of-hamilton.html' title='View organization page'>&#8599;</a></td><td class='num'>$5,200,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Ottawa <a class='orglink' href='../orgs/city-of-ottawa.html' title='View organization page'>&#8599;</a></td><td class='num'>$5,000,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>Municipality of Durham <a class='orglink' href='../orgs/municipality-of-durham.html' title='View organization page'>&#8599;</a></td><td class='num'>$4,600,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>Province of Manitoba  <a class='orglink' href='../orgs/province-of-manitoba.html' title='View organization page'>&#8599;</a></td><td class='num'>$3,060,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>The regional municipality of York <a class='orglink' href='../orgs/the-regional-municipality-of-york.html' title='View organization page'>&#8599;</a></td><td class='num'>$2,300,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>Municipality of Waterloo <a class='orglink' href='../orgs/municipality-of-waterloo.html' title='View organization page'>&#8599;</a></td><td class='num'>$1,000,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Niagara <a class='orglink' href='../orgs/city-of-niagara.html' title='View organization page'>&#8599;</a></td><td class='num'>$912,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Halton <a class='orglink' href='../orgs/city-of-halton.html' title='View organization page'>&#8599;</a></td><td class='num'>$257,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Windsor <a class='orglink' href='../orgs/city-of-windsor.html' title='View organization page'>&#8599;</a></td><td class='num'>$106,000</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Moncton <a class='orglink' href='../orgs/city-of-moncton.html' title='View organization page'>&#8599;</a></td><td class='num'>$10,000</td><td>FY 2023</td></tr></tbody><tbody class='more-rows' id='more-grants'><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Dieppe  <a class='orglink' href='../orgs/city-of-dieppe.html' title='View organization page'>&#8599;</a></td><td class='num'>$3,780</td><td>FY 2023</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>MINISTRE DES FINANCES - QUEBEC <a class='orglink' href='../orgs/ministre-des-finances-quebec.html' title='View organization page'>&#8599;</a></td><td class='num'>$66,900,000</td><td>FY 2022</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>CITY OF TORONTO <a class='orglink' href='../orgs/city-of-toronto.html' title='View organization page'>&#8599;</a></td><td class='num'>$39,900,000</td><td>FY 2022</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>CITY OF TORONTO <a class='orglink' href='../orgs/city-of-toronto.html' title='View organization page'>&#8599;</a></td><td class='num'>$31,400,000</td><td>FY 2022</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>CITY OF TORONTO <a class='orglink' href='../orgs/city-of-toronto.html' title='View organization page'>&#8599;</a></td><td class='num'>$17,100,000</td><td>FY 2022</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>City of Ottawa <a class='orglink' href='../orgs/city-of-ottawa.html' title='View organization page'>&#8599;</a></td><td class='num'>$9,000,000</td><td>FY 2022</td></tr><tr><td>Immigration, Refugees and Citizenship Canada  <a class='orglink' href='../orgs/immigration-refugees-and-citizenship-canada.html' title='View organization page'>&#8599;</a></td><td>CITY OF TORONTO <a class='orglink' href='../orgs/city-of-toronto.html' title='View organization page'>&#8599;</a></td><td class='num'>$23,000,000</td><td>FY 2020</td></tr></tbody><tfoot><tr><td colspan='4'><span class='show-more' data-target='more-grants' data-show='Show 7 more grants' data-hide='Show fewer' onclick='toggleMoreRows(this)'>Show 7 more grants ▼</span></td></tr></tfoot></table></div>
+<footer><p class="draft-footer-notice">DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p>
+Generated 2026-07-15 10:18 from the Canadian Nonprofit Data entity graph.
+&middot; <a href="index.html">&larr; Search grant text</a>
+&middot; <a href="../orgs/index.html">Search organizations</a></footer>
+</div>
+<script>
+function toggleShowWork(){
+  document.body.classList.toggle('show-work');
+  document.getElementById('sw').classList.toggle('on');
+}
+function toggleMoreRows(el){
+  const tbody = document.getElementById(el.dataset.target);
+  if (!tbody) return;
+  const showing = tbody.classList.toggle('shown');
+  el.textContent = showing ? (el.dataset.hide + ' \u25b2') : (el.dataset.show + ' \u25bc');
+}
+function toggleDrawer(el){
+  const d = document.getElementById(el.dataset.drawer);
+  if (!d) return;
+  if (d.classList.contains('open')) { d.classList.remove('open'); return; }
+  // Relocate the drawer next to the clicked claim so it opens inline, not at
+  // the bottom of the document. A table row can only contain <td>/<th>, so a
+  // claim inside one gets a sibling <tr><td colspan> row instead of a bare
+  // insertAdjacentElement (which a table would silently mangle into an
+  // anonymous cell).
+  const row = el.closest('tr');
+  if (row) {
+    let holder = row.nextElementSibling;
+    if (!holder || !holder.classList.contains('drawer-row')) {
+      holder = document.createElement('tr');
+      holder.className = 'drawer-row';
+      const td = document.createElement('td');
+      td.colSpan = row.children.length;
+      holder.appendChild(td);
+      row.insertAdjacentElement('afterend', holder);
+    }
+    holder.firstElementChild.appendChild(d);
+  } else {
+    const container = el.closest('div, h1');
+    if (container) container.insertAdjacentElement('afterend', d);
+  }
+  d.classList.add('open');
+}
+</script>
+</body></html>

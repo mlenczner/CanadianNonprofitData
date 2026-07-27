@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "org-pages",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8929", "--directory", "docs/orgs"],
+      "port": 8929
+    },
+    {
+      "name": "docs-pages",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8930", "--directory", "docs"],
+      "port": 8930
+    },
+    {
+      "name": "webapp",
+      "runtimeExecutable": ".venv/bin/python",
+      "runtimeArgs": ["analysis/webapp.py", "--port", "8931"],
+      "port": 8931
+    }
+  ]
+}
