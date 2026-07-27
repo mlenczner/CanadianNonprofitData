@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[DRAFT] Canadian Nonprofit Data</title>
+<style>
+:root{--red:#d52b1e;--ink:#1a1a1a;--mut:#6b6b6b;--bg:#faf8f5;--card:#fff;--line:#e8e4de}
+*{box-sizing:border-box;margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding-top:40px}
+.draft-banner{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff3cd;color:#8a6d00;font-weight:700;text-align:center;padding:8px 12px;font-size:.85rem;border-bottom:2px solid #8a6d00}
+.wrap{max-width:900px;margin:0 auto;padding:0 24px 80px}
+header{padding:56px 0 8px}
+h1{font-size:2.2rem;letter-spacing:-.02em}
+.sub{color:var(--mut);margin:10px 0 0;max-width:640px}
+h2{font-size:1.05rem;margin:44px 0 14px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);border-bottom:2px solid var(--red);display:inline-block;padding-bottom:4px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+a.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;text-decoration:none;color:inherit;display:block}
+a.card:hover{border-color:var(--red)}
+a.card h3{font-size:1.02rem;margin-bottom:6px;color:var(--ink)}
+a.card p{color:var(--mut);font-size:.85rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+a.chip{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 14px;font-size:.85rem;text-decoration:none;color:var(--ink)}
+a.chip:hover{border-color:var(--red);color:var(--red)}
+.note{color:var(--mut);font-size:.85rem;margin-top:10px}
+footer{margin-top:56px;color:var(--mut);font-size:.78rem;border-top:1px solid var(--line);padding-top:16px}
+</style></head><body>
+<div class="draft-banner">DRAFT — research prototype, not for circulation</div>
+<div class="wrap">
+<header>
+<h1>Canadian Nonprofit Data</h1>
+<p class="sub">Analysis of the Government of Canada's Proactive Disclosure — Grants and
+Contributions dataset, cross-referenced against the CRA charity registry and provincial/
+federal nonprofit incorporation registries.</p>
+</header>
+
+<h2>Reports</h2>
+<div class="cards"><a class="card" href="data-quality-rankings.html"><h3>Federal Grants & Contributions: Disclosure Quality</h3><p>Policy brief on disclosure completeness across federal departments — executive summary, recommendations, Post-December-2025 compliance, and recurring data patterns with real records.</p></a><a class="card" href="grants-dashboard.html"><h3>Federal Grants & Contributions: Overview</h3><p>Totals, department-by-department disclosure-completeness metrics, and a fiscal-year funding chart.</p></a></div>
+
+<h2>Organization profiles (sample)</h2>
+<div class="chips"><a class="chip" href="orgs/canadian-cancer-society-soci-t-canadienne-du-cancer.html">CANADIAN CANCER SOCIETY - SOCIÉTÉ CANADIENNE DU CANCER</a><a class="chip" href="orgs/canadian-opera-company.html">CANADIAN OPERA COMPANY</a><a class="chip" href="orgs/evergreen.html">EVERGREEN</a><a class="chip" href="orgs/habitat-for-humanity-canada.html">HABITAT FOR HUMANITY CANADA/HABITAT POUR L'HUMANITÉ CANADA</a><a class="chip" href="orgs/harbourfront-corporation-1990.html">HARBOURFRONT CORPORATION (1990)</a><a class="chip" href="orgs/prince-rupert-port-authority.html">Prince Rupert Port Authority</a><a class="chip" href="orgs/six-nations-of-the-grand-river.html">SIX NATIONS OF THE GRAND RIVER</a><a class="chip" href="orgs/the-canadian-red-cross-society.html">THE CANADIAN RED CROSS SOCIETY / LA SOCIETE CANADIENNE DE LA CROIX-ROUGE</a><a class="chip" href="orgs/the-corporation-of-the-town-of-espanola.html">The Corporation of the Town of Espanola</a><a class="chip" href="orgs/the-governing-council-of-the-salvation-army-in-canada.html">THE GOVERNING COUNCIL OF THE SALVATION ARMY IN CANADA/CONSEIL DE DIRECTION DE L'ARMÉE DU SALUT DU CANADA</a><a class="chip" href="orgs/toronto-international-film-festival-inc.html">TORONTO INTERNATIONAL FILM FESTIVAL INC.</a><a class="chip" href="orgs/tys-theatre-yes-society.html">TYS THEATRE YES SOCIETY</a><a class="chip" href="orgs/ymca-of-greater-toronto.html">YMCA OF GREATER TORONTO</a></div>
+<p class="note">These are individually generated sample pages, not a search index — the
+live application (not part of this static site) supports searching every organization in
+the dataset.</p>
+
+<h2>Grant text search</h2>
+<div class="chips"><a class="chip" href="grants/index.html">Search grant descriptions &rarr;</a><a class="chip" href="grants/grant-37350e1e7360081f.html">Canada Housing Infrastructure Fund</a><a class="chip" href="grants/grant-41b8d52f186a1d48.html">Youth - Canada Summer Jobs</a><a class="chip" href="grants/grant-bc6751591061367e.html">Interim Housing Assistance Program</a><a class="chip" href="grants/grant-dbc7b66a3aa958a4.html">Other Programs</a></div>
+
+<h2>Evidence Encyclopedia (demo)</h2>
+<div class="chips"><a class="chip" href="evidence/index.html">Evidence Encyclopedia index &rarr;</a><a class="chip" href="evidence/emergency_shelter.html">Emergency shelter (category, not a branded model)</a><a class="chip" href="evidence/housing_first.html">Housing First</a><a class="chip" href="evidence/multisystemic_therapy.html">Multisystemic Therapy</a><a class="chip" href="evidence/nurse_family_partnership.html">Nurse-Family Partnership</a><a class="chip" href="evidence/roots_of_empathy.html">Roots of Empathy</a></div>
+
+<h2>Documentation</h2>
+<div class="cards"><a class="card" href="data-publishing-problems.md"><h3>Data Publishing Problems</h3><p>Full technical findings behind the disclosure-quality report.</p></a><a class="card" href="entity-resolution-methodology.md"><h3>Entity Resolution Methodology</h3><p>How organizations are matched and de-duplicated across sources.</p></a><a class="card" href="questions-and-insights.md"><h3>Questions & Possible Insights</h3><p>Working list of open research questions.</p></a><a class="card" href="why-this-matters.md"><h3>Policy Context</h3><p>Background on Canada's open-government commitments relevant to this data.</p></a></div>
+
+<footer>
+<p>Source: <a href="https://github.com/mlenczner/CanadianNonprofitData">github.com/mlenczner/CanadianNonprofitData</a>.
+DRAFT — research prototype. This is an unreleased working draft produced for research purposes only. Figures are derived from public data using experimental methods, contain known data-quality limitations, and have not been reviewed for publication. Do not cite, circulate, or rely on any figure or claim in this document.</p>
+</footer>
+</div>
+</body></html>
